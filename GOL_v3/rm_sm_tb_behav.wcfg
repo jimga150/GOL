@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="rm_sm_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="rm_sm_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="10371000000fs"></ZoomStartTime>
+      <ZoomEndTime time="11427000001fs"></ZoomEndTime>
+      <Cursor1Time time="10583000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="184"></NameColumnWidth>
+      <ValueColumnWidth column_width="79"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="19" />
+   <wvobject fp_name="/rm_sm_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/pixel_clk" type="logic">
+      <obj_property name="ElementShortName">pixel_clk</obj_property>
+      <obj_property name="ObjectShortName">pixel_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/rstn" type="logic">
+      <obj_property name="ElementShortName">rstn</obj_property>
+      <obj_property name="ObjectShortName">rstn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/cols" type="array">
+      <obj_property name="ElementShortName">cols[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cols[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/rows" type="array">
+      <obj_property name="ElementShortName">rows[15:0]</obj_property>
+      <obj_property name="ObjectShortName">rows[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/count_in" type="array">
+      <obj_property name="ElementShortName">count_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">count_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/vsync" type="logic">
+      <obj_property name="ElementShortName">vsync</obj_property>
+      <obj_property name="ObjectShortName">vsync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/hsync" type="logic">
+      <obj_property name="ElementShortName">hsync</obj_property>
+      <obj_property name="ObjectShortName">hsync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/disp_en" type="logic">
+      <obj_property name="ElementShortName">disp_en</obj_property>
+      <obj_property name="ObjectShortName">disp_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/column_vga" type="other">
+      <obj_property name="ElementShortName">column_vga</obj_property>
+      <obj_property name="ObjectShortName">column_vga</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/row_vga" type="other">
+      <obj_property name="ElementShortName">row_vga</obj_property>
+      <obj_property name="ObjectShortName">row_vga</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/uut/rm_state" type="other">
+      <obj_property name="ElementShortName">rm_state</obj_property>
+      <obj_property name="ObjectShortName">rm_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/row_out" type="array">
+      <obj_property name="ElementShortName">row_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">row_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/ar_valid" type="logic">
+      <obj_property name="ElementShortName">ar_valid</obj_property>
+      <obj_property name="ObjectShortName">ar_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/rd_ready" type="logic">
+      <obj_property name="ElementShortName">rd_ready</obj_property>
+      <obj_property name="ObjectShortName">rd_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/count_rst" type="logic">
+      <obj_property name="ElementShortName">count_rst</obj_property>
+      <obj_property name="ObjectShortName">count_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/clk_period" type="other">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/rm_sm_tb/pixel_clk_period" type="other">
+      <obj_property name="ElementShortName">pixel_clk_period</obj_property>
+      <obj_property name="ObjectShortName">pixel_clk_period</obj_property>
+   </wvobject>
+</wave_config>

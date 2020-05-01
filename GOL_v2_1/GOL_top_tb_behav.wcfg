@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="GOL_top_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="GOL_top_tb" />
+            <top_module name="glbl" />
+            <top_module name="ternary_fxn" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="2995367269194fs"></ZoomStartTime>
+      <ZoomEndTime time="52190702546162fs"></ZoomEndTime>
+      <Cursor1Time time="43991480000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="170"></NameColumnWidth>
+      <ValueColumnWidth column_width="105"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="16" />
+   <wvobject fp_name="/GOL_top_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/vga_clk" type="logic">
+      <obj_property name="ElementShortName">vga_clk</obj_property>
+      <obj_property name="ObjectShortName">vga_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_n" type="logic">
+      <obj_property name="ElementShortName">rst_n</obj_property>
+      <obj_property name="ObjectShortName">rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_debounce/button" type="logic">
+      <obj_property name="ElementShortName">button</obj_property>
+      <obj_property name="ObjectShortName">button</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_debounce/flipflops" type="array">
+      <obj_property name="ElementShortName">flipflops[1:0]</obj_property>
+      <obj_property name="ObjectShortName">flipflops[1:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_debounce/counter_set" type="logic">
+      <obj_property name="ElementShortName">counter_set</obj_property>
+      <obj_property name="ObjectShortName">counter_set</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_debounce/count_sig" type="other">
+      <obj_property name="ElementShortName">count_sig</obj_property>
+      <obj_property name="ObjectShortName">count_sig</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_debounce/result_sig" type="logic">
+      <obj_property name="ElementShortName">result_sig</obj_property>
+      <obj_property name="ObjectShortName">result_sig</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_dbcd" type="logic">
+      <obj_property name="ElementShortName">rst_dbcd</obj_property>
+      <obj_property name="ObjectShortName">rst_dbcd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/rst_n_dbcd" type="logic">
+      <obj_property name="ElementShortName">rst_n_dbcd</obj_property>
+      <obj_property name="ObjectShortName">rst_n_dbcd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/pixel" type="array">
+      <obj_property name="ElementShortName">pixel[11:0]</obj_property>
+      <obj_property name="ObjectShortName">pixel[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/hsync" type="logic">
+      <obj_property name="ElementShortName">hsync</obj_property>
+      <obj_property name="ObjectShortName">hsync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/vsync" type="logic">
+      <obj_property name="ElementShortName">vsync</obj_property>
+      <obj_property name="ObjectShortName">vsync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/gol_tick_en" type="logic">
+      <obj_property name="ElementShortName">gol_tick_en</obj_property>
+      <obj_property name="ObjectShortName">gol_tick_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_top_tb/uut/GOL/GOL_outputs" type="array">
+      <obj_property name="ElementShortName">GOL_outputs[39:0][39:0]</obj_property>
+      <obj_property name="ObjectShortName">GOL_outputs[39:0][39:0]</obj_property>
+   </wvobject>
+</wave_config>

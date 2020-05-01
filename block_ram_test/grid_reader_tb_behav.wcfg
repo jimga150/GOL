@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="grid_reader_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="grid_reader_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="170000001fs"></ZoomEndTime>
+      <Cursor1Time time="45435000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="154"></NameColumnWidth>
+      <ValueColumnWidth column_width="141"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="7" />
+   <wvobject fp_name="/grid_reader_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/grid_reader_tb/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/grid_reader_tb/read" type="logic">
+      <obj_property name="ElementShortName">read</obj_property>
+      <obj_property name="ObjectShortName">read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/grid_reader_tb/addr_base" type="array">
+      <obj_property name="ElementShortName">addr_base[5:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_base[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/grid_reader_tb/grid_index_en" type="array">
+      <obj_property name="ElementShortName">grid_index_en[8:0]</obj_property>
+      <obj_property name="ObjectShortName">grid_index_en[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/grid_reader_tb/uut/addr_to_bram" type="array">
+      <obj_property name="ElementShortName">addr_to_bram[5:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_to_bram[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/grid_reader_tb/dout" type="array">
+      <obj_property name="ElementShortName">dout[63:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[63:0]</obj_property>
+   </wvobject>
+</wave_config>
