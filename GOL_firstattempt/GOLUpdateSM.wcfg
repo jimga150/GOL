@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="E:/Code/VHDL/GOL/GOLUpdaterSM_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="bus_array_pkg" />
+            <top_module name="golupdatersm_tb" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="17" />
+   <wvobject fp_name="/golupdatersm_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/disp_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">disp_en</obj_property>
+      <obj_property name="ObjectShortName">disp_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/v_sync_fired" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">v_sync_fired</obj_property>
+      <obj_property name="ObjectShortName">v_sync_fired</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/rd_count" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_count[6:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_count[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/readout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">readout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">readout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/uut/nextstate" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">nextstate</obj_property>
+      <obj_property name="ObjectShortName">nextstate</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/uut/x_vect" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">x_vect[7:0]</obj_property>
+      <obj_property name="ObjectShortName">x_vect[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/uut/y_vect" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">y_vect[10:0]</obj_property>
+      <obj_property name="ObjectShortName">y_vect[10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/cmd_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cmd_en</obj_property>
+      <obj_property name="ObjectShortName">cmd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/rd_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/wr_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/plane" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">plane</obj_property>
+      <obj_property name="ObjectShortName">plane</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/x_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">x_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">x_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/y_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">y_out[10:0]</obj_property>
+      <obj_property name="ObjectShortName">y_out[10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/instruction" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">instruction[2:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/golupdatersm_tb/grid" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">grid[2:0]</obj_property>
+      <obj_property name="ObjectShortName">grid[2:0]</obj_property>
+   </wvobject>
+</wave_config>

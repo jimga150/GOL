@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="E:/Code/VHDL/GOL/SegReadSM_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="segreadsm_tb" />
+            <top_module name="std_logic_1164" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="13" />
+   <wvobject fp_name="/segreadsm_tb/rd_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_empty</obj_property>
+      <obj_property name="ObjectShortName">rd_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/disp_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">disp_en</obj_property>
+      <obj_property name="ObjectShortName">disp_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/v_sync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">v_sync</obj_property>
+      <obj_property name="ObjectShortName">v_sync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/rd_count" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_count[6:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_count[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/chunk_index_plus_one" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">chunk_index_plus_one[4:0]</obj_property>
+      <obj_property name="ObjectShortName">chunk_index_plus_one[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/row_in" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">row_in[8:0]</obj_property>
+      <obj_property name="ObjectShortName">row_in[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/uut/nextstate" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">nextstate</obj_property>
+      <obj_property name="ObjectShortName">nextstate</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/chunk_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">chunk_addr[13:0]</obj_property>
+      <obj_property name="ObjectShortName">chunk_addr[13:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/rd_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/cmd_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cmd_en</obj_property>
+      <obj_property name="ObjectShortName">cmd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/segreadsm_tb/clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+</wave_config>

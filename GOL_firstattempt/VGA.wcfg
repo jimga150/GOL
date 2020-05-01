@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="E:/Code/VHDL/GOL/VGA_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="vga_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="13" />
+   <wvobject fp_name="/vga_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/pixel_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">pixel_clk</obj_property>
+      <obj_property name="ObjectShortName">pixel_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/chunk" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">chunk[31:0]</obj_property>
+      <obj_property name="ObjectShortName">chunk[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/chunk_index" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">chunk_index[7:0]</obj_property>
+      <obj_property name="ObjectShortName">chunk_index[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/we" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">we</obj_property>
+      <obj_property name="ObjectShortName">we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/row" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">row</obj_property>
+      <obj_property name="ObjectShortName">row</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/col" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">col</obj_property>
+      <obj_property name="ObjectShortName">col</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/column_vect" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">column_vect[0:10]</obj_property>
+      <obj_property name="ObjectShortName">column_vect[0:10]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/h_sync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">h_sync</obj_property>
+      <obj_property name="ObjectShortName">h_sync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/v_sync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">v_sync</obj_property>
+      <obj_property name="ObjectShortName">v_sync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/disp_ena" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">disp_ena</obj_property>
+      <obj_property name="ObjectShortName">disp_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/vga_tb/pixel" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">pixel</obj_property>
+      <obj_property name="ObjectShortName">pixel</obj_property>
+   </wvobject>
+</wave_config>
