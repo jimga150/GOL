@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="E:/Code/VHDL/GOL/MasterSM_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="mastersm_tb" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="12" />
+   <wvobject fp_name="/mastersm_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/disp_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">disp_en</obj_property>
+      <obj_property name="ObjectShortName">disp_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/v_sync" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">v_sync</obj_property>
+      <obj_property name="ObjectShortName">v_sync</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/done_reading" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">done_reading</obj_property>
+      <obj_property name="ObjectShortName">done_reading</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/done_updating" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">done_updating</obj_property>
+      <obj_property name="ObjectShortName">done_updating</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/uut/seg_count_temp" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">seg_count_temp[2:0]</obj_property>
+      <obj_property name="ObjectShortName">seg_count_temp[2:0]</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ff00ff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/read_seg" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read_seg</obj_property>
+      <obj_property name="ObjectShortName">read_seg</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/segment_num" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">segment_num[2:0]</obj_property>
+      <obj_property name="ObjectShortName">segment_num[2:0]</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/pixel_clk_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">pixel_clk_en</obj_property>
+      <obj_property name="ObjectShortName">pixel_clk_en</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/update" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">update</obj_property>
+      <obj_property name="ObjectShortName">update</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mastersm_tb/current" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">current</obj_property>
+      <obj_property name="ObjectShortName">current</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#00ffff</obj_property>
+   </wvobject>
+</wave_config>
