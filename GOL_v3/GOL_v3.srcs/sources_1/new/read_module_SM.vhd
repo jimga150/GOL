@@ -31,11 +31,15 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+library work;
+use work.GOL_package.all;
+
 entity read_module_SM is
     port(
         clk, rst, vsync, disp_en, hsync : in std_logic;
-        count_in, row_vga_in, num_cols, num_rows : in std_logic_vector(15 downto 0);
-        row_out : out std_logic_vector(15 downto 0);
+        count_in : in std_logic_vector(GOL_col_addr_length-1 downto 0);
+        row_vga_in : in std_logic_vector(GOL_row_addr_length-1 downto 0);
+        row_out : out std_logic_vector(GOL_row_addr_length-1 downto 0);
         ar_valid, rd_ready, count_rst : out std_logic
     );
 end read_module_SM;
@@ -45,20 +49,17 @@ architecture Behavioral of read_module_SM is
     type state_type is (IDLE, ISSUE_READS, WAIT_BLANKING, WAIT_READS, INC_ADDR);
     signal rm_state, next_state : state_type := IDLE;
     
-    signal row : std_logic_vector(15 downto 0) := (others => '0');
-    signal max_col, max_row, rowm1_wa : std_logic_vector(15 downto 0);
+    signal row : std_logic_vector(GOL_row_addr_length-1 downto 0) := (others => '0');
+    signal rowm1_wa : std_logic_vector(GOL_row_addr_length-1 downto 0);
 
 begin
 
     row_out <= row;
     
-    max_col <= std_logic_vector(unsigned(num_cols) - 1);
-    max_row <= std_logic_vector(unsigned(num_rows) - 1);
-    
     wrp_sub1_inst : entity work.wraparound_sub1
     port map(
         num_in => row,
-        max => max_row,
+        max => GOL_max_row_vect,
         result => rowm1_wa
     );
 
@@ -72,7 +73,7 @@ begin
         end if;
     end process sync_proc;
     
-    ns_proc: process(rm_state, vsync, disp_en, hsync, count_in, num_cols, row_vga_in) is begin
+    ns_proc: process(rm_state, vsync, disp_en, hsync, count_in, row_vga_in) is begin
         case rm_state is
             when IDLE => 
                 if vsync = '1' then
@@ -81,7 +82,7 @@ begin
                     next_state <= IDLE;
                 end if;
             when ISSUE_READS => 
-                if count_in = max_col then
+                if count_in = GOL_max_col_index_vect then
                     next_state <= WAIT_BLANKING;
                 else
                     next_state <= ISSUE_READS;
@@ -95,13 +96,13 @@ begin
                     next_state <= WAIT_BLANKING;
                 end if;
             when WAIT_READS => 
-                if count_in = max_col then
+                if count_in = GOL_max_col_index_vect then
                     next_state <= INC_ADDR;
                 else
                     next_state <= WAIT_READS;
                 end if;
             when INC_ADDR =>
-                if row = max_row then
+                if row = GOL_num_rows_vect then
                     next_state <= IDLE;
                 else
                     next_state <= ISSUE_READS;

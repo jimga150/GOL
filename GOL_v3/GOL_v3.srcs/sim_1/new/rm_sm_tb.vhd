@@ -31,6 +31,9 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+library work;
+use work.GOL_package.all;
+
 entity rm_sm_tb is
 --  Port ( );
 end rm_sm_tb;
@@ -38,14 +41,13 @@ end rm_sm_tb;
 architecture Behavioral of rm_sm_tb is
 
     signal clk, pixel_clk, rst : std_logic := '0';
-    signal count_in : std_logic_vector(15 downto 0) := (others => '0');
-    signal cols, rows : std_logic_vector(15 downto 0) := x"000A";
+    signal count_in : std_logic_vector(GOL_col_addr_length-1 downto 0) := (others => '0');
     
     signal vsync, disp_en, hsync, rstn : std_logic;
     signal column_vga, row_vga : integer;
-    signal row_vga_vect : std_logic_vector(15 downto 0);
+    signal row_vga_vect : std_logic_vector(GOL_row_addr_length-1 downto 0);
     
-    signal row_out : std_logic_vector(15 downto 0);
+    signal row_out : std_logic_vector(GOL_row_addr_length-1 downto 0);
     signal ar_valid, rd_ready, count_rst : std_logic;
     
     constant clk_period : time := 10ns;
@@ -58,7 +60,7 @@ begin
     clk <= not clk after clk_period/2;
     pixel_clk <= not pixel_clk after pixel_clk_period/2;
     
-    row_vga_vect <= std_logic_vector(to_unsigned(row_vga, 16));
+    row_vga_vect <= std_logic_vector(to_unsigned(row_vga, GOL_row_addr_length));
     
     process(clk) is begin
         if rising_edge(clk) then
@@ -77,8 +79,6 @@ begin
         vsync => vsync,
         disp_en => disp_en,
         hsync => hsync,
-        num_cols => cols,
-        num_rows => rows,
         row_out => row_out,
         count_in => count_in,
         row_vga_in => row_vga_vect,
@@ -88,18 +88,6 @@ begin
     );
     
     vga_cont_inst: entity work.vga_controller
-    generic map(
-        h_pulse => 2,
-        h_bp => 3,
-        h_pixels => 10,
-        h_fp => 4,
-        h_pol => '1',
-        v_pulse => 5,
-        v_bp => 6,
-        v_pixels => 10,
-        v_fp => 7,
-        v_pol => '1'
-    )
     port map(
         pixel_clk => pixel_clk,
         reset_n => rstn,
