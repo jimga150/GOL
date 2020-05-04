@@ -25,6 +25,8 @@
 !*.srcs/
 !*.xci
 
+!*.tcl
+*/**/*.tcl
 
 !*.circ
 !*.bit
