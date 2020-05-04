@@ -37,6 +37,7 @@ use work.GOL_package.all;
 entity read_module_SM is
     port(
         clk, rst, vsync, disp_en, hsync : in std_logic;
+        ar_ready, rd_valid : in std_logic;
         count_in : in std_logic_vector(GOL_col_addr_length-1 downto 0);
         row_vga_in : in std_logic_vector(GOL_row_addr_length-1 downto 0);
         row_out : out std_logic_vector(GOL_row_addr_length-1 downto 0);
@@ -56,12 +57,7 @@ begin
 
     row_out <= row;
     
-    wrp_sub1_inst : entity work.wraparound_sub1
-    port map(
-        num_in => row,
-        max => GOL_max_row_vect,
-        result => rowm1_wa
-    );
+    rowm1_wa <= GOL_max_row_vect when unsigned(row) = 0 else std_logic_vector(unsigned(row) - 1);
 
     sync_proc: process(clk) is begin
         if rising_edge(clk) then
@@ -73,7 +69,7 @@ begin
         end if;
     end process sync_proc;
     
-    ns_proc: process(rm_state, vsync, disp_en, hsync, count_in, row_vga_in) is begin
+    ns_proc: process(rm_state, vsync, disp_en, hsync, count_in, row_vga_in, rowm1_wa, row, ar_ready, rd_valid) is begin
         case rm_state is
             when IDLE => 
                 if vsync = '1' then
@@ -82,21 +78,20 @@ begin
                     next_state <= IDLE;
                 end if;
             when ISSUE_READS => 
-                if count_in = GOL_max_col_index_vect then
+                if count_in = GOL_max_col_index_vect and ar_ready = '1' then
                     next_state <= WAIT_BLANKING;
                 else
                     next_state <= ISSUE_READS;
                 end if;
             when WAIT_BLANKING => 
                 --true in the front porch before the H_sync just BEFORE the row that we need to load into dist. RAM
-                --TODO: use wraparound module or at least make rows-1 a signal
                 if disp_en = '0' and row_vga_in = rowm1_wa then
                     next_state <= WAIT_READS;
                 else
                     next_state <= WAIT_BLANKING;
                 end if;
             when WAIT_READS => 
-                if count_in = GOL_max_col_index_vect then
+                if count_in = GOL_max_col_index_vect and rd_valid = '1' then
                     next_state <= INC_ADDR;
                 else
                     next_state <= WAIT_READS;
