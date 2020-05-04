@@ -31,11 +31,12 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+library work;
+use work.GOL_package.all;
+
 entity GOL_readout_module is
     port(
-        clk, pixel_clk, rst : in std_logic;
-        
-        num_rows, num_cols : std_logic_vector(15 downto 0);
+        clk, pixel_clk, rst, frame_parity : in std_logic;
         
         ar_valid : out std_logic;
         ar_ready : in std_logic;
@@ -51,12 +52,13 @@ end GOL_readout_module;
 
 architecture Structural of GOL_readout_module is
 
-    signal vsync, disp_en, hsync, count_rst, ar_valid_from_sm, rd_ready_from_sm, rstn : std_logic;
+    signal vsync, disp_en, hsync, count_rst, ar_valid_from_sm, rd_ready_from_sm, rstn, rx_word, pixel_from_regs : std_logic;
     
-    signal count : std_logic_vector(15 downto 0) := (others => '0');
+    signal count : std_logic_vector(GOL_col_addr_length-1 downto 0) := (others => '0');
     
     signal row_vga_int, col_vga_int : integer;
-    signal row_vga_vect, col_vga_vect, row_sm : std_logic_vector(15 downto 0);
+    signal row_vga_vect, row_sm : std_logic_vector(GOL_row_addr_length-1 downto 0);
+    signal col_vga_vect : std_logic_vector(GOL_pixel_col_addr_length-1 downto 0);
 
 begin
 
@@ -66,13 +68,18 @@ begin
     ar_valid <= ar_valid_from_sm;
     rd_ready <= rd_ready_from_sm;
     
+    rx_word <= rd_ready_from_sm and rd_valid;
+    
     rstn <= not rst;
+    
+    h_sync <= hsync;
+    v_sync <= vsync;
 
     process(clk) is begin
         if rising_edge(clk) then
             if count_rst = '1' then
                 count <= (others => '0');
-            elsif (ar_valid_from_sm = '1' and ar_ready = '1') or (rd_ready_from_sm = '1' and rd_valid = '1') then
+            elsif (ar_valid_from_sm = '1' and ar_ready = '1') or rx_word = '1' then
                 count <= std_logic_vector(unsigned(count) + 1);
             end if;
         end if;
@@ -85,6 +92,8 @@ begin
         vsync => vsync,
         disp_en => disp_en,
         hsync => hsync,
+        ar_ready => ar_ready,
+        rd_valid => rd_valid,
         count_in => count,
         count_rst => count_rst,
         row_vga_in => row_vga_vect,
@@ -97,9 +106,36 @@ begin
     port map(
         pixel_clk => pixel_clk,
         reset_n => rstn,
-        
+        h_sync => hsync,
+        v_sync => vsync,
+        disp_ena => disp_en,
+        row => row_vga_int,
+        column => col_vga_int,
+        n_blank => open,
+        n_sync => open
     );
     
+    row_regs: entity work.row_registers
+    port map(
+        clk => clk,
+        rst => rst,
+        write_en => rx_word,
+        write_addr => count,
+        read_addr => col_vga_vect,
+        write_data => rd_data,
+        pixel => pixel_from_regs
+    );
     
+    addr_combine: entity work.address_combiner
+    port map(
+        row => row_sm,
+        col => count,
+        addr_out => ar_addr(GOL_frame_addr_length-1 downto 0)
+    );
+    
+    ar_addr(31 downto GOL_frame_addr_length+1) <= (others => '0');
+    ar_addr(GOL_frame_addr_length) <= frame_parity;
+    
+    pixel <= pixel_from_regs and disp_en;
 
 end Structural;

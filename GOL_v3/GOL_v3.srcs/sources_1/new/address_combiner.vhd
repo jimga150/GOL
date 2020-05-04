@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 05/01/2020 02:34:19 PM
+-- Create Date: 05/01/2020 08:10:32 PM
 -- Design Name: 
--- Module Name: wraparound_add1 - Behavioral
+-- Module Name: address_combiner - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -24,24 +24,28 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
-use IEEE.NUMERIC_STD.ALL;
+--use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity wraparound_add1 is
-    port(
-        num_in, max : in std_logic_vector(15 downto 0);
-        result : out std_logic_vector(15 downto 0)
-    );
-end wraparound_add1;
+library work;
+use work.GOL_package.all;
 
-architecture Behavioral of wraparound_add1 is
+entity address_combiner is
+    port(
+        row : in std_logic_vector(GOL_row_addr_length-1 downto 0);
+        col : in std_logic_vector(GOL_col_addr_length-1 downto 0);
+        addr_out : out std_logic_vector(GOL_frame_addr_length-1 downto 0)
+    );
+end address_combiner;
+
+architecture Behavioral of address_combiner is
 
 begin
 
-    result <= (others => '0') when num_in = max else std_logic_vector(unsigned(num_in) + 1);
+    addr_out <= row & col;
 
 end Behavioral;

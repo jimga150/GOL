@@ -28,14 +28,22 @@ use IEEE.NUMERIC_STD.ALL;
 
 package GOL_package is
 
+    --frame dimensions
     constant GOL_num_rows : integer := 10;
     constant GOL_num_col_pixels : integer := 32;
     
+    constant GOL_log_2_bpw : integer := 5;
     constant GOL_bits_per_word : integer := 32;
     constant GOL_words_per_row : integer := GOL_num_col_pixels/GOL_bits_per_word;
     
-    constant GOL_col_addr_length : integer := 16;
-    constant GOL_row_addr_length : integer := 16;
+    --address lengths
+    constant GOL_row_addr_length : integer := 13;
+    
+    constant GOL_col_addr_length : integer := 13;
+    constant GOL_pixel_col_addr_length : integer := GOL_col_addr_length + GOL_log_2_bpw;
+    
+    constant GOL_frame_addr_length : integer := GOL_row_addr_length + GOL_col_addr_length;
+    
     
     constant GOL_num_rows_unsigned : unsigned(GOL_row_addr_length-1 downto 0) := 
         to_unsigned(GOL_num_rows, GOL_row_addr_length);
