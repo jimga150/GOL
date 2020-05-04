@@ -39,7 +39,7 @@ package GOL_package is
     --address lengths
     constant GOL_row_addr_length : integer := 13;
     
-    constant GOL_col_addr_length : integer := 13;
+    constant GOL_col_addr_length : integer := 3;
     constant GOL_pixel_col_addr_length : integer := GOL_col_addr_length + GOL_log_2_bpw;
     
     constant GOL_frame_addr_length : integer := GOL_row_addr_length + GOL_col_addr_length;

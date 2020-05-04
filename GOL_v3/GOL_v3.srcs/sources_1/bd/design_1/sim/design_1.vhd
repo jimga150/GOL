@@ -1,7 +1,7 @@
 --Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2019.1.3 (win64) Build 2644227 Wed Sep  4 09:45:24 MDT 2019
---Date        : Tue Apr 28 13:04:24 2020
+--Date        : Mon May  4 09:44:39 2020
 --Host        : DESKTOP-JKR6EMK running 64-bit major release  (build 9200)
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -1995,24 +1995,12 @@ architecture STRUCTURE of design_1 is
     m_axi_rready : out STD_LOGIC
   );
   end component design_1_axi_protocol_convert_0_1;
-  component design_1_blk_mem_gen_0_0 is
-  port (
-    clka : in STD_LOGIC;
-    rsta : in STD_LOGIC;
-    ena : in STD_LOGIC;
-    wea : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    addra : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    douta : out STD_LOGIC_VECTOR ( 31 downto 0 );
-    rsta_busy : out STD_LOGIC
-  );
-  end component design_1_blk_mem_gen_0_0;
   component design_1_axi_bram_ctrl_0_0 is
   port (
     s_axi_aclk : in STD_LOGIC;
     s_axi_aresetn : in STD_LOGIC;
     s_axi_awid : in STD_LOGIC_VECTOR ( 0 to 0 );
-    s_axi_awaddr : in STD_LOGIC_VECTOR ( 23 downto 0 );
+    s_axi_awaddr : in STD_LOGIC_VECTOR ( 12 downto 0 );
     s_axi_awlen : in STD_LOGIC_VECTOR ( 7 downto 0 );
     s_axi_awsize : in STD_LOGIC_VECTOR ( 2 downto 0 );
     s_axi_awburst : in STD_LOGIC_VECTOR ( 1 downto 0 );
@@ -2031,7 +2019,7 @@ architecture STRUCTURE of design_1 is
     s_axi_bvalid : out STD_LOGIC;
     s_axi_bready : in STD_LOGIC;
     s_axi_arid : in STD_LOGIC_VECTOR ( 0 to 0 );
-    s_axi_araddr : in STD_LOGIC_VECTOR ( 23 downto 0 );
+    s_axi_araddr : in STD_LOGIC_VECTOR ( 12 downto 0 );
     s_axi_arlen : in STD_LOGIC_VECTOR ( 7 downto 0 );
     s_axi_arsize : in STD_LOGIC_VECTOR ( 2 downto 0 );
     s_axi_arburst : in STD_LOGIC_VECTOR ( 1 downto 0 );
@@ -2050,11 +2038,23 @@ architecture STRUCTURE of design_1 is
     bram_clk_a : out STD_LOGIC;
     bram_en_a : out STD_LOGIC;
     bram_we_a : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    bram_addr_a : out STD_LOGIC_VECTOR ( 23 downto 0 );
+    bram_addr_a : out STD_LOGIC_VECTOR ( 12 downto 0 );
     bram_wrdata_a : out STD_LOGIC_VECTOR ( 31 downto 0 );
     bram_rddata_a : in STD_LOGIC_VECTOR ( 31 downto 0 )
   );
   end component design_1_axi_bram_ctrl_0_0;
+  component design_1_blk_mem_gen_0_1 is
+  port (
+    clka : in STD_LOGIC;
+    rsta : in STD_LOGIC;
+    ena : in STD_LOGIC;
+    wea : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    addra : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    douta : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    rsta_busy : out STD_LOGIC
+  );
+  end component design_1_blk_mem_gen_0_1;
   signal S_AXI_0_1_ARADDR : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal S_AXI_0_1_ARPROT : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal S_AXI_0_1_ARREADY : STD_LOGIC;
@@ -2095,12 +2095,13 @@ architecture STRUCTURE of design_1 is
   signal S_AXI_1_1_WVALID : STD_LOGIC;
   signal aclk_0_1 : STD_LOGIC;
   signal aresetn_0_1 : STD_LOGIC;
-  signal axi_bram_ctrl_0_bram_addr_a : STD_LOGIC_VECTOR ( 23 downto 0 );
-  signal axi_bram_ctrl_0_bram_clk_a : STD_LOGIC;
-  signal axi_bram_ctrl_0_bram_en_a : STD_LOGIC;
-  signal axi_bram_ctrl_0_bram_rst_a : STD_LOGIC;
-  signal axi_bram_ctrl_0_bram_we_a : STD_LOGIC_VECTOR ( 3 downto 0 );
-  signal axi_bram_ctrl_0_bram_wrdata_a : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_bram_ctrl_0_BRAM_PORTA_ADDR : STD_LOGIC_VECTOR ( 12 downto 0 );
+  signal axi_bram_ctrl_0_BRAM_PORTA_CLK : STD_LOGIC;
+  signal axi_bram_ctrl_0_BRAM_PORTA_DIN : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_bram_ctrl_0_BRAM_PORTA_DOUT : STD_LOGIC_VECTOR ( 31 downto 0 );
+  signal axi_bram_ctrl_0_BRAM_PORTA_EN : STD_LOGIC;
+  signal axi_bram_ctrl_0_BRAM_PORTA_RST : STD_LOGIC;
+  signal axi_bram_ctrl_0_BRAM_PORTA_WE : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal axi_interconnect_0_M00_AXI_ARADDR : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal axi_interconnect_0_M00_AXI_ARBURST : STD_LOGIC_VECTOR ( 1 downto 0 );
   signal axi_interconnect_0_M00_AXI_ARCACHE : STD_LOGIC_VECTOR ( 3 downto 0 );
@@ -2206,7 +2207,6 @@ architecture STRUCTURE of design_1 is
   signal axi_protocol_convert_1_M_AXI_WREADY : STD_LOGIC;
   signal axi_protocol_convert_1_M_AXI_WSTRB : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal axi_protocol_convert_1_M_AXI_WVALID : STD_LOGIC;
-  signal blk_mem_gen_0_douta : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal NLW_blk_mem_gen_0_rsta_busy_UNCONNECTED : STD_LOGIC;
   attribute X_INTERFACE_INFO : string;
   attribute X_INTERFACE_INFO of S_AXI_0_arready : signal is "xilinx.com:interface:aximm:1.0 S_AXI_0 ARREADY";
@@ -2231,7 +2231,7 @@ architecture STRUCTURE of design_1 is
   attribute X_INTERFACE_INFO of S_AXI_1_wvalid : signal is "xilinx.com:interface:aximm:1.0 S_AXI_1 WVALID";
   attribute X_INTERFACE_INFO of aclk_0 : signal is "xilinx.com:signal:clock:1.0 CLK.ACLK_0 CLK";
   attribute X_INTERFACE_PARAMETER : string;
-  attribute X_INTERFACE_PARAMETER of aclk_0 : signal is "XIL_INTERFACENAME CLK.ACLK_0, ASSOCIATED_BUSIF M00_AXI_0:S_AXI_0:S_AXI_1, ASSOCIATED_RESET aresetn_0, CLK_DOMAIN design_1_aclk_0, FREQ_HZ 10000000, INSERT_VIP 0, PHASE 0.000";
+  attribute X_INTERFACE_PARAMETER of aclk_0 : signal is "XIL_INTERFACENAME CLK.ACLK_0, ASSOCIATED_BUSIF S_AXI_0:S_AXI_1, ASSOCIATED_RESET aresetn_0, CLK_DOMAIN design_1_aclk_0, FREQ_HZ 10000000, INSERT_VIP 0, PHASE 0.000";
   attribute X_INTERFACE_INFO of aresetn_0 : signal is "xilinx.com:signal:reset:1.0 RST.ARESETN_0 RST";
   attribute X_INTERFACE_PARAMETER of aresetn_0 : signal is "XIL_INTERFACENAME RST.ARESETN_0, INSERT_VIP 0, POLARITY ACTIVE_LOW";
   attribute X_INTERFACE_INFO of S_AXI_0_araddr : signal is "xilinx.com:interface:aximm:1.0 S_AXI_0 ARADDR";
@@ -2297,15 +2297,15 @@ begin
   aresetn_0_1 <= aresetn_0;
 axi_bram_ctrl_0: component design_1_axi_bram_ctrl_0_0
      port map (
-      bram_addr_a(23 downto 0) => axi_bram_ctrl_0_bram_addr_a(23 downto 0),
-      bram_clk_a => axi_bram_ctrl_0_bram_clk_a,
-      bram_en_a => axi_bram_ctrl_0_bram_en_a,
-      bram_rddata_a(31 downto 0) => blk_mem_gen_0_douta(31 downto 0),
-      bram_rst_a => axi_bram_ctrl_0_bram_rst_a,
-      bram_we_a(3 downto 0) => axi_bram_ctrl_0_bram_we_a(3 downto 0),
-      bram_wrdata_a(31 downto 0) => axi_bram_ctrl_0_bram_wrdata_a(31 downto 0),
+      bram_addr_a(12 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_ADDR(12 downto 0),
+      bram_clk_a => axi_bram_ctrl_0_BRAM_PORTA_CLK,
+      bram_en_a => axi_bram_ctrl_0_BRAM_PORTA_EN,
+      bram_rddata_a(31 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_DOUT(31 downto 0),
+      bram_rst_a => axi_bram_ctrl_0_BRAM_PORTA_RST,
+      bram_we_a(3 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_WE(3 downto 0),
+      bram_wrdata_a(31 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_DIN(31 downto 0),
       s_axi_aclk => aclk_0_1,
-      s_axi_araddr(23 downto 0) => axi_interconnect_0_M00_AXI_ARADDR(23 downto 0),
+      s_axi_araddr(12 downto 0) => axi_interconnect_0_M00_AXI_ARADDR(12 downto 0),
       s_axi_arburst(1 downto 0) => axi_interconnect_0_M00_AXI_ARBURST(1 downto 0),
       s_axi_arcache(3 downto 0) => axi_interconnect_0_M00_AXI_ARCACHE(3 downto 0),
       s_axi_aresetn => aresetn_0_1,
@@ -2316,7 +2316,7 @@ axi_bram_ctrl_0: component design_1_axi_bram_ctrl_0_0
       s_axi_arready => axi_interconnect_0_M00_AXI_ARREADY,
       s_axi_arsize(2 downto 0) => axi_interconnect_0_M00_AXI_ARSIZE(2 downto 0),
       s_axi_arvalid => axi_interconnect_0_M00_AXI_ARVALID,
-      s_axi_awaddr(23 downto 0) => axi_interconnect_0_M00_AXI_AWADDR(23 downto 0),
+      s_axi_awaddr(12 downto 0) => axi_interconnect_0_M00_AXI_AWADDR(12 downto 0),
       s_axi_awburst(1 downto 0) => axi_interconnect_0_M00_AXI_AWBURST(1 downto 0),
       s_axi_awcache(3 downto 0) => axi_interconnect_0_M00_AXI_AWCACHE(3 downto 0),
       s_axi_awid(0) => axi_interconnect_0_M00_AXI_AWID(0),
@@ -2576,16 +2576,16 @@ axi_protocol_convert_1: component design_1_axi_protocol_convert_0_1
       s_axi_wstrb(3 downto 0) => S_AXI_1_1_WSTRB(3 downto 0),
       s_axi_wvalid => S_AXI_1_1_WVALID
     );
-blk_mem_gen_0: component design_1_blk_mem_gen_0_0
+blk_mem_gen_0: component design_1_blk_mem_gen_0_1
      port map (
-      addra(31 downto 24) => B"00000000",
-      addra(23 downto 0) => axi_bram_ctrl_0_bram_addr_a(23 downto 0),
-      clka => axi_bram_ctrl_0_bram_clk_a,
-      dina(31 downto 0) => axi_bram_ctrl_0_bram_wrdata_a(31 downto 0),
-      douta(31 downto 0) => blk_mem_gen_0_douta(31 downto 0),
-      ena => axi_bram_ctrl_0_bram_en_a,
-      rsta => axi_bram_ctrl_0_bram_rst_a,
+      addra(31 downto 13) => B"0000000000000000000",
+      addra(12 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_ADDR(12 downto 0),
+      clka => axi_bram_ctrl_0_BRAM_PORTA_CLK,
+      dina(31 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_DIN(31 downto 0),
+      douta(31 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_DOUT(31 downto 0),
+      ena => axi_bram_ctrl_0_BRAM_PORTA_EN,
+      rsta => axi_bram_ctrl_0_BRAM_PORTA_RST,
       rsta_busy => NLW_blk_mem_gen_0_rsta_busy_UNCONNECTED,
-      wea(3 downto 0) => axi_bram_ctrl_0_bram_we_a(3 downto 0)
+      wea(3 downto 0) => axi_bram_ctrl_0_BRAM_PORTA_WE(3 downto 0)
     );
 end STRUCTURE;
