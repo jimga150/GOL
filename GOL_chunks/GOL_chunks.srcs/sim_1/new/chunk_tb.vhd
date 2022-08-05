@@ -72,7 +72,15 @@ begin
 		  2 => "000111",
 		  others => (others => '0')
 		);
-		report "0th row in chunk: " & slv_to_string(v_chunk(0));
+--		report "0th row in chunk: " & slv_to_string(v_chunk(0));
+		report slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  0 => "000100",
+		  1 => "001000",
+		  2 => "001110",
+		  others => (others => '0')
+		);
 		report slv_to_string(chunk_to_vector(v_chunk));
         
         assert v_pass report "Test failed" severity failure;
