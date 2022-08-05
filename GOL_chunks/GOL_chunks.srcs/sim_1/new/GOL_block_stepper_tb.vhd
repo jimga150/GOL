@@ -57,6 +57,7 @@ architecture Behavioral of GOL_block_stepper_tb is
     signal o_bram_we : std_logic;
     signal o_bram_addr : std_logic_vector(9 downto 0);
     signal o_bram_wr_data : std_logic_vector(35 downto 0);
+    signal o_current_state_msb : std_logic;
 
     --Clock Periods
     constant i_clk_period : time := 10 ns;

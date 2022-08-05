@@ -49,7 +49,9 @@ entity GOL_block_stepper is
         
         o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_num_cell_cols-1 downto 0);
         o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_num_cell_rows-1 downto 0);
-        o_top_left_bit, o_top_right_bit, o_bottom_left_bit, o_bottom_right_bit : out std_logic
+        o_top_left_bit, o_top_right_bit, o_bottom_left_bit, o_bottom_right_bit : out std_logic;
+        
+        o_current_state_msb : out std_logic
         
     );
 end GOL_block_stepper;
@@ -137,6 +139,7 @@ begin
     o_bram_clk <= i_clk;
     
     s_next_state_msb <= not s_current_state_msb;
+    o_current_state_msb <= s_current_state_msb;
     
     s_chunk_in <= vector_to_chunk(i_bram_rd_data);
     
