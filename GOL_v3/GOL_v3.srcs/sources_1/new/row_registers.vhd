@@ -37,8 +37,8 @@ use work.GOL_package.all;
 entity row_registers is
     port(
         clk, rst, write_en : in std_logic;
-        write_addr : in std_logic_vector(GOL_col_addr_length-1 downto 0);
-        read_addr : in std_logic_vector(GOL_pixel_col_addr_length-1 downto 0);
+        write_addr : in std_logic_vector(GOL_row_word_addr_length-1 downto 0);
+        read_addr : in std_logic_vector(GOL_row_pixel_addr_length-1 downto 0);
         write_data : in std_logic_vector(GOL_bits_per_word-1 downto 0);
         pixel : out std_logic
     );
@@ -46,7 +46,7 @@ end row_registers;
 
 architecture Behavioral of row_registers is
 
-    signal row_regs : std_logic_vector(GOL_num_col_pixels-1 downto 0) := (others => '0');
+    signal row_regs : std_logic_vector(GOL_frame_width_pixels-1 downto 0) := (others => '0');
 
     signal wa_int : integer;
 

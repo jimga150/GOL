@@ -36,9 +36,9 @@ use work.GOL_package.all;
 
 entity address_combiner is
     port(
-        row : in std_logic_vector(GOL_row_addr_length-1 downto 0);
-        col : in std_logic_vector(GOL_col_addr_length-1 downto 0);
-        addr_out : out std_logic_vector(GOL_frame_addr_length-1 downto 0)
+        row : in std_logic_vector(GOL_frame_row_addr_length-1 downto 0);
+        col : in std_logic_vector(GOL_row_word_addr_length-1 downto 0);
+        addr_out : out std_logic_vector(GOL_frame_word_addr_length-1 downto 0)
     );
 end address_combiner;
 

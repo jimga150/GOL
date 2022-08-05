@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="84094500001fs"></ZoomEndTime>
-      <Cursor1Time time="84094500000fs"></Cursor1Time>
+      <ZoomStartTime time="61523600000fs"></ZoomStartTime>
+      <ZoomEndTime time="61683200001fs"></ZoomEndTime>
+      <Cursor1Time time="61592600000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="184"></NameColumnWidth>
-      <ValueColumnWidth column_width="63"></ValueColumnWidth>
+      <NameColumnWidth column_width="149"></NameColumnWidth>
+      <ValueColumnWidth column_width="103"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="21" />
+   <WVObjectSize size="22" />
    <wvobject fp_name="/GOL_readout_module_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -49,24 +49,29 @@
       <obj_property name="ObjectShortName">rd_data[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_readout_module_tb/uut/SM/row_vga_in" type="array">
-      <obj_property name="ElementShortName">row_vga_in[12:0]</obj_property>
-      <obj_property name="ObjectShortName">row_vga_in[12:0]</obj_property>
+      <obj_property name="ElementShortName">row_vga_in[3:0]</obj_property>
+      <obj_property name="ObjectShortName">row_vga_in[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_readout_module_tb/uut/SM/row" type="array">
-      <obj_property name="ElementShortName">row[12:0]</obj_property>
-      <obj_property name="ObjectShortName">row[12:0]</obj_property>
+      <obj_property name="ElementShortName">row[3:0]</obj_property>
+      <obj_property name="ObjectShortName">row[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_readout_module_tb/uut/SM/rowm1_wa" type="array">
-      <obj_property name="ElementShortName">rowm1_wa[12:0]</obj_property>
-      <obj_property name="ObjectShortName">rowm1_wa[12:0]</obj_property>
+      <obj_property name="ElementShortName">rowm1_wa[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rowm1_wa[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_readout_module_tb/uut/SM/rm_state" type="other">
       <obj_property name="ElementShortName">rm_state</obj_property>
       <obj_property name="ObjectShortName">rm_state</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_readout_module_tb/uut/count" type="array">
-      <obj_property name="ElementShortName">count[12:0]</obj_property>
-      <obj_property name="ObjectShortName">count[12:0]</obj_property>
+   <wvobject fp_name="/GOL_readout_module_tb/uut/row_regs/row_regs" type="array">
+      <obj_property name="ElementShortName">row_regs[127:0]</obj_property>
+      <obj_property name="ObjectShortName">row_regs[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_readout_module_tb/uut/word_index" type="array">
+      <obj_property name="ElementShortName">word_index[2:0]</obj_property>
+      <obj_property name="ObjectShortName">word_index[2:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_readout_module_tb/ar_valid" type="logic">
       <obj_property name="ElementShortName">ar_valid</obj_property>
