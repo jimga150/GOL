@@ -21,6 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_textio.all;
+use std.textio.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -39,12 +41,10 @@ package body string_pkg is
 
     function slv_to_string(i_slv : std_logic_vector) return string is
         variable v_ans : string(1 to i_slv'length);
-        variable v_slv_idx : integer := 0;
+        variable v_line : line;
     begin
-        for i in v_ans'range loop
-            v_slv_idx := i_slv'length - i;
-            v_ans(i to i) := std_logic'image(i_slv(v_slv_idx));
-        end loop;
+        write(v_line, i_slv);
+        read(v_line, v_ans);
         return v_ans;
     end function;
 

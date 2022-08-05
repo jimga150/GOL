@@ -55,6 +55,10 @@ package GOL_pkg is
         i_addr_len : integer
     ) return std_logic_vector;
     
+    --please only use these for simulation.
+    pure function get_chunk_x(i_addr : std_logic_vector) return integer;
+    pure function get_chunk_y(i_addr : std_logic_vector) return integer;
+    
     pure function chunk_to_vector(i_chunk : t_chunk_type) return std_logic_vector;
     
     pure function vector_to_chunk(i_vector : std_logic_vector(35 downto 0)) return t_chunk_type;
@@ -93,6 +97,28 @@ package body GOL_pkg is
                 severity failure;
         end if;
         return i_msb & std_logic_vector(to_unsigned(v_result_int, i_addr_len - 1));
+    end function;
+    
+    pure function get_chunk_x(i_addr : std_logic_vector) return integer is
+        variable v_addr_tmp : std_logic_vector(i_addr'range);
+        variable v_ans : integer;
+    begin
+        v_addr_tmp := i_addr;
+        v_addr_tmp(v_addr_tmp'high) := '0'; --remove msb, parity bit
+        v_ans := to_integer(unsigned(v_addr_tmp));
+        v_ans := v_ans mod c_num_chunk_cols;
+        return v_ans;
+    end function;
+    
+    pure function get_chunk_y(i_addr : std_logic_vector) return integer is
+        variable v_addr_tmp : std_logic_vector(i_addr'range);
+        variable v_ans : integer;
+    begin
+        v_addr_tmp := i_addr;
+        v_addr_tmp(v_addr_tmp'high) := '0'; --remove msb, parity bit
+        v_ans := to_integer(unsigned(v_addr_tmp));
+        v_ans := v_ans/c_num_chunk_cols;
+        return v_ans;
     end function;
     
     pure function chunk_to_vector(i_chunk : t_chunk_type) return std_logic_vector is

@@ -8,19 +8,20 @@
             <top_module name="GOL_chunk_stepper_tb" />
             <top_module name="glbl" />
             <top_module name="gol_pkg" />
+            <top_module name="string_pkg" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="152800001fs"></ZoomEndTime>
-      <Cursor1Time time="455000fs"></Cursor1Time>
+      <ZoomStartTime time="1008821667fs"></ZoomStartTime>
+      <ZoomEndTime time="1116721668fs"></ZoomEndTime>
+      <Cursor1Time time="666805000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="214"></NameColumnWidth>
-      <ValueColumnWidth column_width="117"></ValueColumnWidth>
+      <ValueColumnWidth column_width="113"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="64" />
+   <WVObjectSize size="54" />
    <wvobject fp_name="/GOL_chunk_stepper_tb/i_clk" type="logic">
       <obj_property name="ElementShortName">i_clk</obj_property>
       <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -33,45 +34,41 @@
       <obj_property name="ElementShortName">i_step_ena</obj_property>
       <obj_property name="ObjectShortName">i_step_ena</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_top_edge" type="array">
-      <obj_property name="ElementShortName">i_top_edge[191:0]</obj_property>
-      <obj_property name="ObjectShortName">i_top_edge[191:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_bottom_edge" type="array">
-      <obj_property name="ElementShortName">i_bottom_edge[191:0]</obj_property>
-      <obj_property name="ObjectShortName">i_bottom_edge[191:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_right_edge" type="array">
-      <obj_property name="ElementShortName">i_right_edge[95:0]</obj_property>
-      <obj_property name="ObjectShortName">i_right_edge[95:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_left_edge" type="array">
-      <obj_property name="ElementShortName">i_left_edge[95:0]</obj_property>
-      <obj_property name="ObjectShortName">i_left_edge[95:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_top_left_bit" type="logic">
-      <obj_property name="ElementShortName">i_top_left_bit</obj_property>
-      <obj_property name="ObjectShortName">i_top_left_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_top_right_bit" type="logic">
-      <obj_property name="ElementShortName">i_top_right_bit</obj_property>
-      <obj_property name="ObjectShortName">i_top_right_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_bottom_left_bit" type="logic">
-      <obj_property name="ElementShortName">i_bottom_left_bit</obj_property>
-      <obj_property name="ObjectShortName">i_bottom_left_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_bottom_right_bit" type="logic">
-      <obj_property name="ElementShortName">i_bottom_right_bit</obj_property>
-      <obj_property name="ObjectShortName">i_bottom_right_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/i_curr_state_msb" type="logic">
-      <obj_property name="ElementShortName">i_curr_state_msb</obj_property>
-      <obj_property name="ObjectShortName">i_curr_state_msb</obj_property>
-   </wvobject>
    <wvobject fp_name="/GOL_chunk_stepper_tb/i_bram_rd_data" type="array">
       <obj_property name="ElementShortName">i_bram_rd_data[35:0]</obj_property>
       <obj_property name="ObjectShortName">i_bram_rd_data[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_top_to_bottom_edge" type="array">
+      <obj_property name="ElementShortName">s_top_to_bottom_edge[191:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_to_bottom_edge[191:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_bottom_to_top_edge" type="array">
+      <obj_property name="ElementShortName">s_bottom_to_top_edge[191:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_to_top_edge[191:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_right_to_left_edge" type="array">
+      <obj_property name="ElementShortName">s_right_to_left_edge[95:0]</obj_property>
+      <obj_property name="ObjectShortName">s_right_to_left_edge[95:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_left_to_right_edge" type="array">
+      <obj_property name="ElementShortName">s_left_to_right_edge[95:0]</obj_property>
+      <obj_property name="ObjectShortName">s_left_to_right_edge[95:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_top_left_to_bottom_right_bit" type="logic">
+      <obj_property name="ElementShortName">s_top_left_to_bottom_right_bit</obj_property>
+      <obj_property name="ObjectShortName">s_top_left_to_bottom_right_bit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_top_right_to_bottom_left_bit" type="logic">
+      <obj_property name="ElementShortName">s_top_right_to_bottom_left_bit</obj_property>
+      <obj_property name="ObjectShortName">s_top_right_to_bottom_left_bit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_bottom_left_to_top_right_bit" type="logic">
+      <obj_property name="ElementShortName">s_bottom_left_to_top_right_bit</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_left_to_top_right_bit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/s_bottom_right_top_left_bit" type="logic">
+      <obj_property name="ElementShortName">s_bottom_right_top_left_bit</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_right_top_left_bit</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_chunk_stepper_tb/o_bram_clk" type="logic">
       <obj_property name="ElementShortName">o_bram_clk</obj_property>
@@ -93,37 +90,9 @@
       <obj_property name="ElementShortName">o_bram_wr_data[35:0]</obj_property>
       <obj_property name="ObjectShortName">o_bram_wr_data[35:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_top_edge" type="array">
-      <obj_property name="ElementShortName">o_top_edge[191:0]</obj_property>
-      <obj_property name="ObjectShortName">o_top_edge[191:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_bottom_edge" type="array">
-      <obj_property name="ElementShortName">o_bottom_edge[191:0]</obj_property>
-      <obj_property name="ObjectShortName">o_bottom_edge[191:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_right_edge" type="array">
-      <obj_property name="ElementShortName">o_right_edge[95:0]</obj_property>
-      <obj_property name="ObjectShortName">o_right_edge[95:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_left_edge" type="array">
-      <obj_property name="ElementShortName">o_left_edge[95:0]</obj_property>
-      <obj_property name="ObjectShortName">o_left_edge[95:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_top_left_bit" type="logic">
-      <obj_property name="ElementShortName">o_top_left_bit</obj_property>
-      <obj_property name="ObjectShortName">o_top_left_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_top_right_bit" type="logic">
-      <obj_property name="ElementShortName">o_top_right_bit</obj_property>
-      <obj_property name="ObjectShortName">o_top_right_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_bottom_left_bit" type="logic">
-      <obj_property name="ElementShortName">o_bottom_left_bit</obj_property>
-      <obj_property name="ObjectShortName">o_bottom_left_bit</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/o_bottom_right_bit" type="logic">
-      <obj_property name="ElementShortName">o_bottom_right_bit</obj_property>
-      <obj_property name="ObjectShortName">o_bottom_right_bit</obj_property>
+   <wvobject fp_name="/GOL_chunk_stepper_tb/UUT/s_current_state_msb" type="logic">
+      <obj_property name="ElementShortName">s_current_state_msb</obj_property>
+      <obj_property name="ObjectShortName">s_current_state_msb</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_chunk_stepper_tb/UUT/s_next_state_msb" type="logic">
       <obj_property name="ElementShortName">s_next_state_msb</obj_property>
@@ -268,13 +237,5 @@
    <wvobject fp_name="/GOL_chunk_stepper_tb/UUT/s_last_write" type="logic">
       <obj_property name="ElementShortName">s_last_write</obj_property>
       <obj_property name="ObjectShortName">s_last_write</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/UUT/c_bram_read_delay" type="other">
-      <obj_property name="ElementShortName">c_bram_read_delay</obj_property>
-      <obj_property name="ObjectShortName">c_bram_read_delay</obj_property>
-   </wvobject>
-   <wvobject fp_name="/GOL_chunk_stepper_tb/UUT/c_readout_sm_reset_state" type="other">
-      <obj_property name="ElementShortName">c_readout_sm_reset_state</obj_property>
-      <obj_property name="ObjectShortName">c_readout_sm_reset_state</obj_property>
    </wvobject>
 </wave_config>

@@ -40,9 +40,7 @@ entity GOL_chunk_stepper is
         i_top_edge, i_bottom_edge : in STD_LOGIC_VECTOR(c_num_cell_cols-1 downto 0) := (others => '0');
         i_right_edge, i_left_edge : in STD_LOGIC_VECTOR(c_num_cell_rows-1 downto 0) := (others => '0');
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : in std_logic := '0';
-        
-        i_curr_state_msb : in STD_LOGIC;
-        
+                
         o_bram_clk : out std_logic;
         o_bram_ena, o_bram_we : out std_logic;
         o_bram_addr : out std_logic_vector(9 downto 0);
@@ -60,7 +58,7 @@ architecture Behavioral of GOL_chunk_stepper is
 
     constant c_bram_read_delay : integer := 2;
     
-    signal s_next_state_msb : std_logic;
+    signal s_current_state_msb, s_next_state_msb : std_logic;
     
     signal s_cache_top_left_bit : std_logic;
     signal s_cache_top_edge : std_logic_vector(c_chunk_width-1 downto 0);
@@ -123,7 +121,7 @@ begin
 
     o_bram_clk <= i_clk;
     
-    s_next_state_msb <= not i_curr_state_msb;
+    s_next_state_msb <= not s_current_state_msb;
     
     s_chunk_in <= vector_to_chunk(i_bram_rd_data);
     
@@ -181,7 +179,7 @@ begin
                 
             when READ_TOP_LEFT => 
             
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int-1, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int-1, s_current_state_msb, o_bram_addr'length);
                 
                 s_we_top_left_bit_pline(0) <= '1';
 
@@ -189,7 +187,7 @@ begin
                 
             when READ_TOP_MIDDLE => 
             
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int-1, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int-1, s_current_state_msb, o_bram_addr'length);
 
                 s_we_top_edge_pline(0) <= '1';
                 
@@ -197,7 +195,7 @@ begin
                 
             when READ_TOP_RIGHT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int-1, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int-1, s_current_state_msb, o_bram_addr'length);
 
                 s_we_top_right_bit_pline(0) <= '1';
                 
@@ -205,14 +203,14 @@ begin
                 
             when READ_CENTER_LEFT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int, s_current_state_msb, o_bram_addr'length);
                 s_we_left_edge_pline(0) <= '1';
                 
                 s_readout_state <= READ_CENTER;
                 
             when READ_CENTER =>
             
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int, s_current_state_msb, o_bram_addr'length);
                                 
                 s_we_center_chunk_pline(0) <= '1';
                 
@@ -220,7 +218,7 @@ begin
                 
             when READ_CENTER_RIGHT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int, s_current_state_msb, o_bram_addr'length);
                 
                 s_we_right_edge_pline(0) <= '1';
                 
@@ -228,7 +226,7 @@ begin
                 
             when READ_BOTTOM_LEFT =>
                  
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int+1, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int+1, s_current_state_msb, o_bram_addr'length);
                 
                 s_we_bottom_left_bit_pline(0) <= '1';
                 
@@ -236,7 +234,7 @@ begin
                 
             when READ_BOTTOM_MIDDLE =>
                  
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int+1, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int+1, s_current_state_msb, o_bram_addr'length);
                 
                 s_we_bottom_edge_pline(0) <= '1';
                 
@@ -244,7 +242,7 @@ begin
                 
             when READ_BOTTOM_RIGHT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int+1, i_curr_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int+1, s_current_state_msb, o_bram_addr'length);
                 
                 s_we_bottom_right_bit_pline(0) <= '1';
                 
@@ -283,11 +281,9 @@ begin
                     s_current_chunk_y <= s_current_chunk_y + 1;
                     if (s_current_chunk_y_int = c_num_chunk_rows - 1) then
                         s_current_chunk_y <= (others => '0');
+                        s_current_state_msb <= not s_current_state_msb;
                     end if;                
                 end if;
-                
-                
-                
                 
                 if (s_current_chunk_y_int = 0) then
                     
@@ -341,8 +337,14 @@ begin
             
             if (s_we_top_left_bit_pline(s_we_top_left_bit_pline'high) = '1') then
                 s_cache_top_left_bit <= s_chunk_in(s_chunk_in'high)(s_chunk_in(0)'high);
-                if (s_current_chunk_x_int = 0 or s_current_chunk_y_int = 0) then
-                    s_cache_top_left_bit <= i_top_left_bit;
+                if (s_current_chunk_y_int = 0) then
+                    if (s_current_chunk_x_int = 0) then
+                        s_cache_top_left_bit <= i_top_left_bit;
+                    else
+                        s_cache_top_left_bit <= i_top_edge(c_chunk_width*s_current_chunk_x_int - 1);
+                    end if;
+                elsif (s_current_chunk_x_int = 0) then
+                    s_cache_top_left_bit <= i_left_edge(c_chunk_height*s_current_chunk_y_int - 1);
                 end if;
             end if;
             
@@ -355,8 +357,14 @@ begin
             
             if (s_we_top_right_bit_pline(s_we_top_right_bit_pline'high) = '1') then
                 s_cache_top_right_bit <= s_chunk_in(s_chunk_in'high)(0);
-                if (s_current_chunk_x_int = c_num_chunk_cols-1 or s_current_chunk_y_int = 0) then
-                    s_cache_top_right_bit <= i_top_right_bit;
+                if (s_current_chunk_y_int = 0) then
+                    if (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                        s_cache_top_right_bit <= i_top_right_bit;
+                    else
+                        s_cache_top_right_bit <= i_top_edge(c_chunk_width*(s_current_chunk_x_int+1));
+                    end if;
+                elsif (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                    s_cache_top_right_bit <= i_right_edge(c_chunk_height*s_current_chunk_y_int - 1);
                 end if;
             end if;
             
@@ -384,8 +392,14 @@ begin
             
             if (s_we_bottom_left_bit_pline(s_we_bottom_left_bit_pline'high) = '1') then
                 s_cache_bottom_left_bit <= s_chunk_in(0)(s_chunk_in(0)'high);
-                if (s_current_chunk_x_int = 0 or s_current_chunk_y_int = c_num_chunk_rows-1) then
-                    s_cache_bottom_left_bit <= i_bottom_left_bit;
+                if (s_current_chunk_y_int = c_num_chunk_rows-1) then
+                    if (s_current_chunk_x_int = 0) then
+                        s_cache_bottom_left_bit <= i_bottom_left_bit;
+                    else
+                        s_cache_bottom_left_bit <= i_bottom_edge(c_chunk_width*s_current_chunk_x_int - 1);
+                    end if;
+                elsif (s_current_chunk_x_int = 0) then
+                    s_cache_bottom_left_bit <= i_left_edge(c_chunk_height*(s_current_chunk_y_int+1));
                 end if;
             end if;
             
@@ -399,8 +413,14 @@ begin
             
             if (s_we_bottom_right_bit_pline(s_we_bottom_right_bit_pline'high) = '1') then
                 s_cache_bottom_right_bit <= s_chunk_in(0)(0);
-                if (s_current_chunk_x_int = c_num_chunk_cols-1 or s_current_chunk_y_int = c_num_chunk_rows-1) then
-                    s_cache_bottom_right_bit <= i_bottom_right_bit;
+                if (s_current_chunk_y_int = c_num_chunk_rows-1) then
+                    if (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                        s_cache_bottom_right_bit <= i_bottom_right_bit;
+                    else
+                        s_cache_bottom_right_bit <= i_bottom_edge(c_chunk_width*(s_current_chunk_x_int+1));
+                    end if;
+                elsif (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                    s_cache_bottom_right_bit <= i_right_edge(c_chunk_height*(s_current_chunk_y_int+1));
                 end if;
             end if;
             
@@ -432,6 +452,7 @@ begin
                 s_we_bottom_right_bit_pline <= (others => '0');
                 s_current_chunk_x <= (others => '0');
                 s_current_chunk_y <= (others => '0');
+                s_current_state_msb <= '0';
                 s_readout_state <= c_readout_sm_reset_state;
             end if;
             

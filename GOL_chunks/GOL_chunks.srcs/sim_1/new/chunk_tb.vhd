@@ -66,6 +66,15 @@ begin
             wait for 10 ns;
         end loop;
         
+        v_chunk := (
+		  0 => "000010",
+		  1 => "000100",
+		  2 => "000111",
+		  others => (others => '0')
+		);
+		report "0th row in chunk: " & slv_to_string(v_chunk(0));
+		report slv_to_string(chunk_to_vector(v_chunk));
+        
         assert v_pass report "Test failed" severity failure;
         assert false report "Test passed" severity failure;
         
