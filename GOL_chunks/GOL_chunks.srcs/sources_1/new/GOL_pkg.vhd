@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 08/03/2022 09:09:04 AM
 -- Design Name: 
--- Module Name: GOL_pkg - Behavioral
+-- Module Name: GOL_pkg
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -34,20 +34,29 @@ use IEEE.MATH_REAL.ALL;
 
 package GOL_pkg is
     
+    --Height and width of one chunk, in cells.
+    --Product of these two integers must be equal to the length of the data word from memory.
+    --Ideally, these numbers should be as close in value as possible, if not the same.
+    --This helps reduce the ratio of border bits to internal bits for chunk calculation, which saves on registers.
     constant c_chunk_width : integer := 6;
     constant c_chunk_height : integer := 6;
     
+    --number of rows and columns, in chunks. Doesn't need to be powers of 2.
     constant c_num_chunk_rows : integer := 16;
     constant c_num_chunk_cols : integer := 32;
     
+    --number of rows and columsn, in cells.
+    --Product of these two numbers must be less than or equal to the number of bits available in memory.
     constant c_num_cell_rows : integer := c_num_chunk_rows*c_chunk_height;
     constant c_num_cell_cols : integer := c_num_chunk_cols*c_chunk_width;
     
+    --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_num_chunk_col_bits : integer := integer(floor(log2(real(c_num_chunk_cols))+1.0));
     constant c_num_chunk_row_bits : integer := integer(floor(log2(real(c_num_chunk_rows))+1.0));
     
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     
+    --Convert chunk X and Y coordinates, as well as the MSB, into an address to be used for read/write on memory.
     pure function get_chunk_addr(
         i_chunk_x : integer;
         i_chunk_y : integer;
@@ -56,20 +65,24 @@ package GOL_pkg is
     ) return std_logic_vector;
     
     --please only use these for simulation.
+    --converts address (obtained via get_chunk_addr) back to the chunk X and Y coords.
+    --NOT terribly synthesizable.
     pure function get_chunk_x(i_addr : std_logic_vector) return integer;
     pure function get_chunk_y(i_addr : std_logic_vector) return integer;
     
+    --converts chunk to std_logic_vector to be written to memory
     pure function chunk_to_vector(i_chunk : t_chunk_type) return std_logic_vector;
     
+    --converts std_logic_vector from memory to chunk
     pure function vector_to_chunk(i_vector : std_logic_vector(35 downto 0)) return t_chunk_type;
     
-    --Used in simulation only
+    --Used in simulation only, for verification
     pure function get_next_cell(
         i_prev_cell : std_logic;
         i_neighbor_cells : std_logic_vector(7 downto 0)
     ) return std_logic;
     
-    --Used in simulation only
+    --Used in simulation only, for verification
     pure function get_next_chunk(
         i_chunk : t_chunk_type;
         i_top_edge, i_bottom_edge : std_logic_vector(c_chunk_width-1 downto 0);

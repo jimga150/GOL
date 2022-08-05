@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 08/01/2022 04:11:09 PM
 -- Design Name: 
--- Module Name: GOL_chunk_stepper - Behavioral
+-- Module Name: GOL_block_stepper - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -33,9 +33,9 @@ use work.GOL_pkg.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity GOL_chunk_stepper is
+entity GOL_block_stepper is
     Port (
-        i_clk, i_rst, i_step_ena : in STD_LOGIC;
+        i_clk, i_rst, i_do_frame : in STD_LOGIC;
         
         i_top_edge, i_bottom_edge : in STD_LOGIC_VECTOR(c_num_cell_cols-1 downto 0) := (others => '0');
         i_right_edge, i_left_edge : in STD_LOGIC_VECTOR(c_num_cell_rows-1 downto 0) := (others => '0');
@@ -52,14 +52,20 @@ entity GOL_chunk_stepper is
         o_top_left_bit, o_top_right_bit, o_bottom_left_bit, o_bottom_right_bit : out std_logic
         
     );
-end GOL_chunk_stepper;
+end GOL_block_stepper;
 
-architecture Behavioral of GOL_chunk_stepper is
+architecture Behavioral of GOL_block_stepper is
 
     constant c_bram_read_delay : integer := 2;
     
+    --the MSB of the address used for BRAM selects for the half of the memory we are using for the current frame 
+    --vs the next fram that is being wirtten to.
+    --for example, when current_state_msb is 1, the current frame is stored at 1XXXXXXXXX (base 2), 
+    --and the chunks for the next frame, the frame being calculated, are all written to 1XXXXXXXXX.
     signal s_current_state_msb, s_next_state_msb : std_logic;
     
+    --caches the chunk for the old frame as well as the surrounding edges and corner bits ("border bits")
+    --to use to calcualate the corresponding chunk of the new frame
     signal s_cache_top_left_bit : std_logic;
     signal s_cache_top_edge : std_logic_vector(c_chunk_width-1 downto 0);
     signal s_cache_top_right_bit : std_logic;
@@ -72,6 +78,7 @@ architecture Behavioral of GOL_chunk_stepper is
     signal s_cache_bottom_edge : std_logic_vector(c_chunk_width-1 downto 0);
     signal s_cache_bottom_right_bit : std_logic;
     
+    --write enable pipelines for the caches, to account for the BRAM read delay
     signal s_we_top_left_bit_pline : std_logic_vector(c_bram_read_delay downto 0);
     signal s_we_top_edge_pline : std_logic_vector(c_bram_read_delay downto 0);
     signal s_we_top_right_bit_pline : std_logic_vector(c_bram_read_delay downto 0);
@@ -84,10 +91,14 @@ architecture Behavioral of GOL_chunk_stepper is
     signal s_we_bottom_edge_pline : std_logic_vector(c_bram_read_delay downto 0);
     signal s_we_bottom_right_bit_pline : std_logic_vector(c_bram_read_delay downto 0);
     
+    --registers to store the block's edge and corner bits ("border bits"). 
+    --While a frame is being calculated, the border bits of that new frame are written to here, 
+    --and the border bits of the old frame are still being output for the use of neighboring blocks.
     signal s_block_top_edge, s_block_bottom_edge : std_logic_vector(c_num_cell_cols-1 downto 0);
     signal s_block_right_edge, s_block_left_edge : std_logic_vector(c_num_cell_rows-1 downto 0);
     signal s_block_top_left_bit, s_block_top_right_bit, s_block_bottom_left_bit, s_block_bottom_right_bit : std_logic;
     
+    --the X and Y coordinates of the current chunk within this block.
     signal s_current_chunk_x : unsigned(c_num_chunk_col_bits-1 downto 0);
     signal s_current_chunk_y : unsigned(c_num_chunk_row_bits-1 downto 0);
     signal s_current_chunk_x_int : integer;
@@ -112,9 +123,13 @@ architecture Behavioral of GOL_chunk_stepper is
     
     signal s_read_wait_cnt : integer range 0 to (c_bram_read_delay + 1);
     
+    --BRAM read data, converted to a chunk for convenience
     signal s_chunk_in : t_chunk_type;
+    
+    --chunk for new frame
     signal s_chunk_towrite : t_chunk_type;
     
+    --'1' when the next write to BRAM will be the last for this frame.
     signal s_last_write : std_logic;
     
 begin
@@ -145,9 +160,11 @@ begin
     process(i_clk) is begin
         if rising_edge(i_clk) then
         
+            --always enable BRAM, since disabling it means disabling the input and output pipelines, which stalls reads.
             o_bram_ena <= '1';
             o_bram_we <= '0';
             
+            --shift all pipelines. the '0' on the end may be overridden later by the state machine
             s_we_top_left_bit_pline <= s_we_top_left_bit_pline(s_we_top_left_bit_pline'high - 1 downto 0) & '0';
             s_we_top_edge_pline <= s_we_top_edge_pline(s_we_top_edge_pline'high - 1 downto 0) & '0';
             s_we_top_right_bit_pline <= s_we_top_right_bit_pline(s_we_top_right_bit_pline'high - 1 downto 0) & '0';
@@ -161,6 +178,7 @@ begin
             case (s_readout_state) is
             when READOUT_IDLE => 
             
+                --its ok to disable the BRAM here since there should not be any pending reads on the BRAM at this juncture.
                 o_bram_ena <= '0';
                 
                 --update edge outputs for neighboring blocks
@@ -173,7 +191,7 @@ begin
                 o_bottom_left_bit <= s_block_bottom_left_bit;
                 o_bottom_right_bit <= s_block_bottom_right_bit;
             
-                if (i_step_ena = '1') then
+                if (i_do_frame = '1') then
                     s_readout_state <= READ_TOP_LEFT;
                 end if;
                 

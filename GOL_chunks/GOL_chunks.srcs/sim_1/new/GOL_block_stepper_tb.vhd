@@ -3,8 +3,8 @@
 -- Engineer: 
 -- 
 -- Create Date: 08/02/2022 10:56:28
--- Design Name: GOL_chunk_stepper_tb
--- Module Name: GOL_chunk_stepper_tb - Behavioral
+-- Design Name: GOL_block_stepper_tb
+-- Module Name: GOL_block_stepper_tb - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -26,10 +26,10 @@ use work.GOL_pkg.all;
 use work.string_pkg.all;
 use work.bmp_pkg.all;
 
-entity GOL_chunk_stepper_tb is
-end GOL_chunk_stepper_tb;
+entity GOL_block_stepper_tb is
+end GOL_block_stepper_tb;
 
-architecture Behavioral of GOL_chunk_stepper_tb is
+architecture Behavioral of GOL_block_stepper_tb is
 
     --Clocks
     signal i_clk : STD_LOGIC := '0';
@@ -38,7 +38,7 @@ architecture Behavioral of GOL_chunk_stepper_tb is
     signal i_rst : STD_LOGIC := '1';
 
     --General inputs
-    signal i_step_ena : STD_LOGIC := '0';
+    signal i_do_frame : STD_LOGIC := '0';
     signal i_bram_rd_data : std_logic_vector(35 downto 0) := (others => '0');
     
     --Intermediate signals
@@ -63,11 +63,11 @@ architecture Behavioral of GOL_chunk_stepper_tb is
 
 begin
 
-    UUT: entity work.GOL_chunk_stepper
+    UUT: entity work.GOL_block_stepper
     port map(
         i_clk => i_clk,
         i_rst => i_rst,
-        i_step_ena => i_step_ena,
+        i_do_frame => i_do_frame,
         i_top_edge => s_bottom_to_top_edge,
         i_bottom_edge => s_top_to_bottom_edge,
         i_right_edge => s_left_to_right_edge,
@@ -123,11 +123,11 @@ begin
 		
 		for i in 0 to 1000 loop
 		
-            i_step_ena <= '1';
+            i_do_frame <= '1';
             
             wait for i_clk_period;
             
-            i_step_ena <= '0';
+            i_do_frame <= '0';
             
             wait until o_bram_ena = '0';
             wait for i_clk_period*10;
