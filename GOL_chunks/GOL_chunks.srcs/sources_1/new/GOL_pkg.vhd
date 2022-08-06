@@ -42,17 +42,40 @@ package GOL_pkg is
     constant c_chunk_height : integer := 6;
     
     --number of rows and columns, in chunks. Doesn't need to be powers of 2.
-    constant c_num_chunk_rows : integer := 16;
-    constant c_num_chunk_cols : integer := 32;
+    constant c_block_num_chunk_rows : integer := 16;
+    constant c_block_num_chunk_cols : integer := 32;
     
     --number of rows and columsn, in cells.
     --Product of these two numbers must be less than or equal to the number of bits available in memory.
-    constant c_num_cell_rows : integer := c_num_chunk_rows*c_chunk_height;
-    constant c_num_cell_cols : integer := c_num_chunk_cols*c_chunk_width;
+    constant c_block_num_cell_rows : integer := c_block_num_chunk_rows*c_chunk_height;
+    constant c_block_num_cell_cols : integer := c_block_num_chunk_cols*c_chunk_width;
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
-    constant c_num_chunk_col_bits : integer := integer(floor(log2(real(c_num_chunk_cols))+1.0));
-    constant c_num_chunk_row_bits : integer := integer(floor(log2(real(c_num_chunk_rows))+1.0));
+    constant c_block_num_chunk_col_bits : integer := integer(floor(log2(real(c_block_num_chunk_cols))+1.0));
+    constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
+    
+    --number of rows and columns, in blocks per field.
+    constant c_field_num_block_rows : integer := 12;
+    constant c_field_num_block_cols : integer := 10;
+    
+    --number of rows and columsn, in chunks per field
+    constant c_field_num_chunk_rows : integer := c_field_num_block_rows*c_block_num_chunk_rows;
+    constant c_field_num_chunk_cols : integer := c_field_num_block_cols*c_block_num_chunk_cols;
+    
+    --number of bits necessary to represent the chunk row and column as an unsigned type.
+    --(wrt the field)
+    constant c_field_num_chunk_col_bits : integer := integer(floor(log2(real(c_field_num_chunk_cols))+1.0));
+    constant c_field_num_chunk_row_bits : integer := integer(floor(log2(real(c_field_num_chunk_rows))+1.0));
+    
+    --number of rows and columns, in cells per field
+    --try to make this close to a standard screen size
+    constant c_field_num_cell_rows : integer := c_field_num_chunk_rows*c_chunk_height;
+    constant c_field_num_cell_cols : integer := c_field_num_chunk_cols*c_chunk_width;
+    
+    --number of bits necessary to represent the cell row and column as an unsigned type.
+    --(wrt the field)
+    constant c_field_num_cell_col_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
+    constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_cols))+1.0));
     
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     
@@ -102,8 +125,8 @@ package body GOL_pkg is
     ) return std_logic_vector is 
         variable v_result_int : integer; 
     begin
-        v_result_int := i_chunk_x + c_num_chunk_cols*i_chunk_y;
-        if (i_chunk_x < c_num_chunk_cols and i_chunk_y < c_num_chunk_rows) then
+        v_result_int := i_chunk_x + c_block_num_chunk_cols*i_chunk_y;
+        if (i_chunk_x < c_block_num_chunk_cols and i_chunk_y < c_block_num_chunk_rows) then
             assert v_result_int < 2**(i_addr_len-1) 
                 report "Address length " & integer'image(i_addr_len-1) & " cannot hold chunk address result of " & integer'image(v_result_int) & 
                     " (chunk (" & integer'image(i_chunk_x) & ", " & integer'image(i_chunk_y) & "))"
@@ -119,7 +142,7 @@ package body GOL_pkg is
         v_addr_tmp := i_addr;
         v_addr_tmp(v_addr_tmp'high) := '0'; --remove msb, parity bit
         v_ans := to_integer(unsigned(v_addr_tmp));
-        v_ans := v_ans mod c_num_chunk_cols;
+        v_ans := v_ans mod c_block_num_chunk_cols;
         return v_ans;
     end function;
     
@@ -130,7 +153,7 @@ package body GOL_pkg is
         v_addr_tmp := i_addr;
         v_addr_tmp(v_addr_tmp'high) := '0'; --remove msb, parity bit
         v_ans := to_integer(unsigned(v_addr_tmp));
-        v_ans := v_ans/c_num_chunk_cols;
+        v_ans := v_ans/c_block_num_chunk_cols;
         return v_ans;
     end function;
     

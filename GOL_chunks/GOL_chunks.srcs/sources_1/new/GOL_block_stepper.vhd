@@ -37,8 +37,8 @@ entity GOL_block_stepper is
     Port (
         i_clk, i_rst, i_do_frame : in STD_LOGIC;
         
-        i_top_edge, i_bottom_edge : in STD_LOGIC_VECTOR(c_num_cell_cols-1 downto 0) := (others => '0');
-        i_right_edge, i_left_edge : in STD_LOGIC_VECTOR(c_num_cell_rows-1 downto 0) := (others => '0');
+        i_top_edge, i_bottom_edge : in STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0) := (others => '0');
+        i_right_edge, i_left_edge : in STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0) := (others => '0');
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : in std_logic := '0';
                 
         o_bram_clk : out std_logic;
@@ -47,8 +47,8 @@ entity GOL_block_stepper is
         o_bram_wr_data : out std_logic_vector(35 downto 0);
         i_bram_rd_data : in std_logic_vector(35 downto 0);
         
-        o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_num_cell_cols-1 downto 0);
-        o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_num_cell_rows-1 downto 0);
+        o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0);
+        o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0);
         o_top_left_bit, o_top_right_bit, o_bottom_left_bit, o_bottom_right_bit : out std_logic;
         
         o_current_state_msb : out std_logic
@@ -96,13 +96,13 @@ architecture Behavioral of GOL_block_stepper is
     --registers to store the block's edge and corner bits ("border bits"). 
     --While a frame is being calculated, the border bits of that new frame are written to here, 
     --and the border bits of the old frame are still being output for the use of neighboring blocks.
-    signal s_block_top_edge, s_block_bottom_edge : std_logic_vector(c_num_cell_cols-1 downto 0);
-    signal s_block_right_edge, s_block_left_edge : std_logic_vector(c_num_cell_rows-1 downto 0);
+    signal s_block_top_edge, s_block_bottom_edge : std_logic_vector(c_block_num_cell_cols-1 downto 0);
+    signal s_block_right_edge, s_block_left_edge : std_logic_vector(c_block_num_cell_rows-1 downto 0);
     signal s_block_top_left_bit, s_block_top_right_bit, s_block_bottom_left_bit, s_block_bottom_right_bit : std_logic;
     
     --the X and Y coordinates of the current chunk within this block.
-    signal s_current_chunk_x : unsigned(c_num_chunk_col_bits-1 downto 0);
-    signal s_current_chunk_y : unsigned(c_num_chunk_row_bits-1 downto 0);
+    signal s_current_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
+    signal s_current_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
     signal s_current_chunk_x_int : integer;
     signal s_current_chunk_y_int : integer;
     
@@ -297,10 +297,10 @@ begin
             
                 s_current_chunk_x <= s_current_chunk_x + 1;
             
-                if (s_current_chunk_x_int = c_num_chunk_cols - 1) then
+                if (s_current_chunk_x_int = c_block_num_chunk_cols - 1) then
                     s_current_chunk_x <= (others => '0');
                     s_current_chunk_y <= s_current_chunk_y + 1;
-                    if (s_current_chunk_y_int = c_num_chunk_rows - 1) then
+                    if (s_current_chunk_y_int = c_block_num_chunk_rows - 1) then
                         s_current_chunk_y <= (others => '0');
                         s_current_state_msb <= not s_current_state_msb;
                     end if;                
@@ -314,7 +314,7 @@ begin
                 
                     s_block_top_edge(c_chunk_width*(s_current_chunk_x_int+1)-1 downto c_chunk_width*s_current_chunk_x_int) <= s_chunk_towrite(0);
                     
-                    if (s_current_chunk_x_int = c_num_chunk_cols - 1) then
+                    if (s_current_chunk_x_int = c_block_num_chunk_cols - 1) then
                         s_block_top_right_bit <= s_chunk_towrite(0)(c_chunk_width-1);
                     end if;
                     
@@ -326,13 +326,13 @@ begin
                     end loop;
                 end if;
                 
-                if (s_current_chunk_x_int = c_num_chunk_cols - 1) then
+                if (s_current_chunk_x_int = c_block_num_chunk_cols - 1) then
                     for r in 0 to c_chunk_height-1 loop
                         s_block_right_edge(c_chunk_height*s_current_chunk_y_int + r) <= s_chunk_towrite(r)(c_chunk_width-1);
                     end loop;
                 end if;
                 
-                if (s_current_chunk_y_int = c_num_chunk_rows - 1) then
+                if (s_current_chunk_y_int = c_block_num_chunk_rows - 1) then
                     
                     if (s_current_chunk_x_int = 0) then
                         s_block_bottom_left_bit <= s_chunk_towrite(c_chunk_height-1)(0);
@@ -340,7 +340,7 @@ begin
                 
                     s_block_bottom_edge(c_chunk_width*(s_current_chunk_x_int+1)-1 downto c_chunk_width*s_current_chunk_x_int) <= s_chunk_towrite(c_chunk_height-1);
                     
-                    if (s_current_chunk_x_int = c_num_chunk_cols - 1) then
+                    if (s_current_chunk_x_int = c_block_num_chunk_cols - 1) then
                         s_block_bottom_right_bit <= s_chunk_towrite(c_chunk_height-1)(c_chunk_width-1);
                     end if;
                     
@@ -348,7 +348,7 @@ begin
                 
             end if;
             
-            if (s_current_chunk_x_int = c_num_chunk_cols - 1 and s_current_chunk_y_int = c_num_chunk_rows - 1) then
+            if (s_current_chunk_x_int = c_block_num_chunk_cols - 1 and s_current_chunk_y_int = c_block_num_chunk_rows - 1) then
                 s_last_write <= '1';
             end if;
             
@@ -379,12 +379,12 @@ begin
             if (s_we_top_right_bit_pline(s_we_top_right_bit_pline'high) = '1') then
                 s_cache_top_right_bit <= s_chunk_in(s_chunk_in'high)(0);
                 if (s_current_chunk_y_int = 0) then
-                    if (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                    if (s_current_chunk_x_int = c_block_num_chunk_cols-1) then
                         s_cache_top_right_bit <= i_top_right_bit;
                     else
                         s_cache_top_right_bit <= i_top_edge(c_chunk_width*(s_current_chunk_x_int+1));
                     end if;
-                elsif (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                elsif (s_current_chunk_x_int = c_block_num_chunk_cols-1) then
                     s_cache_top_right_bit <= i_right_edge(c_chunk_height*s_current_chunk_y_int - 1);
                 end if;
             end if;
@@ -406,14 +406,14 @@ begin
                 for r in 0 to c_chunk_height-1 loop
                     s_cache_right_edge(r) <= s_chunk_in(r)(0);
                 end loop;
-                if (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                if (s_current_chunk_x_int = c_block_num_chunk_cols-1) then
                     s_cache_right_edge <= i_right_edge(c_chunk_height*(s_current_chunk_y_int+1)-1 downto c_chunk_height*s_current_chunk_y_int);
                 end if;
             end if;
             
             if (s_we_bottom_left_bit_pline(s_we_bottom_left_bit_pline'high) = '1') then
                 s_cache_bottom_left_bit <= s_chunk_in(0)(s_chunk_in(0)'high);
-                if (s_current_chunk_y_int = c_num_chunk_rows-1) then
+                if (s_current_chunk_y_int = c_block_num_chunk_rows-1) then
                     if (s_current_chunk_x_int = 0) then
                         s_cache_bottom_left_bit <= i_bottom_left_bit;
                     else
@@ -426,7 +426,7 @@ begin
             
             if (s_we_bottom_edge_pline(s_we_bottom_edge_pline'high) = '1') then
                 s_cache_bottom_edge <= s_chunk_in(0);
-                if (s_current_chunk_y_int = c_num_chunk_rows-1) then
+                if (s_current_chunk_y_int = c_block_num_chunk_rows-1) then
                     s_cache_bottom_edge <= 
                         i_bottom_edge(c_chunk_width*(s_current_chunk_x_int+1)-1 downto c_chunk_width*s_current_chunk_x_int);
                 end if;
@@ -434,13 +434,13 @@ begin
             
             if (s_we_bottom_right_bit_pline(s_we_bottom_right_bit_pline'high) = '1') then
                 s_cache_bottom_right_bit <= s_chunk_in(0)(0);
-                if (s_current_chunk_y_int = c_num_chunk_rows-1) then
-                    if (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                if (s_current_chunk_y_int = c_block_num_chunk_rows-1) then
+                    if (s_current_chunk_x_int = c_block_num_chunk_cols-1) then
                         s_cache_bottom_right_bit <= i_bottom_right_bit;
                     else
                         s_cache_bottom_right_bit <= i_bottom_edge(c_chunk_width*(s_current_chunk_x_int+1));
                     end if;
-                elsif (s_current_chunk_x_int = c_num_chunk_cols-1) then
+                elsif (s_current_chunk_x_int = c_block_num_chunk_cols-1) then
                     s_cache_bottom_right_bit <= i_right_edge(c_chunk_height*(s_current_chunk_y_int+1));
                 end if;
             end if;

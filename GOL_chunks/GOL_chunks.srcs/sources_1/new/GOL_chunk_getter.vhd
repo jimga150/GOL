@@ -36,8 +36,8 @@ use work.GOL_pkg.all;
 entity GOL_chunk_getter is
     port(
         i_clk : in std_logic;
-        i_chunk_x : in unsigned(c_num_chunk_col_bits-1 downto 0);
-        i_chunk_y : in unsigned(c_num_chunk_col_bits-1 downto 0);
+        i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
+        i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
         i_curr_state_msb : in std_logic;
         o_chunk : out t_chunk_type;
         

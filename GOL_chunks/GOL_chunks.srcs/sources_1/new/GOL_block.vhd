@@ -37,18 +37,18 @@ entity GOL_block is
     port(
         i_clk, i_rst : in std_logic;
         
-        i_chunk_x : in unsigned(c_num_chunk_col_bits-1 downto 0);
-        i_chunk_y : in unsigned(c_num_chunk_col_bits-1 downto 0);
+        i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
+        i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
         o_chunk : out t_chunk_type;
         
         i_do_frame: in std_logic;
         
-        i_top_edge, i_bottom_edge : in std_logic_vector(c_num_cell_cols-1 downto 0) := (others => '0');
-        i_right_edge, i_left_edge : in std_logic_vector(c_num_cell_rows-1 downto 0) := (others => '0');
+        i_top_edge, i_bottom_edge : in std_logic_vector(c_block_num_cell_cols-1 downto 0) := (others => '0');
+        i_right_edge, i_left_edge : in std_logic_vector(c_block_num_cell_rows-1 downto 0) := (others => '0');
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : in std_logic := '0';
         
-        o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_num_cell_cols-1 downto 0);
-        o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_num_cell_rows-1 downto 0);
+        o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0);
+        o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0);
         o_top_left_bit, o_top_right_bit, o_bottom_left_bit, o_bottom_right_bit : out std_logic
     );
 end GOL_block;

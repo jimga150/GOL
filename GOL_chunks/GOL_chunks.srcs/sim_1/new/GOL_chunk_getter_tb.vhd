@@ -33,8 +33,8 @@ architecture Behavioral of GOL_chunk_getter_tb is
     signal i_clk : std_logic := '0';
 
     --General inputs
-    signal i_chunk_x : unsigned(c_num_chunk_col_bits-1 downto 0) := (others => '0');
-    signal i_chunk_y : unsigned(c_num_chunk_col_bits-1 downto 0) := (others => '0');
+    signal i_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
+    signal i_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0) := (others => '0');
     signal i_curr_state_msb : std_logic := '0';
     signal i_bram_rd_data : std_logic_vector(35 downto 0);
 

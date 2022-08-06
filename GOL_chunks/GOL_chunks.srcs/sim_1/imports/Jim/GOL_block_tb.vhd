@@ -37,15 +37,15 @@ architecture Behavioral of GOL_block_tb is
     signal i_rst : std_logic := '1';
     
     --General inputs
-    signal i_chunk_x : unsigned(c_num_chunk_col_bits-1 downto 0) := (others => '0');
-    signal i_chunk_y : unsigned(c_num_chunk_col_bits-1 downto 0) := (others => '0');
+    signal i_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
+    signal i_chunk_y : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
     signal i_do_frame : std_logic := '0';
     
     --Loopbacks
-    signal s_top_to_bottom_edge : std_logic_vector(c_num_cell_cols-1 downto 0);
-    signal s_bottom_to_top_edge : std_logic_vector(c_num_cell_cols-1 downto 0);
-    signal s_right_to_left_edge : std_logic_vector(c_num_cell_rows-1 downto 0);
-    signal s_left_to_right_edge : std_logic_vector(c_num_cell_rows-1 downto 0);
+    signal s_top_to_bottom_edge : std_logic_vector(c_block_num_cell_cols-1 downto 0);
+    signal s_bottom_to_top_edge : std_logic_vector(c_block_num_cell_cols-1 downto 0);
+    signal s_right_to_left_edge : std_logic_vector(c_block_num_cell_rows-1 downto 0);
+    signal s_left_to_right_edge : std_logic_vector(c_block_num_cell_rows-1 downto 0);
     signal s_top_left_to_bottom_right_bit : std_logic;
     signal s_top_right_to_bottom_left_bit : std_logic;
     signal s_bottom_left_to_top_right_bit : std_logic;
@@ -106,8 +106,8 @@ begin
             
             wait for i_clk_period;
             
-            for r in 0 to c_num_chunk_rows - 1 loop
-                for c in 0 to c_num_chunk_cols - 1 loop
+            for r in 0 to c_block_num_chunk_rows - 1 loop
+                for c in 0 to c_block_num_chunk_cols - 1 loop
                     i_chunk_x <= to_unsigned(c, i_chunk_x'length);
                     i_chunk_y <= to_unsigned(c, i_chunk_x'length);
                     wait for i_clk_period;
@@ -138,8 +138,8 @@ begin
     begin
     
         if (not v_bmp_is_init) then
-            v_bmp_ptr.meta.width := c_num_cell_cols;
-            v_bmp_ptr.meta.height := c_num_cell_rows;
+            v_bmp_ptr.meta.width := c_block_num_cell_cols;
+            v_bmp_ptr.meta.height := c_block_num_cell_rows;
             v_bmp_is_init := true;
         end if;
         
@@ -147,8 +147,8 @@ begin
         
         wait for i_clk_period*5;
         
-        for r in 0 to c_num_chunk_rows - 1 loop
-            for c in 0 to c_num_chunk_cols - 1 loop
+        for r in 0 to c_block_num_chunk_rows - 1 loop
+            for c in 0 to c_block_num_chunk_cols - 1 loop
             
                 v_chunk := o_chunk;
                 
