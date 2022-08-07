@@ -66,22 +66,115 @@ begin
             wait for 10 ns;
         end loop;
         
-        v_chunk := (
-		  0 => "000010",
-		  1 => "000100",
-		  2 => "000111",
-		  others => (others => '0')
-		);
---		report "0th row in chunk: " & slv_to_string(v_chunk(0));
-		report slv_to_string(chunk_to_vector(v_chunk));
+--        v_chunk := (
+--		  0 => "000010",
+--		  1 => "000100",
+--		  2 => "000111",
+--		  others => (others => '0')
+--		);
+----		report "0th row in chunk: " & slv_to_string(v_chunk(0));
+--		report slv_to_string(chunk_to_vector(v_chunk));
+		
+--		v_chunk := (
+--		  0 => "000100",
+--		  1 => "001000",
+--		  2 => "001110",
+--		  others => (others => '0')
+--		);
+--		report slv_to_string(chunk_to_vector(v_chunk));
 		
 		v_chunk := (
-		  0 => "000100",
-		  1 => "001000",
-		  2 => "001110",
+		  "000011",
+		  "000011",
 		  others => (others => '0')
 		);
-		report slv_to_string(chunk_to_vector(v_chunk));
+		report "(0, 0): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "010000",
+		  "010000",
+		  "100000",
+		  others => (others => '0')
+		);
+		report "(0, 1): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "110100",
+		  "010000",
+		  "001000",
+		  "000011",
+		  others => (others => '0')
+		);
+		report "(0, 2): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "010000",
+		  "001100",
+		  "001100",
+		  "001100",
+		  "010000",
+		  others => (others => '0')
+		);
+		report "(0, 3): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "000001",
+		  "000000",
+		  "000000",
+		  "000000",
+		  "000001",
+		  "000001"
+		);
+		report "(0, 4): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "000000",
+		  "000000",
+		  "110000",
+		  "110000",
+		  others => (others => '0')
+		);
+		report "(0, 5): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  others => (others => '0')
+		);
+		report "(1, 0): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "000000",
+		  "000000",
+		  "000000",
+		  "000000",
+		  "100000",
+		  "010000"
+		);
+		report "(1, 1): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "000000",
+		  "000000",
+		  "000000",
+		  "000011",
+		  "001000",
+		  "010000"
+		);
+		report "(1, 2): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  others => (others => '0')
+		);
+		report "(1, 3): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_chunk := (
+		  "000000",
+		  "000000",
+		  "000000",
+		  "000000",
+		  "000000",
+		  "000001"
+		);
+		report "(1, 4): " & slv_to_string(chunk_to_vector(v_chunk));
         
         assert v_pass report "Test failed" severity failure;
         assert false report "Test passed" severity failure;
