@@ -32,3 +32,13 @@
 !*.bit
 
 **/glbl.v
+
+!*.cpp
+!*.c
+!*.h
+!*.hpp
+!*.pro
+!*.ui
+
+**/work/*.c
+**/ieee/*.c
