@@ -42,3 +42,14 @@
 
 **/work/*.c
 **/ieee/*.c
+**/sim/*.c
+**/sysc/*.c
+**/work/*.cpp
+**/ieee/*.cpp
+**/sim/*.cpp
+**/sysc/*.cpp
+**/work/*.h
+**/ieee/*.h
+**/sim/*.h
+**/sysc/*.h
+**/bd/**/*.ui
