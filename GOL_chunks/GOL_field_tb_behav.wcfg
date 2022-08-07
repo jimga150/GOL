@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="GOL_field_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="GOL_field_tb" />
+            <top_module name="bmp_pkg" />
+            <top_module name="glbl" />
+            <top_module name="gol_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="992300fs"></ZoomStartTime>
+      <ZoomEndTime time="1127601fs"></ZoomEndTime>
+      <Cursor1Time time="1101200fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="214"></NameColumnWidth>
+      <ValueColumnWidth column_width="101"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="26" />
+   <wvobject fp_name="/GOL_field_tb/i_clk" type="logic">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_rst" type="logic">
+      <obj_property name="ElementShortName">i_rst</obj_property>
+      <obj_property name="ObjectShortName">i_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_do_frame" type="logic">
+      <obj_property name="ElementShortName">i_do_frame</obj_property>
+      <obj_property name="ObjectShortName">i_do_frame</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_col" type="array">
+      <obj_property name="ElementShortName">i_col[10:0]</obj_property>
+      <obj_property name="ObjectShortName">i_col[10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_row" type="array">
+      <obj_property name="ElementShortName">i_row[10:0]</obj_property>
+      <obj_property name="ObjectShortName">i_row[10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/o_pixel" type="logic">
+      <obj_property name="ElementShortName">o_pixel</obj_property>
+      <obj_property name="ObjectShortName">o_pixel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_clk_period" type="other">
+      <obj_property name="ElementShortName">i_clk_period</obj_property>
+      <obj_property name="ObjectShortName">i_clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_top_to_bottom_edges" type="array">
+      <obj_property name="ElementShortName">s_top_to_bottom_edges[11:0,9:0][191:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_to_bottom_edges[11:0,9:0][191:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_bottom_to_top_edges" type="array">
+      <obj_property name="ElementShortName">s_bottom_to_top_edges[11:0,9:0][191:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_to_top_edges[11:0,9:0][191:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_left_to_right_edges" type="array">
+      <obj_property name="ElementShortName">s_left_to_right_edges[11:0,9:0][95:0]</obj_property>
+      <obj_property name="ObjectShortName">s_left_to_right_edges[11:0,9:0][95:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_right_to_left_edges" type="array">
+      <obj_property name="ElementShortName">s_right_to_left_edges[11:0,9:0][95:0]</obj_property>
+      <obj_property name="ObjectShortName">s_right_to_left_edges[11:0,9:0][95:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_top_left_to_bottom_right_corners" type="array">
+      <obj_property name="ElementShortName">s_top_left_to_bottom_right_corners[11:0,9:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_left_to_bottom_right_corners[11:0,9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_top_right_to_bottom_left_corners" type="array">
+      <obj_property name="ElementShortName">s_top_right_to_bottom_left_corners[11:0,9:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_right_to_bottom_left_corners[11:0,9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_bottom_left_to_top_right_corners" type="array">
+      <obj_property name="ElementShortName">s_bottom_left_to_top_right_corners[11:0,9:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_left_to_top_right_corners[11:0,9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_bottom_right_to_top_left_corners" type="array">
+      <obj_property name="ElementShortName">s_bottom_right_to_top_left_corners[11:0,9:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_right_to_top_left_corners[11:0,9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_chunks" type="array">
+      <obj_property name="ElementShortName">s_chunks[11:0,9:0][5:0,5:0]</obj_property>
+      <obj_property name="ObjectShortName">s_chunks[11:0,9:0][5:0,5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_row" type="array">
+      <obj_property name="ElementShortName">s1_s8_field_pixel_row[8:1][10:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_s8_field_pixel_row[8:1][10:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col" type="array">
+      <obj_property name="ElementShortName">s1_s8_field_pixel_col[8:1][10:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_s8_field_pixel_col[8:1][10:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[8]" type="array">
+         <obj_property name="ElementShortName">[8][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[8][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[7]" type="array">
+         <obj_property name="ElementShortName">[7][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[6]" type="array">
+         <obj_property name="ElementShortName">[6][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[5]" type="array">
+         <obj_property name="ElementShortName">[5][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[4]" type="array">
+         <obj_property name="ElementShortName">[4][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[3]" type="array">
+         <obj_property name="ElementShortName">[3][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[2]" type="array">
+         <obj_property name="ElementShortName">[2][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_field_tb/UUT/s1_s8_field_pixel_col[1]" type="array">
+         <obj_property name="ElementShortName">[1][10:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][10:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_x" type="array">
+      <obj_property name="ElementShortName">s1_chunk_x[4:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_chunk_x[4:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_y" type="array">
+      <obj_property name="ElementShortName">s1_chunk_y[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_chunk_y[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s6_block_row" type="array">
+      <obj_property name="ElementShortName">s6_block_row[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s6_block_row[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s6_block_col" type="array">
+      <obj_property name="ElementShortName">s6_block_col[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s6_block_col[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s7_chunk" type="array">
+      <obj_property name="ElementShortName">s7_chunk[5:0][5:0]</obj_property>
+      <obj_property name="ObjectShortName">s7_chunk[5:0][5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s7_chunk_cell_x" type="array">
+      <obj_property name="ElementShortName">s7_chunk_cell_x[2:0]</obj_property>
+      <obj_property name="ObjectShortName">s7_chunk_cell_x[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s7_chunk_cell_y" type="array">
+      <obj_property name="ElementShortName">s7_chunk_cell_y[2:0]</obj_property>
+      <obj_property name="ObjectShortName">s7_chunk_cell_y[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s8_pixel" type="logic">
+      <obj_property name="ElementShortName">s8_pixel</obj_property>
+      <obj_property name="ObjectShortName">s8_pixel</obj_property>
+   </wvobject>
+</wave_config>

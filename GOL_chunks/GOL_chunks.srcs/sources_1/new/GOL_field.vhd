@@ -1,0 +1,195 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 08/05/2022 06:53:37 PM
+-- Design Name: 
+-- Module Name: GOL_field - Structural
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+
+use work.GOL_pkg.all;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity GOL_field is
+    port(
+        i_clk, i_rst, i_do_frame : in std_logic;
+        i_col : in unsigned(c_field_num_cell_col_bits-1 downto 0);
+        i_row : in unsigned(c_field_num_cell_row_bits-1 downto 0);
+        o_pixel : out std_logic
+    );
+end GOL_field;
+
+architecture Structural of GOL_field is
+
+    function barrel_add(i_in : integer; i_max : integer) return integer is
+        variable v_ans : integer;
+    begin
+        if (i_in = i_max) then
+            v_ans := 0;
+        else
+            v_ans := i_in + 1;
+        end if;
+        return v_ans;
+    end function;
+    
+    function barrel_sub(i_in : integer; i_max : integer) return integer is
+        variable v_ans : integer;
+    begin
+        if (i_in = 0) then
+            v_ans := i_max;
+        else
+            v_ans := i_in - 1;
+        end if;
+        return v_ans;
+    end function;
+
+    type t_2d_array_type is array(natural range<>, natural range<>) of std_logic;
+    type t_h_edge_2d_array_type is array(natural range<>, natural range<>) of std_logic_vector(c_block_num_cell_cols-1 downto 0);
+    type t_v_edge_2d_array_type is array(natural range<>, natural range<>) of std_logic_vector(c_block_num_cell_rows-1 downto 0);
+    
+    signal s_top_to_bottom_edges : t_h_edge_2d_array_type(
+        c_field_num_block_rows-1 downto 0,
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_bottom_to_top_edges : t_h_edge_2d_array_type(
+        c_field_num_block_rows-1 downto 0,
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_left_to_right_edges : t_v_edge_2d_array_type(
+        c_field_num_block_rows-1 downto 0,
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_right_to_left_edges : t_v_edge_2d_array_type(
+        c_field_num_block_rows-1 downto 0,
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_top_left_to_bottom_right_corners : t_2d_array_type(
+        c_field_num_block_rows-1 downto 0, 
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_top_right_to_bottom_left_corners : t_2d_array_type(
+        c_field_num_block_rows-1 downto 0, 
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_bottom_left_to_top_right_corners : t_2d_array_type(
+        c_field_num_block_rows-1 downto 0, 
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    signal s_bottom_right_to_top_left_corners : t_2d_array_type(
+        c_field_num_block_rows-1 downto 0, 
+        c_field_num_block_cols-1 downto 0
+    );
+    
+    type t_chunk_2d_array is array(natural range<>, natural range<>) of t_chunk_type;
+    signal s_chunks : t_chunk_2d_array(c_field_num_block_rows-1 downto 0, c_field_num_block_cols-1 downto 0);
+    
+    type t_row_pipeline is array(natural range<>) of unsigned(i_row'range);
+    type t_col_pipeline is array(natural range<>) of unsigned(i_col'range);
+    
+    signal s1_s8_field_pixel_row : t_row_pipeline(8 downto 1);
+    signal s1_s8_field_pixel_col : t_col_pipeline(8 downto 1);
+    
+    signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
+    signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
+    
+    signal s6_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
+    signal s6_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
+    
+    signal s7_chunk : t_chunk_type;
+    signal s7_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
+    signal s7_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
+    
+    signal s8_pixel : std_logic;
+
+begin
+
+    block_row_gen: for r in 0 to c_field_num_block_rows-1 generate
+        block_col_gen: for c in 0 to c_field_num_block_cols-1 generate
+            constant c_next_row : integer := barrel_add(r, c_field_num_block_rows-1);
+            constant c_next_col : integer := barrel_add(c, c_field_num_block_cols-1);
+            constant c_prev_row : integer := barrel_sub(r, c_field_num_block_rows-1);
+            constant c_prev_col : integer := barrel_sub(c, c_field_num_block_cols-1);
+        begin
+            --5 cycles delay between (x, y) update and o_chunk
+            block_inst: entity work.GOL_block
+                port map(
+                    i_clk => i_clk,
+                    i_rst => i_rst,
+                    i_chunk_x => s1_chunk_x,
+                    i_chunk_y => s1_chunk_y,
+                    o_chunk => s_chunks(r, c),
+                    i_do_frame => i_do_frame,
+                    i_top_edge => s_bottom_to_top_edges(c_prev_row, c),
+                    i_bottom_edge => s_top_to_bottom_edges(c_next_row, c),
+                    i_left_edge => s_right_to_left_edges(r, c_prev_col),
+                    i_right_edge => s_left_to_right_edges(r, c_next_col),
+                    i_top_left_bit => s_bottom_right_to_top_left_corners(c_prev_row, c_prev_col),
+                    i_top_right_bit => s_bottom_left_to_top_right_corners(c_prev_row, c_next_col),
+                    i_bottom_left_bit => s_top_right_to_bottom_left_corners(c_next_row, c_prev_col),
+                    i_bottom_right_bit => s_top_left_to_bottom_right_corners(c_next_row, c_next_col),
+                    o_top_edge => s_top_to_bottom_edges(r, c),
+                    o_bottom_edge => s_bottom_to_top_edges(r, c),
+                    o_right_edge => s_right_to_left_edges(r, c),
+                    o_left_edge => s_left_to_right_edges(r, c),
+                    o_top_left_bit => s_top_left_to_bottom_right_corners(r, c),
+                    o_top_right_bit => s_top_right_to_bottom_left_corners(r, c),
+                    o_bottom_left_bit => s_bottom_left_to_top_right_corners(r, c),
+                    o_bottom_right_bit => s_bottom_right_to_top_left_corners(r, c)
+                );
+        end generate block_col_gen;
+    end generate block_row_gen;
+    
+    process(i_clk) is begin
+        if rising_edge(i_clk) then
+        
+            s1_s8_field_pixel_row <= s1_s8_field_pixel_row(s1_s8_field_pixel_row'high - 1 downto s1_s8_field_pixel_row'low) & i_row;
+            s1_s8_field_pixel_col <= s1_s8_field_pixel_col(s1_s8_field_pixel_col'high - 1 downto s1_s8_field_pixel_col'low) & i_col;
+            
+            s1_chunk_x <= to_unsigned(to_integer(i_col) mod c_field_num_block_cols, s1_chunk_x'length);
+            s1_chunk_y <= to_unsigned(to_integer(i_row) mod c_field_num_block_rows, s1_chunk_y'length);
+            
+            s6_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(5))/c_block_num_cell_rows, s6_block_row'length);
+            s6_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(5))/c_block_num_cell_cols, s6_block_col'length);
+            
+            s7_chunk <= s_chunks(to_integer(s6_block_row), to_integer(s6_block_col));
+            s7_chunk_cell_x <= to_unsigned(to_integer(i_col) mod c_chunk_width, s7_chunk_cell_x'length);
+            s7_chunk_cell_y <= to_unsigned(to_integer(i_row) mod c_chunk_height, s7_chunk_cell_y'length);
+            
+            s8_pixel <= s7_chunk(to_integer(s7_chunk_cell_y))(to_integer(s7_chunk_cell_x));
+            
+        end if;
+    end process;
+    
+    o_pixel <= s8_pixel;
+
+end Structural;
