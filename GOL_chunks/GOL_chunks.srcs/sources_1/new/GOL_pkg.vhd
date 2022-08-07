@@ -41,6 +41,10 @@ package GOL_pkg is
     constant c_chunk_width : integer := 6;
     constant c_chunk_height : integer := 6;
     
+    --number of bits necessary to represent the chunk row and column as an unsigned type.
+    constant c_chunk_num_cell_col_bits : integer := integer(floor(log2(real(c_chunk_width))+1.0));
+    constant c_chunk_num_cell_row_bits : integer := integer(floor(log2(real(c_chunk_height))+1.0));
+    
     --number of rows and columns, in chunks. Doesn't need to be powers of 2.
     constant c_block_num_chunk_rows : integer := 16;
     constant c_block_num_chunk_cols : integer := 32;
@@ -55,8 +59,12 @@ package GOL_pkg is
     constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
     
     --number of rows and columns, in blocks per field.
-    constant c_field_num_block_rows : integer := 12;
-    constant c_field_num_block_cols : integer := 10;
+    constant c_field_num_block_rows : integer := 4;
+    constant c_field_num_block_cols : integer := 4;
+    
+    --number of bits necessary to represent the chunk row and column as an unsigned type.
+    constant c_field_num_block_col_bits : integer := integer(floor(log2(real(c_field_num_block_cols))+1.0));
+    constant c_field_num_block_row_bits : integer := integer(floor(log2(real(c_field_num_block_rows))+1.0));
     
     --number of rows and columsn, in chunks per field
     constant c_field_num_chunk_rows : integer := c_field_num_block_rows*c_block_num_chunk_rows;
