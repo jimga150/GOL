@@ -58,6 +58,25 @@ begin
 
 end Summation;
 
+--Uses 5 LUTs on Artix A7 100T
+--Paradoxically, this results in MORE LUT usage in the overall design, probably thanks to less LUT combining in chunks.
+--architecture NeighborSummation of GOL_cell_logic is
+    
+--    signal s_top_sum, s_middle_sum, s_bottom_sum : unsigned(1 downto 0);
+--    signal s_num_neighbors : unsigned(3 downto 0);
+
+--begin
+
+--    s_top_sum <= unsigned'('0' & i_top_left) + unsigned'('0' & i_top_center) + unsigned'('0' & i_top_right);
+--    s_middle_sum <= unsigned'('0' & i_middle_left) + unsigned'('0' & i_middle_right);
+--    s_bottom_sum <= unsigned'('0' & i_bottom_left) + unsigned'('0' & i_bottom_center) + unsigned'('0' & i_bottom_right);
+    
+--    s_num_neighbors <= ("00" & s_top_sum) + s_middle_sum + s_bottom_sum;
+
+--    o_cell <= '1' when to_integer(s_num_neighbors) = 3 or (to_integer(s_num_neighbors) = 2 and i_center = '1') else '0';
+
+--end NeighborSummation;
+
 --Uses 7 LUTs on Artix A7 100T
 --Generated with excel. I did not type this all out.
 --architecture LUT of GOL_cell_logic is
