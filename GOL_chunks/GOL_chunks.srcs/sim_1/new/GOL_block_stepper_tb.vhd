@@ -77,7 +77,6 @@ begin
         i_top_right_bit => s_bottom_left_to_top_right_bit,
         i_bottom_left_bit => s_top_right_to_bottom_left_bit,
         i_bottom_right_bit => s_top_left_to_bottom_right_bit,
-        o_bram_clk => o_bram_clk,
         o_bram_ena => o_bram_ena,
         o_bram_we => o_bram_we,
         o_bram_addr => o_bram_addr,
@@ -180,7 +179,7 @@ begin
         end if;
         
         if (o_bram_ena = '0' and v_last_ena_val = '1') then
-            bmp_save(v_bmp_ptr, "..\..\..\..\GOL_steps\GOL_step_" & integer'image(v_step_num) & ".bmp");
+            bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(v_step_num) & ".bmp");
             v_step_num := v_step_num + 1;
         end if;
         

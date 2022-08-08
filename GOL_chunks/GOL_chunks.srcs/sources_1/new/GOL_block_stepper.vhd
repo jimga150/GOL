@@ -41,7 +41,6 @@ entity GOL_block_stepper is
         i_right_edge, i_left_edge : in STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0) := (others => '0');
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : in std_logic := '0';
                 
-        o_bram_clk : out std_logic;
         o_bram_ena, o_bram_we : out std_logic;
         o_bram_addr : out std_logic_vector(9 downto 0);
         o_bram_wr_data : out std_logic_vector(35 downto 0);
@@ -58,7 +57,7 @@ end GOL_block_stepper;
 
 architecture Behavioral of GOL_block_stepper is
 
-    constant c_bram_read_delay : integer := 2;
+    constant c_bram_read_delay : integer := 1;
     
     --the MSB of the address used for BRAM selects for the half of the memory we are using for the current frame 
     --vs the next fram that is being wirtten to.
@@ -135,8 +134,6 @@ architecture Behavioral of GOL_block_stepper is
     signal s_last_write : std_logic;
     
 begin
-
-    o_bram_clk <= i_clk;
     
     s_next_state_msb <= not s_current_state_msb;
     o_current_state_msb <= s_current_state_msb;

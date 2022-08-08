@@ -41,7 +41,6 @@ entity GOL_chunk_getter is
         i_curr_state_msb : in std_logic;
         o_chunk : out t_chunk_type;
         
-        o_bram_clk : out std_logic;
         o_bram_ena : out std_logic := '1';
         o_bram_addr : out std_logic_vector(9 downto 0);
         i_bram_rd_data : in std_logic_vector(35 downto 0)
@@ -52,8 +51,6 @@ end GOL_chunk_getter;
 architecture Behavioral of GOL_chunk_getter is
 
 begin
-
-    o_bram_clk <= i_clk;
 
     process(i_clk) is begin
         if (rising_edge(i_clk)) then

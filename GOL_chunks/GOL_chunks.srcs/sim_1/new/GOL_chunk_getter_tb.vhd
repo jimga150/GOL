@@ -56,7 +56,6 @@ begin
         i_chunk_y => i_chunk_y,
         i_curr_state_msb => i_curr_state_msb,
         o_chunk => o_chunk,
-        o_bram_clk => o_bram_clk,
         o_bram_ena => o_bram_ena,
         o_bram_addr => o_bram_addr,
         i_bram_rd_data => i_bram_rd_data
@@ -64,7 +63,7 @@ begin
     
     bram_inst: entity work.bram_dp_36k
 	port map(
-		i_clka => o_bram_clk,
+		i_clka => i_clk,
 		i_ena => o_bram_ena,
 		i_wea => '0',
 		i_addra => o_bram_addr,

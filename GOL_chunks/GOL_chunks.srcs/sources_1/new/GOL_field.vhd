@@ -122,14 +122,14 @@ architecture Structural of GOL_field is
     signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
     signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
     
-    signal s6_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
-    signal s6_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
+    signal s4_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
+    signal s4_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
     
-    signal s7_chunk : t_chunk_type;
-    signal s7_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
-    signal s7_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
+    signal s5_chunk : t_chunk_type;
+    signal s5_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
+    signal s5_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
     
-    signal s8_pixel : std_logic;
+    signal s6_pixel : std_logic;
 
 begin
 
@@ -139,9 +139,15 @@ begin
             constant c_next_col : integer := barrel_add(c, c_field_num_block_cols-1);
             constant c_prev_row : integer := barrel_sub(r, c_field_num_block_rows-1);
             constant c_prev_col : integer := barrel_sub(c, c_field_num_block_cols-1);
+            constant c_block_idx : integer := c + c_field_num_block_cols*r;
         begin
             --5 cycles delay between (x, y) update and o_chunk
             block_inst: entity work.GOL_block
+                generic map(
+--                    g_init_filepath => c_project_path & "\GOL_mem_init_files\corner" & integer'image(c_block_idx) & ".mif"
+--                    g_init_filepath => c_project_path & "\GOL_mem_init_files\glidergun.mif"
+                    g_init_filepath => c_project_path & "\GOL_mem_init_files\vline.mif"
+                )
                 port map(
                     i_clk => i_clk,
                     i_rst => i_rst,
@@ -175,21 +181,21 @@ begin
             s1_s8_field_pixel_row <= s1_s8_field_pixel_row(s1_s8_field_pixel_row'high - 1 downto s1_s8_field_pixel_row'low) & i_row;
             s1_s8_field_pixel_col <= s1_s8_field_pixel_col(s1_s8_field_pixel_col'high - 1 downto s1_s8_field_pixel_col'low) & i_col;
             
-            s1_chunk_x <= to_unsigned(to_integer(i_col) mod c_field_num_block_cols, s1_chunk_x'length);
-            s1_chunk_y <= to_unsigned(to_integer(i_row) mod c_field_num_block_rows, s1_chunk_y'length);
+            s1_chunk_x <= to_unsigned((to_integer(i_col)/c_chunk_width) mod c_block_num_chunk_cols, s1_chunk_x'length);
+            s1_chunk_y <= to_unsigned((to_integer(i_row)/c_chunk_height) mod c_block_num_chunk_rows, s1_chunk_y'length);
             
-            s6_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(5))/c_block_num_cell_rows, s6_block_row'length);
-            s6_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(5))/c_block_num_cell_cols, s6_block_col'length);
+            s4_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(3))/c_block_num_cell_rows, s4_block_row'length);
+            s4_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(3))/c_block_num_cell_cols, s4_block_col'length);
             
-            s7_chunk <= s_chunks(to_integer(s6_block_row), to_integer(s6_block_col));
-            s7_chunk_cell_x <= to_unsigned(to_integer(i_col) mod c_chunk_width, s7_chunk_cell_x'length);
-            s7_chunk_cell_y <= to_unsigned(to_integer(i_row) mod c_chunk_height, s7_chunk_cell_y'length);
+            s5_chunk <= s_chunks(to_integer(s4_block_row), to_integer(s4_block_col));
+            s5_chunk_cell_x <= to_unsigned(to_integer(s1_s8_field_pixel_col(4)) mod c_chunk_width, s5_chunk_cell_x'length);
+            s5_chunk_cell_y <= to_unsigned(to_integer(s1_s8_field_pixel_row(4)) mod c_chunk_height, s5_chunk_cell_y'length);
             
-            s8_pixel <= s7_chunk(to_integer(s7_chunk_cell_y))(to_integer(s7_chunk_cell_x));
+            s6_pixel <= s5_chunk(to_integer(s5_chunk_cell_y))(to_integer(s5_chunk_cell_x));
             
         end if;
     end process;
     
-    o_pixel <= s8_pixel;
+    o_pixel <= s6_pixel;
 
 end Structural;

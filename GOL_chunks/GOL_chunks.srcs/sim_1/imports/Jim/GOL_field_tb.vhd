@@ -70,16 +70,8 @@ begin
         
         wait for i_clk_period;
         
-        for i in 0 to 100 loop
-            
-            i_do_frame <= '1';
-            
-            wait for i_clk_period;
-            
-            i_do_frame <= '0';
-            
-            wait for i_clk_period;
-            
+        for i in 0 to 1000 loop
+        
             for r in 0 to c_field_num_cell_rows-1 loop
                 for c in 0 to c_field_num_cell_cols-1 loop
                     i_col <= to_unsigned(c, i_col'length);
@@ -88,7 +80,13 @@ begin
                 end loop;
             end loop;
             
-            wait for i_clk_period*10;
+            i_do_frame <= '1';
+            
+            wait for i_clk_period;
+            
+            i_do_frame <= '0';
+
+            wait for i_clk_period*7000;
             
         end loop;
         
@@ -117,9 +115,16 @@ begin
             v_bmp_is_init := true;
         end if;
         
-        wait until i_do_frame = '1';
+--        wait until i_do_frame = '1';
+        if i_rst = '1' then
+            wait until i_rst = '0';
+            wait for i_clk_period;
+        else
+            wait until i_do_frame = '0';
+            wait for i_clk_period*7000;
+        end if;
         
-        wait for i_clk_period*8;
+        wait for i_clk_period*6;
         
         for r in 0 to c_field_num_cell_rows - 1 loop
             for c in 0 to c_field_num_cell_cols - 1 loop
@@ -132,7 +137,7 @@ begin
             end loop;
         end loop;
         
-        bmp_save(v_bmp_ptr, "..\..\..\..\GOL_steps\GOL_step_" & integer'image(v_step_num) & ".bmp");
+        bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(v_step_num) & ".bmp");
         v_step_num := v_step_num + 1;
         
     end process;

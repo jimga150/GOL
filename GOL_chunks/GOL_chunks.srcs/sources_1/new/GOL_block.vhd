@@ -34,6 +34,9 @@ use work.GOL_pkg.all;
 --use UNISIM.VComponents.all;
 
 entity GOL_block is
+    generic(
+        g_init_filepath : string := ""
+    );
     port(
         i_clk, i_rst : in std_logic;
         
@@ -57,13 +60,11 @@ architecture Structural of GOL_block is
 
     signal s_current_state_msb : std_logic;
     
-    signal s_bram_clka : std_logic;
     signal s_bram_enaa, s_bram_wea : std_logic;
     signal s_bram_addra : std_logic_vector(9 downto 0);
     signal s_bram_wr_dataa : std_logic_vector(35 downto 0);
     signal s_bram_rd_dataa : std_logic_vector(35 downto 0);
     
-    signal s_bram_clkb : std_logic;
     signal s_bram_enab, s_bram_web : std_logic;
     signal s_bram_addrb : std_logic_vector(9 downto 0);
     signal s_bram_wr_datab : std_logic_vector(35 downto 0);
@@ -84,7 +85,6 @@ begin
         i_top_right_bit => i_top_right_bit,
         i_bottom_left_bit => i_bottom_left_bit,
         i_bottom_right_bit => i_bottom_right_bit,
-        o_bram_clk => s_bram_clka,
         o_bram_ena => s_bram_enaa,
         o_bram_we => s_bram_wea,
         o_bram_addr => s_bram_addra,
@@ -102,14 +102,17 @@ begin
     );
     
     bram_inst: entity work.bram_dp_36k
+    generic map(
+        g_init_filepath => g_init_filepath
+    )
     port map(
-        i_clka => s_bram_clka,
+        i_clka => i_clk,
         i_ena => s_bram_enaa,
         i_wea => s_bram_wea,
         i_addra => s_bram_addra,
         i_dina => s_bram_wr_dataa,
         o_douta => s_bram_rd_dataa,
-        i_clkb => s_bram_clkb,
+        i_clkb => i_clk,
         i_enb => s_bram_enab,
         i_web => s_bram_web,
         i_addrb => s_bram_addrb,
@@ -124,7 +127,6 @@ begin
         i_chunk_y => i_chunk_y,
         i_curr_state_msb => s_current_state_msb,
         o_chunk => o_chunk,
-        o_bram_clk => s_bram_clkb,
         o_bram_ena => s_bram_enab,
         o_bram_addr => s_bram_addrb,
         i_bram_rd_data => s_bram_rd_datab

@@ -38,7 +38,7 @@ architecture Behavioral of GOL_block_tb is
     
     --General inputs
     signal i_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
-    signal i_chunk_y : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
+    signal i_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0) := (others => '0');
     signal i_do_frame : std_logic := '0';
     
     --Loopbacks
@@ -57,9 +57,16 @@ architecture Behavioral of GOL_block_tb is
     --Clock Periods
     constant i_clk_period : time := 10 ns;
     
+    constant c_num_frames : integer := 100;
+    
 begin
     
     UUT: entity work.GOL_block
+    generic map(
+--        g_init_filepath => c_project_path & "\GOL_mem_init_files\corner" & integer'image(c_block_idx) & ".mif"
+--        g_init_filepath => c_project_path & "\GOL_mem_init_files\glidergun.mif"
+        g_init_filepath => c_project_path & "\GOL_mem_init_files\vline.mif"
+    )
     port map(
         i_clk => i_clk,
         i_rst => i_rst,
@@ -96,23 +103,21 @@ begin
         
         wait for i_clk_period;
         
-        for i in 0 to 100 loop
+        for i in 0 to c_num_frames-1 loop
+        
+            for r in 0 to c_block_num_chunk_rows - 1 loop
+                for c in 0 to c_block_num_chunk_cols - 1 loop
+                    i_chunk_x <= to_unsigned(c, i_chunk_x'length);
+                    i_chunk_y <= to_unsigned(r, i_chunk_y'length);
+                    wait for i_clk_period;
+                end loop;
+            end loop;
         
             i_do_frame <= '1';
             
             wait for i_clk_period;
             
             i_do_frame <= '0';
-            
-            wait for i_clk_period;
-            
-            for r in 0 to c_block_num_chunk_rows - 1 loop
-                for c in 0 to c_block_num_chunk_cols - 1 loop
-                    i_chunk_x <= to_unsigned(c, i_chunk_x'length);
-                    i_chunk_y <= to_unsigned(c, i_chunk_x'length);
-                    wait for i_clk_period;
-                end loop;
-            end loop;
             
             wait for i_clk_period*7000;
         
@@ -134,7 +139,6 @@ begin
         constant c_bmp_pix_0 : bmp_pix := (others => (others => '0'));
         constant c_bmp_pix_1 : bmp_pix := (others => (others => '1'));
         variable v_bmp_pix : bmp_pix;
-        variable v_step_num : integer := 1;
     begin
     
         if (not v_bmp_is_init) then
@@ -143,34 +147,40 @@ begin
             v_bmp_is_init := true;
         end if;
         
-        wait until i_do_frame = '1';
+        wait for i_clk_period*2; --reset delay
         
-        wait for i_clk_period*5;
+        wait for i_clk_period*3; --pipeline delay
         
-        for r in 0 to c_block_num_chunk_rows - 1 loop
-            for c in 0 to c_block_num_chunk_cols - 1 loop
+        for i in 0 to c_num_frames-1 loop
             
-                v_chunk := o_chunk;
+            for r in 0 to c_block_num_chunk_rows - 1 loop
+                for c in 0 to c_block_num_chunk_cols - 1 loop
                 
-                for y in r*c_chunk_height to (r+1)*c_chunk_height - 1 loop
-                    v_cell_y := y mod c_chunk_height;
-                    for x in c*c_chunk_width to (c+1)*c_chunk_width - 1 loop
-                        v_cell_x := x mod c_chunk_width;
-                        v_bmp_pix := c_bmp_pix_0;
-                        if (v_chunk(v_cell_y)(v_cell_x) = '1') then 
-                            v_bmp_pix := c_bmp_pix_1;
-                        end if;
-                        bmp_set_pix(v_bmp_ptr, x, y, v_bmp_pix);
+                    v_chunk := o_chunk;
+                    
+                    for y in r*c_chunk_height to (r+1)*c_chunk_height - 1 loop
+                        v_cell_y := y mod c_chunk_height;
+                        for x in c*c_chunk_width to (c+1)*c_chunk_width - 1 loop
+                            v_cell_x := x mod c_chunk_width;
+                            v_bmp_pix := c_bmp_pix_0;
+                            if (v_chunk(v_cell_y)(v_cell_x) = '1') then 
+                                v_bmp_pix := c_bmp_pix_1;
+                            end if;
+                            bmp_set_pix(v_bmp_ptr, x, y, v_bmp_pix);
+                        end loop;
                     end loop;
+                    
+                    wait for i_clk_period;
+                    
                 end loop;
-                
-                wait for i_clk_period;
-                
             end loop;
-        end loop;
+            
+            bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(i) & ".bmp");
+             
+            wait for i_clk_period;
+            wait for i_clk_period*7000;
         
-        bmp_save(v_bmp_ptr, "..\..\..\..\GOL_steps\GOL_step_" & integer'image(v_step_num) & ".bmp");
-        v_step_num := v_step_num + 1;
+        end loop;
         
     end process;
 

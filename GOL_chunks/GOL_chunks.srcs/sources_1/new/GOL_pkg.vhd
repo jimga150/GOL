@@ -33,6 +33,8 @@ use IEEE.MATH_REAL.ALL;
 --use UNISIM.VComponents.all;
 
 package GOL_pkg is
+
+    constant c_project_path : string := "C:\Users\Jim\Desktop\Code\VHDL\GOL\GOL_chunks";
     
     --Height and width of one chunk, in cells.
     --Product of these two integers must be equal to the length of the data word from memory.
@@ -82,8 +84,8 @@ package GOL_pkg is
     
     --number of bits necessary to represent the cell row and column as an unsigned type.
     --(wrt the field)
-    constant c_field_num_cell_col_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
-    constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_cols))+1.0));
+    constant c_field_num_cell_col_bits : integer := integer(floor(log2(real(c_field_num_cell_cols))+1.0));
+    constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
     
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     
