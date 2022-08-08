@@ -82,10 +82,10 @@ void MainWindow::saveState(){
         for (int chunk_x = 0; chunk_x < BLOCK_NUM_CHUNK_COLS; ++chunk_x){
             QString vector_str = this->chunk_to_vector(block[chunk_y][chunk_x]);
             tstream << vector_str << "\n";
-            if (chunk_x > lowest_rightmost_live_chunk.x() && chunk_y > lowest_rightmost_live_chunk.y()){
-                broken = true;
-                break;
-            }
+//            if (chunk_x > lowest_rightmost_live_chunk.x() && chunk_y > lowest_rightmost_live_chunk.y()){
+//                broken = true;
+//                break;
+//            }
         }
         if (broken) break;
     }
