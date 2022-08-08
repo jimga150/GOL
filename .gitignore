@@ -40,6 +40,8 @@
 !*.pro
 !*.ui
 
+**/build-*
+
 **/work/*.c
 **/ieee/*.c
 **/sim/*.c
