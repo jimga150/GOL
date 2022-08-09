@@ -18,31 +18,9 @@
 #include "ui_mainwindow.h"
 #include "CustomScene.h"
 
-
-#define REVERSE_ENDIANNESS 1
-
-#define pwrtwo(x) (1 << (x))
-
 #define CHUNK_HEIGHT (6)
 #define CHUNK_WIDTH (6)
 
-#define BLOCK_NUM_CHUNK_ROWS (16)
-#define BLOCK_NUM_CHUNK_COLS (32)
-
-#define BLOCK_NUM_CELL_ROWS (CHUNK_HEIGHT*BLOCK_NUM_CHUNK_ROWS)
-#define BLOCK_NUM_CELL_COLS (CHUNK_WIDTH*BLOCK_NUM_CHUNK_COLS)
-
-#define BITS_PER_WORD (32)
-#define PIXEL_MASK (1)
-#define COL_WORDS (COLS/BITS_PER_WORD)
-
-#define ROW_ADDR_BITS (5)
-#define COL_ADDR_BITS (1)
-
-#define NUM_ROWS pwrtwo(ROW_ADDR_BITS)
-#define NUM_COLS pwrtwo(COL_ADDR_BITS)
-
-#define NUM_WORDS NUM_ROWS*NUM_COLS
 
 enum dragging_state_enum{
     NOT_DRAGGING = 0,
@@ -80,9 +58,7 @@ private:
     Ui::MainWindow *ui;
         
     QImage GOL_image;
-    
-    uint getAddr(uint row, uint col);
-        
+            
     void clearImage();
     
     void saveState();
@@ -92,6 +68,14 @@ private:
     QString chunk_to_vector(chunk_struct chunk);
 
     chunk_struct vector_to_chunk(QString vector);
+
+    int num_chunk_rows = 16;
+    int num_chunk_cols = 32;
+
+    int num_cell_rows = CHUNK_HEIGHT*num_chunk_rows;
+    int num_cell_cols = CHUNK_WIDTH*num_chunk_cols;
+
+    int pixel_mask = 0x1;
     
 private slots:
     
@@ -105,5 +89,7 @@ private slots:
     
     void on_loadButton_clicked();
     void on_clearButton_clicked();
+    void on_chunkColsSpinbox_editingFinished();
+    void on_chunkRowsSpinbox_editingFinished();
 };
 #endif // MAINWINDOW_H
