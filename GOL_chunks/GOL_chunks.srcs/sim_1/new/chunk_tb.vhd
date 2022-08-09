@@ -44,9 +44,18 @@ architecture Behavioral of chunk_tb is
 begin
 
     process is
+    
+        constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\vline_plussome.gmif";
+        constant c_field_arr : t_2d_chunk_array := chunk_2d_arr_from_gmif(c_init_filename); 
+        constant c_block_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 0);
+        constant c_block01_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 1);
+        constant c_block10_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 1, 0);
+        constant c_block11_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 1, 1);
+    
         variable v_slv1, v_slv2 : std_logic_vector(35 downto 0);
         variable v_chunk : t_chunk_type;
         variable v_pass : boolean := true;
+        
     begin
     
         wait for 10 ns;

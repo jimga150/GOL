@@ -59,13 +59,15 @@ architecture Behavioral of GOL_block_tb is
     
     constant c_num_frames : integer := 100;
     
+    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
+    constant c_field_arr : t_2d_chunk_array := chunk_2d_arr_from_gmif(c_init_filename);
+    constant c_block_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 0);
+    
 begin
     
     UUT: entity work.GOL_block
     generic map(
---        g_init_filepath => c_project_path & "\GOL_mem_init_files\corner10.mif"
---        g_init_filepath => c_project_path & "\GOL_mem_init_files\glidergun.mif"
-        g_init_filepath => c_project_path & "\GOL_mem_init_files\vline.mif"
+        g_init_cells => c_block_chunk_arr
     )
     port map(
         i_clk => i_clk,

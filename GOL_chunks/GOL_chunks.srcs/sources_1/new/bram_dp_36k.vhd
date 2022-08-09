@@ -37,7 +37,7 @@ use work.GOL_pkg.all;
 
 entity bram_dp_36k is
     generic(
-        g_init_filepath : string := ""
+        g_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := (others => (others => (others => (others => '0'))))
     );
     PORT (
         i_clka : IN STD_LOGIC;
@@ -62,21 +62,20 @@ architecture Inferred of bram_dp_36k is
     
     type t_ram_type is array (c_ram_depth-1 downto 0) of std_logic_vector(o_douta'range);
     
-    impure function InitRamFromFile(RamFileName : in string) return t_ram_type is
-        FILE RamFile : text is in RamFileName;
-        variable RamFileLine : line;
-        variable v_bv : bit_vector(o_douta'range);
+    impure function InitRamFromChunks(i_chunk_arr : in t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0)) return t_ram_type is
         variable v_ram : t_ram_type;
+        variable v_ram_idx : integer := 0;
     begin
-        for i in t_ram_type'low to t_ram_type'high loop
-            readline(RamFile, RamFileLine);
-            read(RamFileLine, v_bv);
-            v_ram(i) := to_stdlogicvector(v_bv);
+        for r in 0 to c_block_num_chunk_rows-1 loop
+            for c in 0 to c_block_num_chunk_cols-1 loop
+                v_ram(v_ram_idx) := chunk_to_vector(i_chunk_arr(r, c));
+                v_ram_idx := v_ram_idx + 1;
+            end loop;
         end loop;
         return v_ram;
     end function;
     
-    shared variable sv_ram : t_ram_type := InitRamFromFile(g_init_filepath);
+    shared variable sv_ram : t_ram_type := InitRamFromChunks(g_init_cells);
     
 begin
 

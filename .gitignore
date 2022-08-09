@@ -42,6 +42,8 @@
 
 **/build-*
 
+!*.gmif
+
 **/work/*.c
 **/ieee/*.c
 **/sim/*.c

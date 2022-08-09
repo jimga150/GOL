@@ -52,7 +52,6 @@ architecture Behavioral of GOL_block_stepper_tb is
     signal s_bottom_right_top_left_bit : std_logic := '0';
 
     --Outputs
-    signal o_bram_clk : std_logic;
     signal o_bram_ena : std_logic;
     signal o_bram_we : std_logic;
     signal o_bram_addr : std_logic_vector(9 downto 0);
@@ -61,14 +60,22 @@ architecture Behavioral of GOL_block_stepper_tb is
 
     --Clock Periods
     constant i_clk_period : time := 10 ns;
+    
+    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
+    constant c_field_arr : t_2d_chunk_array := chunk_2d_arr_from_gmif(c_init_filename);
+    constant c_block_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 0);
 
 begin
 
     UUT: entity work.GOL_block_stepper
+    generic map(
+        g_init_cells => c_block_chunk_arr
+    )
     port map(
         i_clk => i_clk,
         i_rst => i_rst,
         i_do_frame => i_do_frame,
+        o_current_state_msb => o_current_state_msb,
         i_top_edge => s_bottom_to_top_edge,
         i_bottom_edge => s_top_to_bottom_edge,
         i_right_edge => s_left_to_right_edge,
@@ -93,6 +100,9 @@ begin
     );
 	
 	bram_inst: entity work.bram_dp_36k
+	generic map(
+        g_init_cells => c_block_chunk_arr
+    )
 	port map(
 		i_clka => i_clk,
 		i_ena => o_bram_ena,

@@ -8,8 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
     
     this->scene = new CustomScene();
     
-    this->GOL_image = QImage(BLOCK_NUM_CELL_COLS, BLOCK_NUM_CELL_ROWS, QImage::Format_Mono);
+    this->GOL_image = QImage(num_cell_cols, num_cell_rows, QImage::Format_Mono);
     this->GOL_image.fill(0);
+
+    this->ui->chunkColsSpinbox->setValue(this->num_chunk_cols);
+    this->ui->chunkRowsSpinbox->setValue(this->num_chunk_rows);
     
     this->pm_item = this->scene->addPixmap(QPixmap::fromImage(this->GOL_image));
     
@@ -40,18 +43,22 @@ void MainWindow::clearImage(){
 
 void MainWindow::saveState(){
 
-    chunk_struct block[BLOCK_NUM_CHUNK_ROWS][BLOCK_NUM_CHUNK_COLS];
+    std::vector<std::vector<chunk_struct>> block;
     QPoint lowest_rightmost_live_chunk(0, 0);
 
-    for (int chunk_y = 0; chunk_y < BLOCK_NUM_CHUNK_ROWS; ++chunk_y){
-        for (int chunk_x = 0; chunk_x < BLOCK_NUM_CHUNK_COLS; ++chunk_x){
+    for (int chunk_y = 0; chunk_y < num_chunk_rows; ++chunk_y){
+        std::vector<chunk_struct> chunk_row;
+        block.push_back(chunk_row);
+        for (int chunk_x = 0; chunk_x < num_chunk_cols; ++chunk_x){
+            chunk_struct chunk;
+            block[chunk_y].push_back(chunk);
             bool has_live_cells = false;
             for (int cell_y = 0; cell_y < CHUNK_HEIGHT; ++cell_y){
                 for (int cell_x = 0; cell_x < CHUNK_WIDTH; ++cell_x){
                     int block_y = chunk_y*CHUNK_HEIGHT + cell_y;
                     int block_x = chunk_x*CHUNK_WIDTH + cell_x;
                     QRgb pixel = this->GOL_image.pixel(block_x, block_y);
-                    bool bit = pixel & PIXEL_MASK;
+                    bool bit = pixel & pixel_mask;
                     block[chunk_y][chunk_x].cells[cell_y][cell_x] = bit;
                     has_live_cells |= bit;
                 }
@@ -66,7 +73,7 @@ void MainWindow::saveState(){
                            this,
                            "Choose write location",
                            QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0),
-                           "MIF Files (*.mif)"
+                           "GOL MIF files (*.gmif)"
                         );
 
     QFile file(filepath, this);
@@ -77,9 +84,11 @@ void MainWindow::saveState(){
 
     QTextStream tstream(&file);
 
-    for (int chunk_y = 0; chunk_y < BLOCK_NUM_CHUNK_ROWS; ++chunk_y){
+    tstream << QString("ChunkRows:\n%1\nChunkCols:\n%2\n").arg(num_chunk_rows).arg(num_chunk_cols);
+
+    for (int chunk_y = 0; chunk_y < num_chunk_rows; ++chunk_y){
         bool broken = false;
-        for (int chunk_x = 0; chunk_x < BLOCK_NUM_CHUNK_COLS; ++chunk_x){
+        for (int chunk_x = 0; chunk_x < num_chunk_cols; ++chunk_x){
             QString vector_str = this->chunk_to_vector(block[chunk_y][chunk_x]);
             tstream << vector_str << "\n";
 //            if (chunk_x > lowest_rightmost_live_chunk.x() && chunk_y > lowest_rightmost_live_chunk.y()){
@@ -93,65 +102,12 @@ void MainWindow::saveState(){
     file.close();
 }
 
-/*void MainWindow::saveState(){
-    quint32 data[NUM_WORDS] = {0};
-    int word[BITS_PER_WORD] = {0};
-    
-    
-    for (int r = 0; r < this->GOL_image.height(); ++r){
-        for (int c = 0; c < this->GOL_image.width(); ++c){
-            int word_index = c % BITS_PER_WORD;
-            word[word_index] = this->GOL_image.pixel(c, r);
-            
-            if (word_index == BITS_PER_WORD-1){
-                quint32 packaged_word = 0;
-                for (int i = 0; i < BITS_PER_WORD; ++i){
-                    int bit_to_shift = word[i] & PIXEL_MASK;
-//                    if (bit_to_shift){
-//                        printf("found 1 bit at (%d, %d)\n", r, c - BITS_PER_WORD - 1 + i);
-//                    }
-                    packaged_word |= bit_to_shift << i;
-                }
-                data[this->getAddr(r, c/BITS_PER_WORD)] = packaged_word;
-            }
-        }
-    }
-    
-    QString filepath = QFileDialog::getSaveFileName(
-                           this, 
-                           "Choose write location", 
-                           QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0),
-                           "All Files (*.*)"
-                        );
-    
-    QFile file(filepath, this);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)){
-        printf("Failed to open file\n");
-        return;
-    }
-    
-    QDataStream streamer(&file);
-    
-    for (int w = 0; w < NUM_WORDS; ++w){
-        printf("%u: Writing 0x%08x\n", w, data[w]);
-        char* c = (char*)&(data[w]);
-#ifdef REVERSE_ENDIANNESS
-        for (int i = 3; i >= 0; --i){
-#else
-        for (int i = 0; i < 4; ++i){
-#endif
-            streamer.writeRawData(&c[i], 1);
-        }
-    }
-    file.close();
-}*/
-
 void MainWindow::loadState(){
     QString filepath = QFileDialog::getOpenFileName(
                            this, 
                            "Choose file to load", 
                            QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0),
-                           "MIF files (*.mif)"
+                           "GOL MIF files (*.gmif)"
                         );
     
     QFile file(filepath, this);
@@ -160,16 +116,40 @@ void MainWindow::loadState(){
         return;
     }
     
-    QTextStream stream(&file);
+    QTextStream tstream(&file);
+
+    tstream.readLine();
+    QString rows_str = tstream.readLine();
+    tstream.readLine();
+    QString cols_str = tstream.readLine();
+    bool ok;
+
+    int chunk_rows = rows_str.toInt(&ok);
+    if (!ok){
+        fprintf(stderr, "Row int conversion failed in header of %s.\n", filepath.toUtf8().constData());
+    }
+    this->num_chunk_rows = chunk_rows;
+    this->num_cell_rows = CHUNK_HEIGHT*num_chunk_rows;
+
+    int chunk_cols = cols_str.toInt(&ok);
+    if (!ok){
+        fprintf(stderr, "Col int conversion failed in header of %s.\n", filepath.toUtf8().constData());
+    }
+    this->num_chunk_cols = chunk_cols;
+    this->num_cell_cols = CHUNK_WIDTH*num_chunk_cols;
+
+    this->GOL_image = QImage(num_cell_cols, num_cell_rows, QImage::Format_Mono);
+    this->GOL_image.fill(0);
     
-    for (int chunk_y = 0; chunk_y < BLOCK_NUM_CHUNK_ROWS; ++chunk_y){
+    for (int chunk_y = 0; chunk_y < num_chunk_rows; ++chunk_y){
         bool broken = false;
-        for (int chunk_x = 0; chunk_x < BLOCK_NUM_CHUNK_COLS; ++chunk_x){
-            if (stream.atEnd()){
+        for (int chunk_x = 0; chunk_x < num_chunk_cols; ++chunk_x){
+            if (tstream.atEnd()){
+                fprintf(stderr, "File ended early!\n");
                 broken = true;
                 break;
             }
-            QString vector = stream.readLine();
+            QString vector = tstream.readLine();
             chunk_struct chunk = this->vector_to_chunk(vector);
             for (int cell_y = 0; cell_y < CHUNK_HEIGHT; ++cell_y){
                 for (int cell_x = 0; cell_x < CHUNK_WIDTH; ++cell_x){
@@ -186,42 +166,14 @@ void MainWindow::loadState(){
         if (broken) break;
     }
 
+    if (!tstream.atEnd()){
+        fprintf(stderr, "File has more lines, but image is filled!\n");
+    }
+
     this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
+
+    file.close();
 }
-
-/*void MainWindow::loadState(){
-    QString filepath = QFileDialog::getOpenFileName(
-                           this,
-                           "Choose file to load",
-                           QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0),
-                           "All Files (*.*)"
-                        );
-
-    QFile file(filepath, this);
-    if (!file.open(QIODevice::ReadOnly)){
-        printf("Failed to open file\n");
-        return;
-    }
-
-    QDataStream stream(&file);
-
-    quint32 data[NUM_WORDS] = {0};
-
-    for (int i = 0; i < NUM_WORDS; ++i){
-        stream >> data[i];
-        printf("%u: Reading out 0x%08x\n", i, data[i]);
-    }
-
-    for (int r = 0; r < this->GOL_image.height(); ++r){
-        for (int c = 0; c < this->GOL_image.width(); ++c){
-            quint32 packaged_word = data[this->getAddr(r, c/BITS_PER_WORD)];
-            int word_index = c % BITS_PER_WORD;
-            quint32 pixel = (packaged_word >> word_index) & PIXEL_MASK;
-            this->GOL_image.setPixel(c, r, pixel);
-        }
-    }
-    this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
-}*/
 
 QString MainWindow::chunk_to_vector(chunk_struct chunk){
     QString ans;
@@ -238,7 +190,14 @@ QString MainWindow::chunk_to_vector(chunk_struct chunk){
 }
 
 chunk_struct MainWindow::vector_to_chunk(QString vector){
-    chunk_struct ans;
+    chunk_struct ans({{
+                          {true, false, false, false, false, true},
+                          {false, true, false, false, true, false},
+                          {false, false, true, true, false, false},
+                          {false, false, true, true, false, false},
+                          {false, true, false, false, true, false},
+                          {true, false, false, false, false, true},
+                      }});
     if (vector.length() != CHUNK_HEIGHT*CHUNK_WIDTH){
         fprintf(stderr, "Vector length is %d chars, expected %d\n", vector.length(), CHUNK_HEIGHT*CHUNK_WIDTH);
         fprintf(stderr, "Vector: %s\n", vector.toUtf8().constData());
@@ -258,10 +217,6 @@ chunk_struct MainWindow::vector_to_chunk(QString vector){
     return ans;
 }
 
-uint MainWindow::getAddr(uint row, uint col){
-    return (row << COL_ADDR_BITS) + col;
-}
-
 void MainWindow::handlePixelClick(QPoint p){
     
     if (p.x() < 0 || p.x() >= this->GOL_image.width()) return;
@@ -269,7 +224,7 @@ void MainWindow::handlePixelClick(QPoint p){
     
     //printf("Got valid pixel change at %d, %d\n", p.x(), p.y());
     
-    int old_val = qGray(this->GOL_image.pixel(p)) & PIXEL_MASK;
+    int old_val = qGray(this->GOL_image.pixel(p)) & pixel_mask;
     int new_val = old_val;
     
     switch(this->dragging_state){
@@ -319,4 +274,44 @@ void MainWindow::on_loadButton_clicked(){
 void MainWindow::on_clearButton_clicked()
 {
     this->clearImage();
+}
+
+void MainWindow::on_chunkColsSpinbox_editingFinished()
+{
+    int new_num_chunk_cols = this->ui->chunkColsSpinbox->value();
+    int new_num_cell_cols = new_num_chunk_cols*CHUNK_WIDTH;
+
+    QImage new_image(new_num_cell_cols, this->num_cell_rows, this->GOL_image.format());
+    new_image.fill(0);
+    for (int y = 0; y < this->num_cell_rows; ++y){
+        for (int x = 0; x < std::min(this->num_cell_cols, new_num_cell_cols); ++x){
+            new_image.setPixel(x, y, this->GOL_image.pixel(x, y) & pixel_mask);
+        }
+    }
+    this->GOL_image = new_image;
+
+    this->num_cell_cols = new_num_cell_cols;
+    this->num_chunk_cols = new_num_chunk_cols;
+
+    this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
+}
+
+void MainWindow::on_chunkRowsSpinbox_editingFinished()
+{
+    int new_num_chunk_rows = this->ui->chunkRowsSpinbox->value();
+    int new_num_cell_rows = new_num_chunk_rows*CHUNK_HEIGHT;
+
+    QImage new_image(this->num_cell_cols, new_num_cell_rows, this->GOL_image.format());
+    new_image.fill(0);
+    for (int y = 0; y < std::min(this->num_cell_rows, new_num_cell_rows); ++y){
+        for (int x = 0; x < this->num_cell_cols; ++x){
+            new_image.setPixel(x, y, this->GOL_image.pixel(x, y) & pixel_mask);
+        }
+    }
+    this->GOL_image = new_image;
+
+    this->num_cell_rows = new_num_cell_rows;
+    this->num_chunk_rows = new_num_chunk_rows;
+
+    this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
 }
