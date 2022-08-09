@@ -73,6 +73,9 @@ architecture Structural of GOL_block is
 begin
 
     block_stepper_inst: entity work.GOL_block_stepper
+    generic map(
+        g_init_filepath => g_init_filepath
+    )
     port map(
         i_clk => i_clk,
         i_rst => i_rst,

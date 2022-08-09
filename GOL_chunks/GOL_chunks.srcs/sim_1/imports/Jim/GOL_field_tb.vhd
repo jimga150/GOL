@@ -47,6 +47,8 @@ architecture Behavioral of GOL_field_tb is
     --Clock Periods
     constant i_clk_period : time := 10 ns;
     
+    constant c_num_frames : integer := 1000;
+    
 begin
     
     UUT: entity work.GOL_field
@@ -70,7 +72,7 @@ begin
         
         wait for i_clk_period;
         
-        for i in 0 to 1000 loop
+        for i in 0 to c_num_frames-1 loop
         
             for r in 0 to c_field_num_cell_rows-1 loop
                 for c in 0 to c_field_num_cell_cols-1 loop
@@ -106,7 +108,6 @@ begin
         constant c_bmp_pix_0 : bmp_pix := (others => (others => '0'));
         constant c_bmp_pix_1 : bmp_pix := (others => (others => '1'));
         variable v_bmp_pix : bmp_pix;
-        variable v_step_num : integer := 1;
     begin
     
         if (not v_bmp_is_init) then
@@ -115,30 +116,29 @@ begin
             v_bmp_is_init := true;
         end if;
         
---        wait until i_do_frame = '1';
-        if i_rst = '1' then
-            wait until i_rst = '0';
-            wait for i_clk_period;
-        else
-            wait until i_do_frame = '0';
-            wait for i_clk_period*7000;
-        end if;
+        wait for i_clk_period*2;
         
         wait for i_clk_period*6;
         
-        for r in 0 to c_field_num_cell_rows - 1 loop
-            for c in 0 to c_field_num_cell_cols - 1 loop
-                v_bmp_pix := c_bmp_pix_0;
-                if (o_pixel = '1') then 
-                    v_bmp_pix := c_bmp_pix_1;
-                end if;
-                bmp_set_pix(v_bmp_ptr, c, r, v_bmp_pix);
-                wait for i_clk_period;
-            end loop;
-        end loop;
+        for i in 0 to c_num_frames-1 loop
         
-        bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(v_step_num) & ".bmp");
-        v_step_num := v_step_num + 1;
+            for r in 0 to c_field_num_cell_rows - 1 loop
+                for c in 0 to c_field_num_cell_cols - 1 loop
+                    v_bmp_pix := c_bmp_pix_0;
+                    if (o_pixel = '1') then 
+                        v_bmp_pix := c_bmp_pix_1;
+                    end if;
+                    bmp_set_pix(v_bmp_ptr, c, r, v_bmp_pix);
+                    wait for i_clk_period;
+                end loop;
+            end loop;
+            
+            bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(i) & ".bmp");
+            
+            wait for i_clk_period;
+            wait for i_clk_period*7000;
+            
+        end loop;
         
     end process;
 

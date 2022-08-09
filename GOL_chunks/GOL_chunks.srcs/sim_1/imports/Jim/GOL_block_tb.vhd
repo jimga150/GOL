@@ -63,7 +63,7 @@ begin
     
     UUT: entity work.GOL_block
     generic map(
---        g_init_filepath => c_project_path & "\GOL_mem_init_files\corner" & integer'image(c_block_idx) & ".mif"
+--        g_init_filepath => c_project_path & "\GOL_mem_init_files\corner10.mif"
 --        g_init_filepath => c_project_path & "\GOL_mem_init_files\glidergun.mif"
         g_init_filepath => c_project_path & "\GOL_mem_init_files\vline.mif"
     )

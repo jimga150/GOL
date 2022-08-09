@@ -26,6 +26,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
+use std.textio.all;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -88,6 +89,7 @@ package GOL_pkg is
     constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
     
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
+    type t_block_chunk_array is array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) of t_chunk_type;
     
     --Convert chunk X and Y coordinates, as well as the MSB, into an address to be used for read/write on memory.
     pure function get_chunk_addr(
@@ -122,6 +124,14 @@ package GOL_pkg is
         i_left_edge, i_right_edge : std_logic_vector(c_chunk_height-1 downto 0);
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : std_logic
     ) return t_chunk_type;
+    
+    impure function block_from_mif(i_mif_filename : in string) return t_block_chunk_array;
+    
+    pure function top_row_from_block(i_block : t_block_chunk_array) return std_logic_vector;
+    pure function bottom_row_from_block(i_block : t_block_chunk_array) return std_logic_vector;
+    
+    pure function left_col_from_block(i_block : t_block_chunk_array) return std_logic_vector;
+    pure function right_col_from_block(i_block : t_block_chunk_array) return std_logic_vector;
     
 end GOL_pkg;
 
@@ -259,6 +269,74 @@ package body GOL_pkg is
                 v_neighbors(6) := v_2d_arr(v_2d_arr_y+1)(v_2d_arr_x);
                 v_neighbors(7) := v_2d_arr(v_2d_arr_y+1)(v_2d_arr_x+1);
                 v_ans(r)(c) := get_next_cell(i_chunk(r)(c), v_neighbors);
+            end loop;
+        end loop;
+        return v_ans;
+    end function;
+    
+    impure function block_from_mif(i_mif_filename : in string) return t_block_chunk_array is
+        FILE RamFile : text is in i_mif_filename;
+        variable RamFileLine : line;
+        variable v_bv : bit_vector(c_chunk_height*c_chunk_width-1 downto 0);
+        variable v_slv : std_logic_vector(v_bv'range);
+        variable v_chunk : t_chunk_type;
+        variable v_ans : t_block_chunk_array;
+    begin
+        for r in 0 to c_block_num_chunk_rows-1 loop
+            for c in 0 to c_block_num_chunk_cols-1 loop
+                readline(RamFile, RamFileLine);
+                read(RamFileLine, v_bv);
+                v_slv := to_stdlogicvector(v_bv);
+                v_chunk := vector_to_chunk(v_slv);
+                v_ans(r, c) := v_chunk;
+            end loop;
+        end loop;
+        return v_ans;
+    end function;
+    
+    pure function top_row_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+        variable v_ans : std_logic_vector(c_block_num_cell_cols-1 downto 0);
+        variable v_chunk : t_chunk_type;
+    begin
+        for c in i_block'range(2) loop
+            v_chunk := i_block(0, c);
+            v_ans((c+1)*c_chunk_width-1 downto c*c_chunk_width) := v_chunk(0);
+        end loop;
+        return v_ans;
+    end function;
+    
+    pure function bottom_row_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+        variable v_ans : std_logic_vector(c_block_num_cell_cols-1 downto 0);
+        variable v_chunk : t_chunk_type;
+    begin
+        for c in i_block'range(2) loop
+            v_chunk := i_block(i_block'high(1), c);
+            v_ans((c+1)*c_chunk_width-1 downto c*c_chunk_width) := v_chunk(v_chunk'high);
+        end loop;
+        return v_ans;
+    end function;
+    
+    pure function left_col_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+        variable v_ans : std_logic_vector(c_block_num_cell_rows-1 downto 0);
+        variable v_chunk : t_chunk_type;
+    begin
+        for r in i_block'range(1) loop
+            v_chunk := i_block(r, 0);
+            for cr in v_chunk'range loop
+                v_ans(r*c_chunk_height + cr) := v_chunk(cr)(0);
+            end loop;
+        end loop;
+        return v_ans;
+    end function;
+    
+    pure function right_col_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+        variable v_ans : std_logic_vector(c_block_num_cell_rows-1 downto 0);
+        variable v_chunk : t_chunk_type;
+    begin
+        for r in i_block'range(1) loop
+            v_chunk := i_block(r, i_block'high(2));
+            for cr in v_chunk'range loop
+                v_ans(r*c_chunk_height + cr) := v_chunk(cr)(v_chunk(cr)'high);
             end loop;
         end loop;
         return v_ans;
