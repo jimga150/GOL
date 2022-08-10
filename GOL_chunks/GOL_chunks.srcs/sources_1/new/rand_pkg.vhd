@@ -39,7 +39,7 @@ end rand_pkg;
 
 package body rand_pkg is
 
-    shared variable v_seed1, v_seed2 : positive := 0;
+    shared variable v_seed1, v_seed2 : positive := 1;
     shared variable v_r : real;
 
     impure function rand_std_logic return std_logic is
