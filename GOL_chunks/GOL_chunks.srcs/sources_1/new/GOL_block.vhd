@@ -61,14 +61,14 @@ architecture Structural of GOL_block is
     signal s_current_state_msb : std_logic;
     
     signal s_bram_enaa, s_bram_wea : std_logic;
-    signal s_bram_addra : std_logic_vector(9 downto 0);
-    signal s_bram_wr_dataa : std_logic_vector(35 downto 0);
-    signal s_bram_rd_dataa : std_logic_vector(35 downto 0);
+    signal s_bram_addra : std_logic_vector(c_bram_addr_bits-1 downto 0);
+    signal s_bram_wr_dataa : std_logic_vector(c_bram_width-1 downto 0);
+    signal s_bram_rd_dataa : std_logic_vector(c_bram_width-1 downto 0);
     
     signal s_bram_enab, s_bram_web : std_logic;
-    signal s_bram_addrb : std_logic_vector(9 downto 0);
-    signal s_bram_wr_datab : std_logic_vector(35 downto 0);
-    signal s_bram_rd_datab : std_logic_vector(35 downto 0);
+    signal s_bram_addrb : std_logic_vector(c_bram_addr_bits-1 downto 0);
+    signal s_bram_wr_datab : std_logic_vector(c_bram_width-1 downto 0);
+    signal s_bram_rd_datab : std_logic_vector(c_bram_width-1 downto 0);
 
 begin
 
@@ -104,7 +104,7 @@ begin
         o_current_state_msb => s_current_state_msb
     );
     
-    bram_inst: entity work.bram_dp_36k
+    bram_inst: entity work.bram_dp
     generic map(
         g_init_cells => g_init_cells
     )

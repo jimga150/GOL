@@ -45,9 +45,9 @@ entity GOL_block_stepper is
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : in std_logic := '0';
                 
         o_bram_ena, o_bram_we : out std_logic;
-        o_bram_addr : out std_logic_vector(9 downto 0);
-        o_bram_wr_data : out std_logic_vector(35 downto 0);
-        i_bram_rd_data : in std_logic_vector(35 downto 0);
+        o_bram_addr : out std_logic_vector(c_bram_addr_bits-1 downto 0);
+        o_bram_wr_data : out std_logic_vector(c_bram_width-1 downto 0);
+        i_bram_rd_data : in std_logic_vector(c_bram_width-1 downto 0);
         
         o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0);
         o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0);

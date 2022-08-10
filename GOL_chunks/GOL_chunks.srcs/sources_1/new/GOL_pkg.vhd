@@ -88,6 +88,11 @@ package GOL_pkg is
     constant c_field_num_cell_col_bits : integer := integer(floor(log2(real(c_field_num_cell_cols))+1.0));
     constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
     
+    --Block RAM stuff
+    constant c_bram_width : integer := c_chunk_width*c_chunk_height;
+    constant c_bram_depth : integer := c_block_num_chunk_rows*c_block_num_chunk_cols*2; --account for data doubling
+    constant c_bram_addr_bits : integer := integer(ceil(log2(real(c_bram_depth))));
+    
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     type t_2d_chunk_array is array(natural range<>, natural range<>) of t_chunk_type;
     
@@ -119,7 +124,7 @@ package GOL_pkg is
     pure function chunk_to_vector(i_chunk : t_chunk_type) return std_logic_vector;
     
     --converts std_logic_vector from memory to chunk
-    pure function vector_to_chunk(i_vector : std_logic_vector(35 downto 0)) return t_chunk_type;
+    pure function vector_to_chunk(i_vector : std_logic_vector(c_bram_width-1 downto 0)) return t_chunk_type;
     
     --Used in simulation only, for verification
     pure function get_next_cell(
@@ -219,7 +224,7 @@ package body GOL_pkg is
     end function;
     
     pure function chunk_to_vector(i_chunk : t_chunk_type) return std_logic_vector is
-        variable v_ans : std_logic_vector(35 downto 0);
+        variable v_ans : std_logic_vector(c_bram_width-1 downto 0);
     begin
         for r in 0 to c_chunk_height-1 loop
             v_ans((r+1)*c_chunk_width - 1 downto r*c_chunk_width) := i_chunk(r);
@@ -227,7 +232,7 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
-    pure function vector_to_chunk(i_vector : std_logic_vector(35 downto 0)) return t_chunk_type is
+    pure function vector_to_chunk(i_vector : std_logic_vector(c_bram_width-1 downto 0)) return t_chunk_type is
         variable v_ans : t_chunk_type;
     begin
         for r in 0 to c_chunk_height-1 loop
