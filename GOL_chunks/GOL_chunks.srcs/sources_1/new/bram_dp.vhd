@@ -37,7 +37,7 @@ use work.GOL_pkg.all;
 
 entity bram_dp is
     generic(
-        g_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := (others => (others => (others => (others => '0'))))
+        g_init_cells : t_block_chunk_arr := c_empty_block
     );
     PORT (
         i_clka : in std_logic;
@@ -60,7 +60,7 @@ architecture Inferred of bram_dp is
     
     type t_ram_type is array (c_bram_depth-1 downto 0) of std_logic_vector(o_douta'range);
     
-    impure function InitRamFromChunks(i_chunk_arr : in t_2d_chunk_array(g_init_cells'range(1), g_init_cells'range(2))) return t_ram_type is
+    impure function InitRamFromChunks(i_chunk_arr : in t_block_chunk_arr) return t_ram_type is
         variable v_ram : t_ram_type;
         variable v_ram_idx : integer := 0;
     begin

@@ -35,7 +35,7 @@ use work.GOL_pkg.all;
 
 entity GOL_field is
     generic(
-        g_init_cells : t_2d_chunk_array
+        g_init_filename : string := c_project_path & "\GOL_mem_init_files\glidergun.gmif"
     );
     port(
         i_clk, i_rst, i_do_frame : in std_logic;
@@ -72,6 +72,8 @@ architecture Structural of GOL_field is
     type t_2d_array_type is array(natural range<>, natural range<>) of std_logic;
     type t_h_edge_2d_array_type is array(natural range<>, natural range<>) of std_logic_vector(c_block_num_cell_cols-1 downto 0);
     type t_v_edge_2d_array_type is array(natural range<>, natural range<>) of std_logic_vector(c_block_num_cell_rows-1 downto 0);
+    
+    constant c_init_cells : t_field_chunk_arr := field_chunk_arr_from_gmif(g_init_filename);
     
     signal s_top_to_bottom_edges : t_h_edge_2d_array_type(
         c_field_num_block_rows-1 downto 0,
@@ -142,8 +144,7 @@ begin
             constant c_next_col : integer := barrel_add(c, c_field_num_block_cols-1);
             constant c_prev_row : integer := barrel_sub(r, c_field_num_block_rows-1);
             constant c_prev_col : integer := barrel_sub(c, c_field_num_block_cols-1);
-            constant c_block_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := 
-                block_chunk_arr_from_field(g_init_cells, c, r);
+            constant c_block_init_cells : t_block_chunk_arr := block_chunk_arr_from_field(c_init_cells, c, r);
         begin
             --5 cycles delay between (x, y) update and o_chunk
             block_inst: entity work.GOL_block

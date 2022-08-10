@@ -35,7 +35,7 @@ use work.GOL_pkg.all;
 
 entity GOL_block_stepper is
     generic(
-        g_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := (others => (others => (others => (others => '0'))))
+        g_init_cells : t_block_chunk_arr := c_empty_block
     );
     Port (
         i_clk, i_rst, i_do_frame : in STD_LOGIC;

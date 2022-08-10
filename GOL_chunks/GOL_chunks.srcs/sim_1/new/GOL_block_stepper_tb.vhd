@@ -62,8 +62,8 @@ architecture Behavioral of GOL_block_stepper_tb is
     constant i_clk_period : time := 10 ns;
     
     constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
-    constant c_field_arr : t_2d_chunk_array := chunk_2d_arr_from_gmif(c_init_filename);
-    constant c_block_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 0);
+    constant c_field_arr : t_field_chunk_arr := field_chunk_arr_from_gmif(c_init_filename);
+    constant c_block_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 0, 0);
 
 begin
 
@@ -99,7 +99,7 @@ begin
         o_bottom_right_bit => s_bottom_right_top_left_bit
     );
 	
-	bram_inst: entity work.bram_dp_36k
+	bram_inst: entity work.bram_dp
 	generic map(
         g_init_cells => c_block_chunk_arr
     )
@@ -131,7 +131,7 @@ begin
 		
 		wait for i_clk_period*10;
 		
-		for i in 0 to 1000 loop
+		for i in 0 to 100 loop
 		
             i_do_frame <= '1';
             
