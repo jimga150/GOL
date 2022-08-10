@@ -49,9 +49,15 @@ architecture Behavioral of GOL_field_tb is
     
     constant c_num_frames : integer := 1000;
     
+    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
+    constant c_field_arr : t_2d_chunk_array := chunk_2d_arr_from_gmif(c_init_filename);
+    
 begin
     
     UUT: entity work.GOL_field
+    generic map(
+        g_init_cells => c_field_arr
+    )
     port map(
         i_clk => i_clk,
         i_rst => i_rst,

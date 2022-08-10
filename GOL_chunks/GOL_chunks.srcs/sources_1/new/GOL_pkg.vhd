@@ -69,7 +69,7 @@ package GOL_pkg is
     constant c_field_num_block_col_bits : integer := integer(floor(log2(real(c_field_num_block_cols))+1.0));
     constant c_field_num_block_row_bits : integer := integer(floor(log2(real(c_field_num_block_rows))+1.0));
     
-    --number of rows and columsn, in chunks per field
+    --number of rows and columns, in chunks per field
     constant c_field_num_chunk_rows : integer := c_field_num_block_rows*c_block_num_chunk_rows;
     constant c_field_num_chunk_cols : integer := c_field_num_block_cols*c_block_num_chunk_cols;
     
@@ -89,7 +89,17 @@ package GOL_pkg is
     constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
     
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
-    type t_block_chunk_array is array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) of t_chunk_type;
+    type t_2d_chunk_array is array(natural range<>, natural range<>) of t_chunk_type;
+    
+    pure function int_max(
+        i_int1 : integer;
+        i_int2 : integer
+    ) return integer;
+    
+    pure function int_min(
+        i_int1 : integer;
+        i_int2 : integer
+    ) return integer;
     
     --Convert chunk X and Y coordinates, as well as the MSB, into an address to be used for read/write on memory.
     pure function get_chunk_addr(
@@ -125,17 +135,48 @@ package GOL_pkg is
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : std_logic
     ) return t_chunk_type;
     
-    impure function block_from_mif(i_mif_filename : in string) return t_block_chunk_array;
+    impure function chunk_2d_arr_from_gmif(i_gmif_filename : in string) return t_2d_chunk_array;
+    impure function populate_chunk_2d_arr(
+        i_gmif_filename : in string; 
+        i_chunk_rows : in integer; 
+        i_chunk_cols : in integer
+    ) return t_2d_chunk_array;
     
-    pure function top_row_from_block(i_block : t_block_chunk_array) return std_logic_vector;
-    pure function bottom_row_from_block(i_block : t_block_chunk_array) return std_logic_vector;
+    pure function block_chunk_arr_from_field(i_2d_chunk_arr : t_2d_chunk_array; i_block_x : integer; i_block_y : integer) return t_2d_chunk_array;
+
+    pure function top_row_from_block(i_block : t_2d_chunk_array) return std_logic_vector;
+    pure function bottom_row_from_block(i_block : t_2d_chunk_array) return std_logic_vector;
     
-    pure function left_col_from_block(i_block : t_block_chunk_array) return std_logic_vector;
-    pure function right_col_from_block(i_block : t_block_chunk_array) return std_logic_vector;
+    pure function left_col_from_block(i_block : t_2d_chunk_array) return std_logic_vector;
+    pure function right_col_from_block(i_block : t_2d_chunk_array) return std_logic_vector;
     
 end GOL_pkg;
 
 package body GOL_pkg is
+
+    pure function int_max(
+        i_int1 : integer;
+        i_int2 : integer
+    ) return integer is
+    
+    begin
+        if (i_int1 > i_int2) then
+            return i_int1;
+        end if;
+        return i_int2;
+    end function;
+    
+    pure function int_min(
+        i_int1 : integer;
+        i_int2 : integer
+    ) return integer is
+    
+    begin
+        if (i_int1 < i_int2) then
+            return i_int1;
+        end if;
+        return i_int2;
+    end function;
 
     pure function get_chunk_addr(
         i_chunk_x : integer;
@@ -274,16 +315,37 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
-    impure function block_from_mif(i_mif_filename : in string) return t_block_chunk_array is
-        FILE RamFile : text is in i_mif_filename;
+    impure function chunk_2d_arr_from_gmif(i_gmif_filename : in string) return t_2d_chunk_array is
+        FILE RamFile : text is in i_gmif_filename;
+        variable RamFileLine : line;
+        variable v_rows, v_cols : integer;        
+    begin
+        readline(RamFile, RamFileLine); --skip first line
+        readline(RamFile, RamFileLine);
+        read(RamFileLine, v_rows);
+        readline(RamFile, RamFileLine); --skip third line
+        readline(RamFile, RamFileLine);
+        read(RamFileLine, v_cols);
+        return populate_chunk_2d_arr(i_gmif_filename, v_rows, v_cols);
+    end function;
+    
+    impure function populate_chunk_2d_arr(
+        i_gmif_filename : in string; 
+        i_chunk_rows : in integer; 
+        i_chunk_cols : in integer
+    ) return t_2d_chunk_array is
+        FILE RamFile : text is in i_gmif_filename;
         variable RamFileLine : line;
         variable v_bv : bit_vector(c_chunk_height*c_chunk_width-1 downto 0);
         variable v_slv : std_logic_vector(v_bv'range);
         variable v_chunk : t_chunk_type;
-        variable v_ans : t_block_chunk_array;
+        variable v_ans : t_2d_chunk_array(i_chunk_rows-1 downto 0, i_chunk_cols-1 downto 0);
     begin
-        for r in 0 to c_block_num_chunk_rows-1 loop
-            for c in 0 to c_block_num_chunk_cols-1 loop
+        for i in 1 to 4 loop
+            readline(RamFile, RamFileLine); --skip first four lines
+        end loop;
+        for r in 0 to i_chunk_rows-1 loop
+            for c in 0 to i_chunk_cols-1 loop
                 readline(RamFile, RamFileLine);
                 read(RamFileLine, v_bv);
                 v_slv := to_stdlogicvector(v_bv);
@@ -294,7 +356,32 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
-    pure function top_row_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+    pure function block_chunk_arr_from_field(
+        i_2d_chunk_arr : t_2d_chunk_array; 
+        i_block_x : integer; 
+        i_block_y : integer
+    ) return t_2d_chunk_array is
+        constant c_start_x : integer := i_block_x*c_block_num_chunk_cols;
+        constant c_start_y : integer := i_block_y*c_block_num_chunk_rows;
+        constant c_last_x : integer := int_min((i_block_x+1)*c_block_num_chunk_cols - 1, i_2d_chunk_arr'high(2));
+        constant c_last_y : integer := int_min((i_block_y+1)*c_block_num_chunk_rows - 1, i_2d_chunk_arr'high(1));
+        variable v_ans : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := (others => (others => (others => (others => '0'))));
+    begin
+        if (c_start_x > c_last_x) then
+            return v_ans;
+        end if;
+        if (c_start_y > c_last_y) then
+            return v_ans;
+        end if;
+        for y in c_start_y to c_last_y loop
+            for x in c_start_x to c_last_x loop
+                v_ans(y - c_start_y, x - c_start_x) := i_2d_chunk_arr(y, x);
+            end loop;
+        end loop;
+        return v_ans;
+    end function;
+    
+    pure function top_row_from_block(i_block : t_2d_chunk_array) return std_logic_vector is
         variable v_ans : std_logic_vector(c_block_num_cell_cols-1 downto 0);
         variable v_chunk : t_chunk_type;
     begin
@@ -305,7 +392,7 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
-    pure function bottom_row_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+    pure function bottom_row_from_block(i_block : t_2d_chunk_array) return std_logic_vector is
         variable v_ans : std_logic_vector(c_block_num_cell_cols-1 downto 0);
         variable v_chunk : t_chunk_type;
     begin
@@ -316,7 +403,7 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
-    pure function left_col_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+    pure function left_col_from_block(i_block : t_2d_chunk_array) return std_logic_vector is
         variable v_ans : std_logic_vector(c_block_num_cell_rows-1 downto 0);
         variable v_chunk : t_chunk_type;
     begin
@@ -329,7 +416,7 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
-    pure function right_col_from_block(i_block : t_block_chunk_array) return std_logic_vector is
+    pure function right_col_from_block(i_block : t_2d_chunk_array) return std_logic_vector is
         variable v_ans : std_logic_vector(c_block_num_cell_rows-1 downto 0);
         variable v_chunk : t_chunk_type;
     begin

@@ -84,7 +84,7 @@ void MainWindow::saveState(){
 
     QTextStream tstream(&file);
 
-    tstream << QString("ChunkRows: %1  ChunkCols: %2\n").arg(num_chunk_rows).arg(num_chunk_cols);
+    tstream << QString("ChunkRows:\n%1\nChunkCols:\n%2\n").arg(num_chunk_rows).arg(num_chunk_cols);
 
     for (int chunk_y = 0; chunk_y < num_chunk_rows; ++chunk_y){
         bool broken = false;
@@ -118,18 +118,20 @@ void MainWindow::loadState(){
     
     QTextStream tstream(&file);
 
-    QString header = tstream.readLine();
-    QStringList header_split = header.split(" ", Qt::SkipEmptyParts);
+    tstream.readLine();
+    QString rows_str = tstream.readLine();
+    tstream.readLine();
+    QString cols_str = tstream.readLine();
     bool ok;
 
-    int chunk_rows = header_split.at(1).toInt(&ok);
+    int chunk_rows = rows_str.toInt(&ok);
     if (!ok){
         fprintf(stderr, "Row int conversion failed in header of %s.\n", filepath.toUtf8().constData());
     }
     this->num_chunk_rows = chunk_rows;
     this->num_cell_rows = CHUNK_HEIGHT*num_chunk_rows;
 
-    int chunk_cols = header_split.at(3).toInt(&ok);
+    int chunk_cols = cols_str.toInt(&ok);
     if (!ok){
         fprintf(stderr, "Col int conversion failed in header of %s.\n", filepath.toUtf8().constData());
     }

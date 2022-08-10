@@ -35,7 +35,7 @@ use work.GOL_pkg.all;
 
 entity GOL_block_stepper is
     generic(
-        g_init_filepath : string := ""
+        g_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := (others => (others => (others => (others => '0'))))
     );
     Port (
         i_clk, i_rst, i_do_frame : in STD_LOGIC;
@@ -94,14 +94,12 @@ architecture Behavioral of GOL_block_stepper is
     signal s_we_bottom_left_bit_pline : std_logic_vector(c_bram_read_delay downto 0);
     signal s_we_bottom_edge_pline : std_logic_vector(c_bram_read_delay downto 0);
     signal s_we_bottom_right_bit_pline : std_logic_vector(c_bram_read_delay downto 0);
-    
-    constant c_block_arr : t_block_chunk_array := block_from_mif(g_init_filepath);
-    
+        
     --reset values for output registers for border bits
-    constant c_block_top_edge_rst : std_logic_vector(c_block_num_cell_cols-1 downto 0) := top_row_from_block(c_block_arr);
-    constant c_block_bottom_edge_rst : std_logic_vector(c_block_num_cell_cols-1 downto 0) := bottom_row_from_block(c_block_arr);
-    constant c_block_right_edge_rst : std_logic_vector(c_block_num_cell_rows-1 downto 0) := right_col_from_block(c_block_arr);
-    constant c_block_left_edge_rst : std_logic_vector(c_block_num_cell_rows-1 downto 0) := left_col_from_block(c_block_arr);
+    constant c_block_top_edge_rst : std_logic_vector(c_block_num_cell_cols-1 downto 0) := top_row_from_block(g_init_cells);
+    constant c_block_bottom_edge_rst : std_logic_vector(c_block_num_cell_cols-1 downto 0) := bottom_row_from_block(g_init_cells);
+    constant c_block_right_edge_rst : std_logic_vector(c_block_num_cell_rows-1 downto 0) := right_col_from_block(g_init_cells);
+    constant c_block_left_edge_rst : std_logic_vector(c_block_num_cell_rows-1 downto 0) := left_col_from_block(g_init_cells);
     constant c_block_top_left_bit_rst : std_logic := c_block_top_edge_rst(0);
     constant c_block_top_right_bit_rst : std_logic := c_block_top_edge_rst(c_block_top_edge_rst'high);
     constant c_block_bottom_left_bit_rst : std_logic := c_block_bottom_edge_rst(0);

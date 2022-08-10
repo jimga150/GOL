@@ -34,6 +34,9 @@ use work.GOL_pkg.all;
 --use UNISIM.VComponents.all;
 
 entity GOL_field is
+    generic(
+        g_init_cells : t_2d_chunk_array
+    );
     port(
         i_clk, i_rst, i_do_frame : in std_logic;
         i_col : in unsigned(c_field_num_cell_col_bits-1 downto 0);
@@ -139,14 +142,13 @@ begin
             constant c_next_col : integer := barrel_add(c, c_field_num_block_cols-1);
             constant c_prev_row : integer := barrel_sub(r, c_field_num_block_rows-1);
             constant c_prev_col : integer := barrel_sub(c, c_field_num_block_cols-1);
-            constant c_block_idx : integer := c + c_field_num_block_cols*r;
+            constant c_block_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := 
+                block_chunk_arr_from_field(g_init_cells, c, r);
         begin
             --5 cycles delay between (x, y) update and o_chunk
             block_inst: entity work.GOL_block
                 generic map(
---                    g_init_filepath => c_project_path & "\GOL_mem_init_files\corner" & integer'image(c_block_idx) & ".mif"
---                    g_init_filepath => c_project_path & "\GOL_mem_init_files\glidergun.mif"
-                    g_init_filepath => c_project_path & "\GOL_mem_init_files\vline.mif"
+                    g_init_cells => c_block_init_cells
                 )
                 port map(
                     i_clk => i_clk,

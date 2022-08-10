@@ -35,7 +35,7 @@ use work.GOL_pkg.all;
 
 entity GOL_block is
     generic(
-        g_init_filepath : string := ""
+        g_init_cells : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := (others => (others => (others => (others => '0'))))
     );
     port(
         i_clk, i_rst : in std_logic;
@@ -74,7 +74,7 @@ begin
 
     block_stepper_inst: entity work.GOL_block_stepper
     generic map(
-        g_init_filepath => g_init_filepath
+        g_init_cells => g_init_cells
     )
     port map(
         i_clk => i_clk,
@@ -106,7 +106,7 @@ begin
     
     bram_inst: entity work.bram_dp_36k
     generic map(
-        g_init_filepath => g_init_filepath
+        g_init_cells => g_init_cells
     )
     port map(
         i_clka => i_clk,
