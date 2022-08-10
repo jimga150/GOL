@@ -334,6 +334,10 @@ package body GOL_pkg is
         variable v_ans : t_field_chunk_arr := c_empty_field;
     begin
     
+        if (i_gmif_filename'length = 0) then
+            return v_ans;
+        end if;
+    
         readline(RamFile, RamFileLine); --skip first line
         readline(RamFile, RamFileLine);
         read(RamFileLine, v_rows);
