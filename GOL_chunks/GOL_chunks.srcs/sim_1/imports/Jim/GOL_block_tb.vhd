@@ -23,6 +23,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.GOL_pkg.all;
+use work.GOL_field_init.all;
 use work.bmp_pkg.all;
 
 entity GOL_block_tb is
@@ -52,15 +53,19 @@ architecture Behavioral of GOL_block_tb is
     signal s_bottom_right_to_top_left_bit : std_logic;
     
     --Outputs
+    signal o_stepper_busy : std_logic;
     signal o_chunk : t_chunk_type;
+    
+    --tb signals
+    signal s_read_delay_pline : std_logic_vector(2 downto 0) := (others => '0');
+    signal s_read_start : std_logic := '0';
     
     --Clock Periods
     constant i_clk_period : time := 10 ns;
     
     constant c_num_frames : integer := 100;
     
-    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
-    constant c_field_arr : t_field_chunk_arr := field_chunk_arr_from_gmif(c_init_filename);
+    constant c_field_arr : t_field_chunk_arr := c_init_glider;
     constant c_block_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 0, 0);
     
 begin
@@ -76,6 +81,7 @@ begin
         i_chunk_y => i_chunk_y,
         o_chunk => o_chunk,
         i_do_frame => i_do_frame,
+        o_stepper_busy => o_stepper_busy,
         i_top_edge => s_bottom_to_top_edge,
         i_bottom_edge => s_top_to_bottom_edge,
         i_right_edge => s_left_to_right_edge,
@@ -109,11 +115,18 @@ begin
         
             for r in 0 to c_block_num_chunk_rows - 1 loop
                 for c in 0 to c_block_num_chunk_cols - 1 loop
+                    s_read_start <= '0';
+                    if (r = 0 and c = 0) then s_read_start <= '1'; end if;
                     i_chunk_x <= to_unsigned(c, i_chunk_x'length);
                     i_chunk_y <= to_unsigned(r, i_chunk_y'length);
                     wait for i_clk_period;
                 end loop;
             end loop;
+            
+            if (o_stepper_busy = '1') then
+                wait until o_stepper_busy = '0';
+                wait for i_clk_period/2;
+            end if;
         
             i_do_frame <= '1';
             
@@ -121,8 +134,8 @@ begin
             
             i_do_frame <= '0';
             
-            wait for i_clk_period*7000;
-        
+            wait for i_clk_period;
+                    
         end loop;
         
         assert false report "End Simulation" severity failure;
@@ -131,6 +144,15 @@ begin
         -- if the above assert statement is removed
         wait;
         
+    end process;
+    
+    process(i_clk) is begin
+        if rising_edge(i_clk) then
+            s_read_delay_pline <= s_read_delay_pline(s_read_delay_pline'high-1 downto 0) & s_read_start;
+            if (i_rst = '1') then
+                s_read_delay_pline <= (others => '0');
+            end if;
+        end if;
     end process;
     
     bmp_write_proc: process is
@@ -148,12 +170,11 @@ begin
             v_bmp_ptr.meta.height := c_block_num_cell_rows;
             v_bmp_is_init := true;
         end if;
-        
-        wait for i_clk_period*2; --reset delay
-        
-        wait for i_clk_period*3; --pipeline delay
-        
+                
         for i in 0 to c_num_frames-1 loop
+        
+            wait until s_read_delay_pline(s_read_delay_pline'high) = '1';
+            wait for i_clk_period/2;
             
             for r in 0 to c_block_num_chunk_rows - 1 loop
                 for c in 0 to c_block_num_chunk_cols - 1 loop
@@ -178,9 +199,6 @@ begin
             end loop;
             
             bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(i) & ".bmp");
-             
-            wait for i_clk_period;
-            wait for i_clk_period*7000;
         
         end loop;
         

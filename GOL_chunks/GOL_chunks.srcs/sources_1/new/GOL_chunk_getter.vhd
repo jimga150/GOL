@@ -42,8 +42,8 @@ entity GOL_chunk_getter is
         o_chunk : out t_chunk_type;
         
         o_bram_ena : out std_logic := '1';
-        o_bram_addr : out std_logic_vector(9 downto 0);
-        i_bram_rd_data : in std_logic_vector(35 downto 0)
+        o_bram_addr : out std_logic_vector(c_bram_addr_bits-1 downto 0);
+        i_bram_rd_data : in std_logic_vector(c_bram_width-1 downto 0)
         
     );
 end GOL_chunk_getter;

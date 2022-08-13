@@ -38,10 +38,12 @@ entity GOL_block_stepper is
         g_init_cells : t_block_chunk_arr := c_empty_block
     );
     Port (
-        i_clk, i_rst, i_do_frame : in STD_LOGIC;
+        i_clk, i_rst, i_do_frame : in std_logic;
         
-        i_top_edge, i_bottom_edge : in STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0) := (others => '0');
-        i_right_edge, i_left_edge : in STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0) := (others => '0');
+        o_stepper_busy : out std_logic;
+        
+        i_top_edge, i_bottom_edge : in std_logic_vector(c_block_num_cell_cols-1 downto 0) := (others => '0');
+        i_right_edge, i_left_edge : in std_logic_vector(c_block_num_cell_rows-1 downto 0) := (others => '0');
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : in std_logic := '0';
                 
         o_bram_ena, o_bram_we : out std_logic;
@@ -49,8 +51,8 @@ entity GOL_block_stepper is
         o_bram_wr_data : out std_logic_vector(c_bram_width-1 downto 0);
         i_bram_rd_data : in std_logic_vector(c_bram_width-1 downto 0);
         
-        o_top_edge, o_bottom_edge : out STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0);
-        o_right_edge, o_left_edge : out STD_LOGIC_VECTOR(c_block_num_cell_rows-1 downto 0);
+        o_top_edge, o_bottom_edge : out std_logic_vector(c_block_num_cell_cols-1 downto 0);
+        o_right_edge, o_left_edge : out std_logic_vector(c_block_num_cell_rows-1 downto 0);
         o_top_left_bit, o_top_right_bit, o_bottom_left_bit, o_bottom_right_bit : out std_logic;
         
         o_current_state_msb : out std_logic
@@ -59,8 +61,6 @@ entity GOL_block_stepper is
 end GOL_block_stepper;
 
 architecture Behavioral of GOL_block_stepper is
-
-    constant c_bram_read_delay : integer := 1;
     
     --the MSB of the address used for BRAM selects for the half of the memory we are using for the current frame 
     --vs the next fram that is being wirtten to.
@@ -173,6 +173,9 @@ begin
     process(i_clk) is begin
         if rising_edge(i_clk) then
         
+            --most states require this to be 1, 0 is the exception
+            o_stepper_busy <= '1';
+        
             --always enable BRAM, since disabling it means disabling the input and output pipelines, which stalls reads.
             o_bram_ena <= '1';
             o_bram_we <= '0';
@@ -191,6 +194,8 @@ begin
             case (s_readout_state) is
             when READOUT_IDLE => 
             
+                o_stepper_busy <= '0';
+            
                 --its ok to disable the BRAM here since there should not be any pending reads on the BRAM at this juncture.
                 o_bram_ena <= '0';
                 
@@ -206,11 +211,17 @@ begin
             
                 if (i_do_frame = '1') then
                     s_readout_state <= READ_TOP_LEFT;
+                    s_current_state_msb <= not s_current_state_msb;
                 end if;
                 
             when READ_TOP_LEFT => 
             
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int-1, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    barrel_decrement(s_current_chunk_x_int, 0, c_block_num_chunk_cols - 1), 
+                    barrel_decrement(s_current_chunk_y_int, 0, c_block_num_chunk_rows - 1), 
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
                 
                 s_we_top_left_bit_pline(0) <= '1';
 
@@ -218,7 +229,12 @@ begin
                 
             when READ_TOP_MIDDLE => 
             
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int-1, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    s_current_chunk_x_int, 
+                    barrel_decrement(s_current_chunk_y_int, 0, c_block_num_chunk_rows - 1),
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
 
                 s_we_top_edge_pline(0) <= '1';
                 
@@ -226,7 +242,12 @@ begin
                 
             when READ_TOP_RIGHT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int-1, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    barrel_increment(s_current_chunk_x_int, 0, c_block_num_chunk_cols - 1), 
+                    barrel_decrement(s_current_chunk_y_int, 0, c_block_num_chunk_rows - 1),
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
 
                 s_we_top_right_bit_pline(0) <= '1';
                 
@@ -234,14 +255,24 @@ begin
                 
             when READ_CENTER_LEFT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    barrel_decrement(s_current_chunk_x_int, 0, c_block_num_chunk_cols - 1),
+                    s_current_chunk_y_int, 
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
                 s_we_left_edge_pline(0) <= '1';
                 
                 s_readout_state <= READ_CENTER;
                 
             when READ_CENTER =>
             
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    s_current_chunk_x_int, 
+                    s_current_chunk_y_int, 
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
                                 
                 s_we_center_chunk_pline(0) <= '1';
                 
@@ -249,7 +280,12 @@ begin
                 
             when READ_CENTER_RIGHT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    barrel_increment(s_current_chunk_x_int, 0, c_block_num_chunk_cols - 1),
+                    s_current_chunk_y_int, 
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
                 
                 s_we_right_edge_pline(0) <= '1';
                 
@@ -257,7 +293,12 @@ begin
                 
             when READ_BOTTOM_LEFT =>
                  
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int-1, s_current_chunk_y_int+1, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    barrel_decrement(s_current_chunk_x_int, 0, c_block_num_chunk_cols - 1),
+                    barrel_increment(s_current_chunk_y_int, 0, c_block_num_chunk_rows - 1),
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
                 
                 s_we_bottom_left_bit_pline(0) <= '1';
                 
@@ -265,7 +306,12 @@ begin
                 
             when READ_BOTTOM_MIDDLE =>
                  
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int, s_current_chunk_y_int+1, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                        s_current_chunk_x_int, 
+                        barrel_increment(s_current_chunk_y_int, 0, c_block_num_chunk_rows - 1),
+                        s_current_state_msb, 
+                        o_bram_addr'length
+                    );
                 
                 s_we_bottom_edge_pline(0) <= '1';
                 
@@ -273,7 +319,12 @@ begin
                 
             when READ_BOTTOM_RIGHT => 
                 
-                o_bram_addr <= get_chunk_addr(s_current_chunk_x_int+1, s_current_chunk_y_int+1, s_current_state_msb, o_bram_addr'length);
+                o_bram_addr <= get_chunk_addr(
+                    barrel_increment(s_current_chunk_x_int, 0, c_block_num_chunk_cols - 1),
+                    barrel_increment(s_current_chunk_y_int, 0, c_block_num_chunk_rows - 1),
+                    s_current_state_msb, 
+                    o_bram_addr'length
+                );
                 
                 s_we_bottom_right_bit_pline(0) <= '1';
                 
@@ -312,7 +363,6 @@ begin
                     s_current_chunk_y <= s_current_chunk_y + 1;
                     if (s_current_chunk_y_int = c_block_num_chunk_rows - 1) then
                         s_current_chunk_y <= (others => '0');
-                        s_current_state_msb <= not s_current_state_msb;
                     end if;                
                 end if;
                 
@@ -483,7 +533,7 @@ begin
                 s_we_bottom_right_bit_pline <= (others => '0');
                 s_current_chunk_x <= (others => '0');
                 s_current_chunk_y <= (others => '0');
-                s_current_state_msb <= '0';
+                s_current_state_msb <= '1'; --will be flipped on first frame
                 s_readout_state <= c_readout_sm_reset_state;
             end if;
             

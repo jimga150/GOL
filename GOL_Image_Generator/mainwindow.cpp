@@ -41,18 +41,19 @@ void MainWindow::clearImage(){
     this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
 }
 
-void MainWindow::saveState(){
-
+void MainWindow::copyConstDecl(){
     std::vector<std::vector<chunk_struct>> block;
-    QPoint lowest_rightmost_live_chunk(0, 0);
+    std::vector<int> rightmost_live_col;
+    int lowest_live_row = -1;
 
     for (int chunk_y = 0; chunk_y < num_chunk_rows; ++chunk_y){
         std::vector<chunk_struct> chunk_row;
         block.push_back(chunk_row);
+        rightmost_live_col.push_back(-1);
         for (int chunk_x = 0; chunk_x < num_chunk_cols; ++chunk_x){
             chunk_struct chunk;
             block[chunk_y].push_back(chunk);
-            bool has_live_cells = false;
+            bool chunk_is_live = false;
             for (int cell_y = 0; cell_y < CHUNK_HEIGHT; ++cell_y){
                 for (int cell_x = 0; cell_x < CHUNK_WIDTH; ++cell_x){
                     int block_y = chunk_y*CHUNK_HEIGHT + cell_y;
@@ -60,11 +61,90 @@ void MainWindow::saveState(){
                     QRgb pixel = this->GOL_image.pixel(block_x, block_y);
                     bool bit = pixel & pixel_mask;
                     block[chunk_y][chunk_x].cells[cell_y][cell_x] = bit;
-                    has_live_cells |= bit;
+                    chunk_is_live |= bit;
                 }
             }
-            if (has_live_cells){
-                lowest_rightmost_live_chunk = QPoint(chunk_x, chunk_y);
+            if (chunk_is_live){
+                rightmost_live_col.at(chunk_y) = chunk_x;
+                lowest_live_row = chunk_y;
+            }
+        }
+    }
+
+    QString decl = "constant c_init_<name> : t_field_chunk_arr := (%1);";
+
+    QString row_decl = "%1 => (%2),";
+    QStringList row_decls;
+    row_decls.append("\n\t\t");
+
+    int y_max = num_chunk_rows-1;
+    if (lowest_live_row < y_max){
+        y_max = lowest_live_row;
+    }
+
+    for (int chunk_y = 0; chunk_y <= y_max; ++chunk_y){
+
+        QString col_decl = "%1 => %2,";
+        QStringList col_decls;
+        col_decls.append("\n\t\t\t");
+
+        int x_max = num_chunk_cols-1;
+        if (rightmost_live_col[chunk_y] < x_max){
+            x_max = rightmost_live_col[chunk_y];
+        }
+
+        if (x_max < 0){
+            continue;
+        }
+
+        for (int chunk_x = 0; chunk_x <= x_max; ++chunk_x){
+            if (!block[chunk_y][chunk_x].isLive()){
+                continue;
+            }
+            col_decls.append(col_decl.arg(chunk_x).arg(block[chunk_y][chunk_x].constDecl()));
+            col_decls.append(col_decls.at(0));
+        }
+
+        col_decls.append("others => c_empty_chunk\n\t\t");
+
+        QString col_decls_str = col_decls.join("");
+        row_decls.append(row_decl.arg(chunk_y).arg(col_decls_str));
+        row_decls.append(row_decls.at(0));
+    }
+
+    row_decls.append("others => (others => c_empty_chunk)\n\t");
+
+    QString row_decls_str = row_decls.join("");
+    decl = decl.arg(row_decls_str);
+    decl.replace("\t", "    ");
+
+    printf("Declaration:\n%s\n", decl.toUtf8().constData());
+    fflush(stdout);
+
+    QClipboard* clipboard = QGuiApplication::clipboard();
+    clipboard->setText(decl);
+
+    QMessageBox::information(this, "GOL Image Generator", "Declatation copied!");
+}
+
+void MainWindow::saveStateGMIF(){
+
+    std::vector<std::vector<chunk_struct>> block;
+
+    for (int chunk_y = 0; chunk_y < num_chunk_rows; ++chunk_y){
+        std::vector<chunk_struct> chunk_row;
+        block.push_back(chunk_row);
+        for (int chunk_x = 0; chunk_x < num_chunk_cols; ++chunk_x){
+            chunk_struct chunk;
+            block[chunk_y].push_back(chunk);
+            for (int cell_y = 0; cell_y < CHUNK_HEIGHT; ++cell_y){
+                for (int cell_x = 0; cell_x < CHUNK_WIDTH; ++cell_x){
+                    int block_y = chunk_y*CHUNK_HEIGHT + cell_y;
+                    int block_x = chunk_x*CHUNK_WIDTH + cell_x;
+                    QRgb pixel = this->GOL_image.pixel(block_x, block_y);
+                    bool bit = pixel & pixel_mask;
+                    block[chunk_y][chunk_x].cells[cell_y][cell_x] = bit;
+                }
             }
         }
     }
@@ -91,10 +171,6 @@ void MainWindow::saveState(){
         for (int chunk_x = 0; chunk_x < num_chunk_cols; ++chunk_x){
             QString vector_str = this->chunk_to_vector(block[chunk_y][chunk_x]);
             tstream << vector_str << "\n";
-//            if (chunk_x > lowest_rightmost_live_chunk.x() && chunk_y > lowest_rightmost_live_chunk.y()){
-//                broken = true;
-//                break;
-//            }
         }
         if (broken) break;
     }
@@ -102,7 +178,7 @@ void MainWindow::saveState(){
     file.close();
 }
 
-void MainWindow::loadState(){
+void MainWindow::loadStateGMIF(){
     QString filepath = QFileDialog::getOpenFileName(
                            this, 
                            "Choose file to load", 
@@ -264,11 +340,11 @@ void MainWindow::on_doubleSpinBox_valueChanged(double new_val) {
 }
 
 void MainWindow::on_saveButton_clicked(){
-    this->saveState();
+    this->saveStateGMIF();
 }
 
 void MainWindow::on_loadButton_clicked(){
-    this->loadState();
+    this->loadStateGMIF();
 }
 
 void MainWindow::on_clearButton_clicked()
@@ -315,3 +391,9 @@ void MainWindow::on_chunkRowsSpinbox_editingFinished()
 
     this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
 }
+
+void MainWindow::on_copyDeclButton_clicked()
+{
+    this->copyConstDecl();
+}
+

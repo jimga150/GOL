@@ -23,6 +23,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.GOL_pkg.all;
+use work.GOL_field_init.all;
 use work.bmp_pkg.all;
 
 entity GOL_field_tb is
@@ -49,13 +50,23 @@ architecture Behavioral of GOL_field_tb is
     
     constant c_num_frames : integer := 100;
     
-    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
+--    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
     
 begin
-    
+
+--    UUT: entity work.GOL_field_synth_wrapper
+--    port map(
+--        i_clk => i_clk,
+--        i_rst => i_rst,
+--        i_do_frame => i_do_frame,
+--        i_col => std_logic_vector(i_col),
+--        i_row => std_logic_vector(i_row),
+--        o_pixel => o_pixel
+--    );
+
     UUT: entity work.GOL_field
     generic map(
-        g_init_filename => c_init_filename
+        g_init_cells => c_init_vlinelrg
     )
     port map(
         i_clk => i_clk,
@@ -93,7 +104,7 @@ begin
             
             i_do_frame <= '0';
 
-            wait for i_clk_period*7000;
+            wait for i_clk_period*c_cycles_per_block;
             
         end loop;
         
@@ -141,7 +152,7 @@ begin
             bmp_save(v_bmp_ptr, c_project_path & "\GOL_steps\GOL_step_" & integer'image(i) & ".bmp");
             
             wait for i_clk_period;
-            wait for i_clk_period*7000;
+            wait for i_clk_period*c_cycles_per_block;
             
         end loop;
         

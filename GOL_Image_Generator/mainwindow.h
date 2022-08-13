@@ -14,6 +14,8 @@
 #include <QDataStream>
 #include <QMouseEvent>
 #include <QPoint>
+#include <QClipboard>
+#include <QMessageBox>
 
 #include "ui_mainwindow.h"
 #include "CustomScene.h"
@@ -32,6 +34,40 @@ enum dragging_state_enum{
 
 struct chunk_struct{
     bool cells[CHUNK_HEIGHT][CHUNK_WIDTH];
+
+    bool isLive(){
+        bool chunk_is_live = false;
+        for (int y = CHUNK_HEIGHT-1; y >= 0; --y){
+            for (int x = CHUNK_WIDTH-1; x >= 0; --x){
+                chunk_is_live |= cells[y][x];
+                if (chunk_is_live) break;
+            }
+            if (chunk_is_live) break;
+        }
+        return chunk_is_live;
+    }
+
+    QString constDecl(){
+
+        if (!this->isLive()){
+            return QString("c_empty_block");
+        }
+
+        QString ans;
+        ans.append("(");
+        for (int y = CHUNK_HEIGHT-1; y >= 0; --y){
+            ans.append("\"");
+            for (int x = CHUNK_WIDTH-1; x >= 0; --x){
+                ans.append(cells[y][x] ? "1" : "0");
+            }
+            ans.append("\"");
+            if (y > 0){
+                ans.append(", ");
+            }
+        }
+        ans.append(")");
+        return ans;
+    }
 };
 
 QT_BEGIN_NAMESPACE
@@ -60,10 +96,12 @@ private:
     QImage GOL_image;
             
     void clearImage();
+
+    void copyConstDecl();
     
-    void saveState();
+    void saveStateGMIF();
     
-    void loadState();
+    void loadStateGMIF();
 
     QString chunk_to_vector(chunk_struct chunk);
 
@@ -91,5 +129,6 @@ private slots:
     void on_clearButton_clicked();
     void on_chunkColsSpinbox_editingFinished();
     void on_chunkRowsSpinbox_editingFinished();
+    void on_copyDeclButton_clicked();
 };
 #endif // MAINWINDOW_H

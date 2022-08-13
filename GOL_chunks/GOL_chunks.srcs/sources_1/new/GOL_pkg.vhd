@@ -49,8 +49,8 @@ package GOL_pkg is
     constant c_chunk_num_cell_row_bits : integer := integer(floor(log2(real(c_chunk_height))+1.0));
     
     --number of rows and columns, in chunks. Doesn't need to be powers of 2.
-    constant c_block_num_chunk_rows : integer := 16;
-    constant c_block_num_chunk_cols : integer := 32;
+    constant c_block_num_chunk_rows : integer := 90;
+    constant c_block_num_chunk_cols : integer := 80;
     
     --number of rows and columsn, in cells.
     --Product of these two numbers must be less than or equal to the number of bits available in memory.
@@ -62,7 +62,7 @@ package GOL_pkg is
     constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
     
     --number of rows and columns, in blocks per field.
-    constant c_field_num_block_rows : integer := 4;
+    constant c_field_num_block_rows : integer := 2;
     constant c_field_num_block_cols : integer := 4;
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
@@ -88,10 +88,16 @@ package GOL_pkg is
     constant c_field_num_cell_col_bits : integer := integer(floor(log2(real(c_field_num_cell_cols))+1.0));
     constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
     
+    constant c_chunks_per_block : integer := c_block_num_chunk_rows*c_block_num_chunk_cols;
+    
     --Block RAM stuff
     constant c_bram_width : integer := c_chunk_width*c_chunk_height;
-    constant c_bram_depth : integer := c_block_num_chunk_rows*c_block_num_chunk_cols*2; --account for data doubling
+    constant c_bram_depth : integer := c_chunks_per_block*2; --account for data doubling
     constant c_bram_addr_bits : integer := integer(ceil(log2(real(c_bram_depth))));
+    constant c_bram_read_delay : integer := 1;
+    
+    constant c_block_stepper_cycles_per_chunk : integer := 11 + c_bram_read_delay;
+    constant c_cycles_per_block : integer := c_block_stepper_cycles_per_chunk*c_chunks_per_block;
     
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     type t_field_chunk_arr is array(c_field_num_chunk_rows-1 downto 0, c_field_num_chunk_cols-1 downto 0) of t_chunk_type;
@@ -110,6 +116,20 @@ package GOL_pkg is
         i_int1 : integer;
         i_int2 : integer
     ) return integer;
+    
+    pure function barrel_decrement(
+        i_int : integer;
+        i_min : integer;
+        i_max : integer
+    ) return integer;
+    
+    pure function barrel_increment(
+        i_int : integer;
+        i_min : integer;
+        i_max : integer
+    ) return integer;
+    
+    pure function str_to_int(i_str : string; i_len : integer) return integer;
     
     --Convert chunk X and Y coordinates, as well as the MSB, into an address to be used for read/write on memory.
     pure function get_chunk_addr(
@@ -144,7 +164,7 @@ package GOL_pkg is
         i_left_edge, i_right_edge : std_logic_vector(c_chunk_height-1 downto 0);
         i_top_left_bit, i_top_right_bit, i_bottom_left_bit, i_bottom_right_bit : std_logic
     ) return t_chunk_type;
-    
+        
     impure function field_chunk_arr_from_gmif(i_gmif_filename : in string) return t_field_chunk_arr;
     
     pure function block_chunk_arr_from_field(
@@ -186,6 +206,57 @@ package body GOL_pkg is
         end if;
         return i_int2;
     end function;
+    
+    pure function barrel_decrement(
+        i_int : integer;
+        i_min : integer;
+        i_max : integer
+    ) return integer is
+        variable v_ans : integer := i_int-1;
+    begin
+        if i_int = i_min then
+            v_ans := i_max;
+        end if;
+        return v_ans;
+    end function;
+    
+    pure function barrel_increment(
+        i_int : integer;
+        i_min : integer;
+        i_max : integer
+    ) return integer is
+        variable v_ans : integer := i_int+1;
+    begin
+        if i_int = i_max then
+            v_ans := i_min;
+        end if;
+        return v_ans;
+    end function;
+    
+    pure function str_to_int(i_str : string; i_len : integer) return integer is
+        variable v_ans : integer := 0;
+        variable v_char : character;
+        variable v_str_idx : integer := 1;
+    begin
+        for i in i_len-1 downto 0 loop
+            v_char := i_str(v_str_idx);
+            v_str_idx := v_str_idx + 1;
+            
+            case v_char is
+            when '1' => v_ans := v_ans + 1*(10**i);
+            when '2' => v_ans := v_ans + 2*(10**i);
+            when '3' => v_ans := v_ans + 3*(10**i);
+            when '4' => v_ans := v_ans + 4*(10**i);
+            when '5' => v_ans := v_ans + 5*(10**i);
+            when '6' => v_ans := v_ans + 6*(10**i);
+            when '7' => v_ans := v_ans + 7*(10**i);
+            when '8' => v_ans := v_ans + 8*(10**i);
+            when '9' => v_ans := v_ans + 9*(10**i);
+            when others => 
+            end case;
+        end loop;
+        return v_ans;
+    end function;
 
     pure function get_chunk_addr(
         i_chunk_x : integer;
@@ -196,33 +267,34 @@ package body GOL_pkg is
         variable v_result_int : integer; 
     begin
         v_result_int := i_chunk_x + c_block_num_chunk_cols*i_chunk_y;
-        if (i_chunk_x < c_block_num_chunk_cols and i_chunk_y < c_block_num_chunk_rows) then
-            assert v_result_int < 2**(i_addr_len-1) 
-                report "Address length " & integer'image(i_addr_len-1) & " cannot hold chunk address result of " & integer'image(v_result_int) & 
-                    " (chunk (" & integer'image(i_chunk_x) & ", " & integer'image(i_chunk_y) & "))"
-                severity failure;
+        if (i_msb = '1') then
+            v_result_int := v_result_int + c_chunks_per_block;
         end if;
-        return i_msb & std_logic_vector(to_unsigned(v_result_int, i_addr_len - 1));
+        assert v_result_int < 2**(i_addr_len) 
+            report "Address length " & integer'image(i_addr_len-1) & " cannot hold chunk address result of " & integer'image(v_result_int) & 
+                " (chunk (" & integer'image(i_chunk_x) & ", " & integer'image(i_chunk_y) & "))"
+            severity failure;
+        return std_logic_vector(to_unsigned(v_result_int, i_addr_len));
     end function;
     
     pure function get_chunk_x(i_addr : std_logic_vector) return integer is
-        variable v_addr_tmp : std_logic_vector(i_addr'range);
         variable v_ans : integer;
     begin
-        v_addr_tmp := i_addr;
-        v_addr_tmp(v_addr_tmp'high) := '0'; --remove msb, parity bit
-        v_ans := to_integer(unsigned(v_addr_tmp));
+        v_ans := to_integer(unsigned(i_addr));
+        if (v_ans = c_chunks_per_block) then
+            v_ans := v_ans - c_chunks_per_block;
+        end if;
         v_ans := v_ans mod c_block_num_chunk_cols;
         return v_ans;
     end function;
     
     pure function get_chunk_y(i_addr : std_logic_vector) return integer is
-        variable v_addr_tmp : std_logic_vector(i_addr'range);
         variable v_ans : integer;
     begin
-        v_addr_tmp := i_addr;
-        v_addr_tmp(v_addr_tmp'high) := '0'; --remove msb, parity bit
-        v_ans := to_integer(unsigned(v_addr_tmp));
+        v_ans := to_integer(unsigned(i_addr));
+        if (v_ans = c_chunks_per_block) then
+            v_ans := v_ans - c_chunks_per_block;
+        end if;
         v_ans := v_ans/c_block_num_chunk_cols;
         return v_ans;
     end function;
@@ -325,13 +397,16 @@ package body GOL_pkg is
     end function;
     
     impure function field_chunk_arr_from_gmif(i_gmif_filename : in string) return t_field_chunk_arr is
-        FILE RamFile : text is in i_gmif_filename;
+        FILE RamFile : text open read_mode is i_gmif_filename;
         variable RamFileLine : line;
-        variable v_rows, v_cols : integer; 
+        variable v_rows, v_cols : integer := 0; 
+        variable v_str_idx : integer := 1;
         variable v_bv : bit_vector(c_chunk_height*c_chunk_width-1 downto 0);
         variable v_slv : std_logic_vector(v_bv'range);
+        variable v_str : string(1 to 80);
         variable v_chunk : t_chunk_type;
         variable v_ans : t_field_chunk_arr := c_empty_field;
+        variable v_char : character;
     begin
     
         if (i_gmif_filename'length = 0) then
@@ -340,10 +415,60 @@ package body GOL_pkg is
     
         readline(RamFile, RamFileLine); --skip first line
         readline(RamFile, RamFileLine);
-        read(RamFileLine, v_rows);
+--        read(RamFileLine, v_rows); --can't do this in Vivado synthesis, apparently
+--        read(RamFileLine, v_str(1 to RamFileLine'length));
+--        v_rows := str_to_int(v_str, RamFileLine'length);
+        v_str_idx := 0;
+        -- synthesis translate_off
+        v_str_idx := 1;
+        -- synthesis translate_on
+        for i in RamFileLine'length-1 downto 0 loop
+            v_char := RamFileLine(v_str_idx);
+            v_str_idx := v_str_idx + 1;
+            
+            case v_char is
+            when '1' => v_rows := v_rows + 1*(10**i);
+            when '2' => v_rows := v_rows + 2*(10**i);
+            when '3' => v_rows := v_rows + 3*(10**i);
+            when '4' => v_rows := v_rows + 4*(10**i);
+            when '5' => v_rows := v_rows + 5*(10**i);
+            when '6' => v_rows := v_rows + 6*(10**i);
+            when '7' => v_rows := v_rows + 7*(10**i);
+            when '8' => v_rows := v_rows + 8*(10**i);
+            when '9' => v_rows := v_rows + 9*(10**i);
+            when others => 
+            end case;
+        end loop;
+        report "Rows: " & integer'image(v_rows);
+        
         readline(RamFile, RamFileLine); --skip third line
         readline(RamFile, RamFileLine);
-        read(RamFileLine, v_cols);
+--        read(RamFileLine, v_cols); --can't do this in Vivado synthesis, apparently.
+--        read(RamFileLine, v_str(1 to RamFileLine'length));
+--        v_cols := str_to_int(v_str, RamFileLine'length);
+        v_str_idx := 0;
+        -- synthesis translate_off
+        v_str_idx := 1;
+        -- synthesis translate_on
+        for i in RamFileLine'length-1 downto 0 loop
+            v_char := RamFileLine(v_str_idx);
+            v_str_idx := v_str_idx + 1;
+            
+            case v_char is
+            when '1' => v_cols := v_cols + 1*(10**i);
+            when '2' => v_cols := v_cols + 2*(10**i);
+            when '3' => v_cols := v_cols + 3*(10**i);
+            when '4' => v_cols := v_cols + 4*(10**i);
+            when '5' => v_cols := v_cols + 5*(10**i);
+            when '6' => v_cols := v_cols + 6*(10**i);
+            when '7' => v_cols := v_cols + 7*(10**i);
+            when '8' => v_cols := v_cols + 8*(10**i);
+            when '9' => v_cols := v_cols + 9*(10**i);
+            when others => 
+            end case;
+        end loop;
+        report "Cols: " & integer'image(v_cols);
+
         
         for r in 0 to v_rows-1 loop
             for c in 0 to v_cols-1 loop

@@ -46,15 +46,19 @@ begin
     process is
     
         constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\vline_plussome.gmif";
-        constant c_field_arr : t_2d_chunk_array := chunk_2d_arr_from_gmif(c_init_filename); 
-        constant c_block_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 0);
-        constant c_block01_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 0, 1);
-        constant c_block10_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 1, 0);
-        constant c_block11_chunk_arr : t_2d_chunk_array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) := block_chunk_arr_from_field(c_field_arr, 1, 1);
+        constant c_field_arr : t_field_chunk_arr := field_chunk_arr_from_gmif(c_init_filename); 
+        constant c_block_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 0, 0);
+        constant c_block01_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 0, 1);
+        constant c_block10_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 1, 0);
+        constant c_block11_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 1, 1);
     
         variable v_slv1, v_slv2 : std_logic_vector(35 downto 0);
         variable v_chunk : t_chunk_type;
         variable v_pass : boolean := true;
+        
+        variable v_int : integer;
+        variable v_block_init_cells : t_block_chunk_arr;
+        variable v_init_cells : t_field_chunk_arr;
         
     begin
     
@@ -184,6 +188,11 @@ begin
 		  "000001"
 		);
 		report "(1, 4): " & slv_to_string(chunk_to_vector(v_chunk));
+		
+		v_int := str_to_int("69", 2);
+        report integer'image(v_int);
+        v_init_cells := field_chunk_arr_from_gmif(c_project_path & "\GOL_mem_init_files\hline_plussome.gmif");
+        v_block_init_cells := block_chunk_arr_from_field(v_init_cells, 0, 0);
         
         assert v_pass report "Test failed" severity failure;
         assert false report "Test passed" severity failure;

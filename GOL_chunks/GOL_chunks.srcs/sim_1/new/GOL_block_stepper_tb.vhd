@@ -52,6 +52,7 @@ architecture Behavioral of GOL_block_stepper_tb is
     signal s_bottom_right_top_left_bit : std_logic := '0';
 
     --Outputs
+    signal o_stepper_busy : std_logic;
     signal o_bram_ena : std_logic;
     signal o_bram_we : std_logic;
     signal o_bram_addr : std_logic_vector(9 downto 0);
@@ -75,6 +76,7 @@ begin
         i_clk => i_clk,
         i_rst => i_rst,
         i_do_frame => i_do_frame,
+        o_stepper_busy => o_stepper_busy,
         o_current_state_msb => o_current_state_msb,
         i_top_edge => s_bottom_to_top_edge,
         i_bottom_edge => s_top_to_bottom_edge,
