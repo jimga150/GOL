@@ -47,7 +47,7 @@
     <Option Name="UseIPStaticLibs" Val="0"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="nexys-a7-100t"/>
-    <Option Name="WTXSimLaunchSim" Val="218"/>
+    <Option Name="WTXSimLaunchSim" Val="220"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -136,20 +136,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/pipeline_thingy.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/pipeline_wrapper.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/new/bram_dp_36k.vhd">
         <FileInfo SFType="VHDL2008">
           <Attr Name="AutoDisabled" Val="1"/>
@@ -174,6 +160,7 @@
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="GOL_field_synth_wrapper"/>
+        <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
@@ -198,19 +185,19 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_block_tb.vhd">
+      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_field_tb.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_block_tb.vhd"/>
-          <Attr Name="ImportTime" Val="1659738254"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_field_tb.vhd"/>
+          <Attr Name="ImportTime" Val="1659813308"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_field_tb.vhd">
+      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_block_tb.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_field_tb.vhd"/>
-          <Attr Name="ImportTime" Val="1659813308"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_block_tb.vhd"/>
+          <Attr Name="ImportTime" Val="1659738254"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -346,6 +333,7 @@
       </File>
       <File Path="$PSRCDIR/sim_1/imports/GOL_chunks/GOL_block_tb_behav.wcfg">
         <FileInfo>
+          <Attr Name="UserDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/GOL_block_tb_behav.wcfg"/>
           <Attr Name="ImportTime" Val="1660314335"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -353,7 +341,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="GOL_block_tb"/>
+        <Option Name="TopModule" Val="GOL_field_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>

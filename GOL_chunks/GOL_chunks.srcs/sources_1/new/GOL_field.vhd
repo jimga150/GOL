@@ -39,6 +39,7 @@ entity GOL_field is
     );
     port(
         i_clk, i_rst, i_do_frame : in std_logic;
+        o_stepper_busy : out std_logic;
         i_col : in unsigned(c_field_num_cell_col_bits-1 downto 0);
         i_row : in unsigned(c_field_num_cell_row_bits-1 downto 0);
         o_pixel : out std_logic
@@ -116,6 +117,9 @@ architecture Structural of GOL_field is
     type t_chunk_2d_array is array(natural range<>, natural range<>) of t_chunk_type;
     signal s_chunks : t_chunk_2d_array(c_field_num_block_rows-1 downto 0, c_field_num_block_cols-1 downto 0);
     
+    type t_2d_std_logic_arr is array(natural range<>, natural range<>) of std_logic;
+    signal s_stepper_busys : t_2d_std_logic_arr(s_chunks'range(1), s_chunks'range(2));
+    
     type t_row_pipeline is array(natural range<>) of unsigned(i_row'range);
     type t_col_pipeline is array(natural range<>) of unsigned(i_col'range);
     
@@ -135,6 +139,8 @@ architecture Structural of GOL_field is
     signal s6_pixel : std_logic;
 
 begin
+
+    o_stepper_busy <= s_stepper_busys(0, 0);
 
     block_row_gen: for r in 0 to c_field_num_block_rows-1 generate
         block_col_gen: for c in 0 to c_field_num_block_cols-1 generate
@@ -156,6 +162,7 @@ begin
                     i_chunk_y => s1_chunk_y,
                     o_chunk => s_chunks(r, c),
                     i_do_frame => i_do_frame,
+                    o_stepper_busy => s_stepper_busys(r, c),
                     i_top_edge => s_bottom_to_top_edges(c_prev_row, c),
                     i_bottom_edge => s_top_to_bottom_edges(c_next_row, c),
                     i_left_edge => s_right_to_left_edges(r, c_prev_col),

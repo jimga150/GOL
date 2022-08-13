@@ -56,8 +56,10 @@ architecture Behavioral of GOL_block_tb is
     signal o_stepper_busy : std_logic;
     signal o_chunk : t_chunk_type;
     
+    constant c_read_delay : integer := 3;
+    
     --tb signals
-    signal s_read_delay_pline : std_logic_vector(2 downto 0) := (others => '0');
+    signal s_read_delay_pline : std_logic_vector(c_read_delay-1 downto 0) := (others => '0');
     signal s_read_start : std_logic := '0';
     
     --Clock Periods
