@@ -49,8 +49,8 @@ package GOL_pkg is
     constant c_chunk_num_cell_row_bits : integer := integer(floor(log2(real(c_chunk_height))+1.0));
     
     --number of rows and columns, in chunks. Doesn't need to be powers of 2.
-    constant c_block_num_chunk_rows : integer := 90;
-    constant c_block_num_chunk_cols : integer := 80;
+    constant c_block_num_chunk_cols : integer := 1680/6;
+    constant c_block_num_chunk_rows : integer := 1050/6;
     
     --number of rows and columsn, in cells.
     --Product of these two numbers must be less than or equal to the number of bits available in memory.
@@ -62,8 +62,8 @@ package GOL_pkg is
     constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
     
     --number of rows and columns, in blocks per field.
-    constant c_field_num_block_rows : integer := 2;
-    constant c_field_num_block_cols : integer := 4;
+    constant c_field_num_block_cols : integer := 1;
+    constant c_field_num_block_rows : integer := 1;
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_field_num_block_col_bits : integer := integer(floor(log2(real(c_field_num_block_cols))+1.0));
