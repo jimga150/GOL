@@ -49,7 +49,7 @@ begin
 
     field_inst: entity work.GOL_field
     generic map(
-        g_init_cells => c_init_vlinelrg
+        g_init_cells => c_init_hline_plussome
     )
     port map(
         i_clk => i_clk,

@@ -37,6 +37,10 @@ package GOL_pkg is
 
     constant c_project_path : string := "C:\Users\Jim\Desktop\Code\VHDL\GOL\GOL_chunks";
     
+    --cell count will be greater than or equal to the screen size
+    constant c_screen_width : integer := 1680;
+    constant c_screen_height : integer := 1050;
+    
     --Height and width of one chunk, in cells.
     --Product of these two integers must be equal to the length of the data word from memory.
     --Ideally, these numbers should be as close in value as possible, if not the same.
@@ -44,13 +48,17 @@ package GOL_pkg is
     constant c_chunk_width : integer := 6;
     constant c_chunk_height : integer := 6;
     
+    --number of rows and columns, in blocks per field.
+    constant c_field_num_block_cols : integer := 1;
+    constant c_field_num_block_rows : integer := 1;
+    
+    --number of rows and columns, in chunks. Doesn't need to be powers of 2.
+    constant c_block_num_chunk_cols : integer := integer(ceil((real(c_screen_width)/real(c_field_num_block_cols))/real(c_chunk_width)));
+    constant c_block_num_chunk_rows : integer := integer(ceil((real(c_screen_height)/real(c_field_num_block_rows))/real(c_chunk_height)));
+    
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_chunk_num_cell_col_bits : integer := integer(floor(log2(real(c_chunk_width))+1.0));
     constant c_chunk_num_cell_row_bits : integer := integer(floor(log2(real(c_chunk_height))+1.0));
-    
-    --number of rows and columns, in chunks. Doesn't need to be powers of 2.
-    constant c_block_num_chunk_cols : integer := 1680/6;
-    constant c_block_num_chunk_rows : integer := 1050/6;
     
     --number of rows and columsn, in cells.
     --Product of these two numbers must be less than or equal to the number of bits available in memory.
@@ -61,9 +69,7 @@ package GOL_pkg is
     constant c_block_num_chunk_col_bits : integer := integer(floor(log2(real(c_block_num_chunk_cols))+1.0));
     constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
     
-    --number of rows and columns, in blocks per field.
-    constant c_field_num_block_cols : integer := 1;
-    constant c_field_num_block_rows : integer := 1;
+    
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_field_num_block_col_bits : integer := integer(floor(log2(real(c_field_num_block_cols))+1.0));
