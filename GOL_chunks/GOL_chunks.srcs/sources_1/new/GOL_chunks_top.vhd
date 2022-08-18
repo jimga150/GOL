@@ -36,7 +36,7 @@ use work.GOL_field_init.all;
 entity GOL_chunks_top is
     port(
         i_clk_100mhz, i_rst_btn : in std_logic;
---        i_frame_hold_btn, i_frame_step_btn : in std_logic;
+        i_frame_hold_btn, i_frame_step_btn : in std_logic;
         o_vga_clk : out std_logic;
         o_h_sync, o_v_sync : out std_logic;
         o_pixel_slv : out std_logic_vector(11 downto 0)
@@ -64,23 +64,32 @@ architecture Structural of GOL_chunks_top is
     signal s_rst_sys_pulse : std_logic;
 
     signal s_clks_locked : std_logic;
-    signal s_clk_logic_locked : std_logic;
+    
+    signal s_clk_vga : std_logic;
     signal s_clk_vga_locked : std_logic;
-
-    signal s_clk_vga, s_clk_logic : std_logic;
     
     signal s_rst_vga_nolock, s_rst_vga, s_rst_vga_n : std_logic;
-    signal s_rst_logic_nolock, s_rst_logic, s_rst_logic_n : std_logic;
     
     signal s_col, s_row : integer;
     
     signal s0_hsync, s0_vsync : std_logic;
     signal s_hsync_pline, s_vsync_pline : std_logic_vector(c_field_read_delay downto 1);
     
-    signal s_vsync_pline_logic : std_logic_vector(3 downto 1);
+    signal s_pixel : std_logic;
+    
+    -----------------------
+    --stepper logic stuff below here
+    -----------------------
+    
+    signal s_clk_logic : std_logic;
+    signal s_clk_logic_locked : std_logic;
+
+    signal s_rst_logic_nolock, s_rst_logic, s_rst_logic_n : std_logic;
+    
+    signal s_vsync_logic : std_logic;
     signal s_do_frame : std_logic;
     
-    signal s_pixel : std_logic;
+    signal s_hold_frame, s_frame_step : std_logic;
 
 begin
 
@@ -110,25 +119,15 @@ begin
         clk_out_vga => s_clk_vga
     );
     
-    locked_logic_conditioner_inst: entity work.button_conditioner
-    port map(
-        i_clk => s_clk_logic,
-        i_btn => s_clks_locked,
-        o_stablized => s_clk_logic_locked
-    );
+    ------------------------------------------------------------------
+    --VGA-clocked stuff below here
+    ------------------------------------------------------------------
     
     locked_vga_conditioner_inst: entity work.button_conditioner
     port map(
         i_clk => s_clk_vga,
         i_btn => s_clks_locked,
         o_stablized => s_clk_vga_locked
-    );
-
-    rst_logic_conditioner_inst: entity work.button_conditioner
-    port map(
-        i_clk => s_clk_logic,
-        i_btn => i_rst_btn,
-        o_debounced => s_rst_logic_nolock
     );
     
     rst_vga_conditioner_inst: entity work.button_conditioner
@@ -138,12 +137,6 @@ begin
         o_debounced => s_rst_vga_nolock
     );
     
-    s_rst_vga <= s_rst_vga_nolock or (not s_clk_vga_locked);
-    s_rst_logic <= s_rst_logic_nolock or (not s_clk_logic_locked);
-
-    s_rst_vga_n <= not s_rst_vga;
-    s_rst_logic_n <= not s_rst_logic;
-
     vga_cont_int: entity work.vga_controller
     port map(
         pixel_clk => s_clk_vga,
@@ -171,15 +164,62 @@ begin
         end if;
     end process;
     
-    process(s_clk_logic) is begin
-        if rising_edge(s_clk_logic) then
-            s_vsync_pline_logic <= s_vsync_pline_logic(s_vsync_pline_logic'high-1 downto s_vsync_pline_logic'low) & s0_vsync;
-            s_do_frame <= s_vsync_pline_logic(s_vsync_pline_logic'high-1) and not s_vsync_pline_logic(s_vsync_pline_logic'high);
-        end if;
-    end process;
-        
     o_h_sync <= s_hsync_pline(s_hsync_pline'high);
     o_v_sync <= s_vsync_pline(s_vsync_pline'high);
+    
+    ------------------------------------------------------------------
+    --Stepper logic-clocked stuff below here
+    ------------------------------------------------------------------
+    
+    locked_logic_conditioner_inst: entity work.button_conditioner
+    port map(
+        i_clk => s_clk_logic,
+        i_btn => s_clks_locked,
+        o_stablized => s_clk_logic_locked
+    );
+    
+    s_rst_vga <= s_rst_vga_nolock or (not s_clk_vga_locked);
+    s_rst_vga_n <= not s_rst_vga;
+    
+    rst_logic_conditioner_inst: entity work.button_conditioner
+    port map(
+        i_clk => s_clk_logic,
+        i_btn => i_rst_btn,
+        o_debounced => s_rst_logic_nolock
+    );
+    
+    s_rst_logic <= s_rst_logic_nolock or (not s_clk_logic_locked);
+    s_rst_logic_n <= not s_rst_logic;
+    
+    frame_hold_btn_cond: entity work.button_conditioner
+    port map(
+        i_clk => s_clk_logic,
+        i_rst => s_rst_logic,
+        i_btn => i_frame_hold_btn,
+        o_debounced => s_hold_frame
+    );
+    
+    frame_step_btn_cond: entity work.button_conditioner
+    port map(
+        i_clk => s_clk_logic,
+        i_rst => s_rst_logic,
+        i_btn => i_frame_step_btn,
+        o_pos_pulse => s_frame_step
+    );
+    
+    do_frame_logic_sync_inst: entity work.button_conditioner
+    generic map(
+        g_metastability_stages => 3,
+        g_stable_cycles => 1
+    )
+    port map(
+        i_clk => s_clk_logic,
+        i_rst => s_rst_logic,
+        i_btn => s0_vsync,
+        o_pos_pulse => s_vsync_logic
+    );
+        
+    s_do_frame <= (s_vsync_logic and (not s_hold_frame)) or s_frame_step;
     
     field_inst: entity work.GOL_field
     generic map(
