@@ -32,15 +32,17 @@ end GOL_field_tb;
 architecture Behavioral of GOL_field_tb is
     
     --Clocks
-    signal i_clk : std_logic := '0';
+    signal i_clk_stepper : std_logic := '0';
+    signal i_clk_read : std_logic := '0';
     
     --Resets
-    signal i_rst : std_logic := '1';
+    signal i_rst_stepper : std_logic := '1';
     
     --General inputs
     signal i_do_frame : std_logic := '0';
-    signal i_col : unsigned(c_field_num_cell_col_bits-1 downto 0) := (others => '0');
-    signal i_row : unsigned(c_field_num_cell_row_bits-1 downto 0) := (others => '0');
+    signal i_col_int, i_row_int : integer := 0;
+    signal i_col : unsigned(c_field_num_cell_col_bits-1 downto 0);
+    signal i_row : unsigned(c_field_num_cell_row_bits-1 downto 0);
     
     --Outputs
     signal o_pixel : std_logic;
@@ -53,7 +55,8 @@ architecture Behavioral of GOL_field_tb is
     signal s_read_start : std_logic := '0';
     
     --Clock Periods
-    constant i_clk_period : time := 10 ns;
+    constant i_clk_stepper_period : time := 10 ns;
+    constant i_clk_read_period : time := 6.796 ns; --VGA timing, 1680x1050 @ 60 Hz
     
     constant c_num_frames : integer := 100;
     
@@ -71,30 +74,39 @@ begin
 --        o_pixel => o_pixel
 --    );
 
+    i_col <= to_unsigned(i_col_int, i_col'length);
+    i_row <= to_unsigned(i_row_int, i_row'length);
+
     UUT: entity work.GOL_field
     generic map(
         g_init_cells => c_init_vlinelrg
     )
     port map(
-        i_clk => i_clk,
-        i_rst => i_rst,
+        i_clk_stepper => i_clk_stepper,
+        i_rst_stepper => i_rst_stepper,
         i_do_frame => i_do_frame,
         o_stepper_busy => o_stepper_busy,
-        i_col => i_col,
-        i_row => i_row,
+        i_clk_read => i_clk_read,
+        i_col => i_col_int,
+        i_row => i_row_int,
         o_pixel => o_pixel
     );
     
     --Clock Drivers
-    i_clk <= not i_clk after i_clk_period/2;
+    i_clk_stepper <= not i_clk_stepper after i_clk_stepper_period/2;
+    i_clk_read <= not i_clk_read after i_clk_read_period/2;
     
     stim_proc: process is begin
         
-        wait for i_clk_period;
+        wait for i_clk_stepper_period;
         
-        i_rst <= '0';
+        i_rst_stepper <= '0';
         
-        wait for i_clk_period;
+        wait for i_clk_stepper_period;
+        
+        --re-sync with read clock
+        wait until i_clk_read = '1';
+        wait until i_clk_read = '0';
         
         for i in 0 to c_num_frames-1 loop
         
@@ -102,28 +114,36 @@ begin
                 for c in 0 to c_field_num_cell_cols-1 loop
                     s_read_start <= '0';
                     if (r = 0 and c = 0) then s_read_start <= '1'; end if;
-                    i_col <= to_unsigned(c, i_col'length);
-                    i_row <= to_unsigned(r, i_row'length);
-                    wait for i_clk_period;
+                    i_col_int <= c;
+                    i_row_int <= r;
+                    wait for i_clk_read_period;
                 end loop;
             end loop;
             
+            --re-sync with read clock
+            wait until i_clk_stepper = '1';
+            wait until i_clk_stepper = '0';
+            
             if (o_stepper_busy = '1') then
                 wait until o_stepper_busy = '0';
-                wait for i_clk_period/2;
+                wait for i_clk_stepper_period/2;
             end if;
         
             i_do_frame <= '1';
             
-            wait for i_clk_period;
+            wait for i_clk_stepper_period;
             
             i_do_frame <= '0';
             
-            wait for i_clk_period;
+            wait for i_clk_stepper_period;
+            
+            --re-sync with read clock
+            wait until i_clk_read = '1';
+            wait until i_clk_read = '0';
             
         end loop;
         
-        wait for i_clk_period*10;
+        wait for i_clk_read_period*10;
         
         assert false report "End Simulation" severity failure;
         
@@ -133,12 +153,9 @@ begin
         
     end process;
     
-    process(i_clk) is begin
-        if rising_edge(i_clk) then
+    process(i_clk_read) is begin
+        if rising_edge(i_clk_read) then
             s_read_delay_pline <= s_read_delay_pline(s_read_delay_pline'high-1 downto 0) & s_read_start;
-            if (i_rst = '1') then
-                s_read_delay_pline <= (others => '0');
-            end if;
         end if;
     end process;
     
@@ -159,7 +176,7 @@ begin
         for i in 0 to c_num_frames-1 loop
         
             wait until s_read_delay_pline(s_read_delay_pline'high) = '1';
-            wait for i_clk_period/2;
+            wait for i_clk_read_period/2;
         
             for r in 0 to c_field_num_cell_rows - 1 loop
                 for c in 0 to c_field_num_cell_cols - 1 loop
@@ -168,7 +185,7 @@ begin
                         v_bmp_pix := c_bmp_pix_1;
                     end if;
                     bmp_set_pix(v_bmp_ptr, c, r, v_bmp_pix);
-                    wait for i_clk_period;
+                    wait for i_clk_read_period;
                 end loop;
             end loop;
             

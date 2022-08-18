@@ -36,7 +36,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity GOL_field_synth_wrapper is
     port(
-        i_clk, i_rst, i_do_frame : in std_logic;
+        i_clk_stepper, i_clk_read, i_rst_stepper, i_do_frame : in std_logic;
         i_col : in std_logic_vector(c_field_num_cell_col_bits-1 downto 0);
         i_row : in std_logic_vector(c_field_num_cell_row_bits-1 downto 0);
         o_pixel : out std_logic
@@ -52,9 +52,10 @@ begin
         g_init_cells => c_init_hline_plussome
     )
     port map(
-        i_clk => i_clk,
-        i_rst => i_rst,
+        i_clk_stepper => i_clk_stepper,
+        i_rst_stepper => i_rst_stepper,
         i_do_frame => i_do_frame,
+        i_clk_read => i_clk_read,
         i_col => unsigned(i_col),
         i_row => unsigned(i_row),
         o_pixel => o_pixel

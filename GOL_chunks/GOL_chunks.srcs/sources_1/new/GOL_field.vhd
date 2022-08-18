@@ -38,11 +38,15 @@ entity GOL_field is
         g_init_cells : t_field_chunk_arr := c_empty_field
     );
     port(
-        i_clk, i_rst, i_do_frame : in std_logic;
-        o_stepper_busy : out std_logic;
-        i_col : in unsigned(c_field_num_cell_col_bits-1 downto 0);
-        i_row : in unsigned(c_field_num_cell_row_bits-1 downto 0);
-        o_pixel : out std_logic
+        i_clk_read : in std_logic;
+        i_col : in integer;
+        i_row : in integer;
+        o_pixel : out std_logic;
+        
+        i_clk_stepper : in std_logic;
+        i_rst_stepper : in std_logic;
+        i_do_frame : in std_logic;
+        o_stepper_busy : out std_logic
     );
 end GOL_field;
 
@@ -120,8 +124,11 @@ architecture Structural of GOL_field is
     type t_2d_std_logic_arr is array(natural range<>, natural range<>) of std_logic;
     signal s_stepper_busys : t_2d_std_logic_arr(s_chunks'range(1), s_chunks'range(2));
     
-    type t_row_pipeline is array(natural range<>) of unsigned(i_row'range);
-    type t_col_pipeline is array(natural range<>) of unsigned(i_col'range);
+    signal s_col : unsigned(c_field_num_cell_col_bits-1 downto 0);
+    signal s_row : unsigned(c_field_num_cell_row_bits-1 downto 0);
+    
+    type t_row_pipeline is array(natural range<>) of unsigned(s_row'range);
+    type t_col_pipeline is array(natural range<>) of unsigned(s_col'range);
     
     signal s1_s8_field_pixel_row : t_row_pipeline(8 downto 1);
     signal s1_s8_field_pixel_col : t_col_pipeline(8 downto 1);
@@ -141,6 +148,9 @@ architecture Structural of GOL_field is
 begin
 
     o_stepper_busy <= s_stepper_busys(0, 0);
+    
+    s_col <= to_unsigned(i_col, s_col'length);
+    s_row <= to_unsigned(i_row, s_row'length);
 
     block_row_gen: for r in 0 to c_field_num_block_rows-1 generate
         block_col_gen: for c in 0 to c_field_num_block_cols-1 generate
@@ -156,11 +166,12 @@ begin
                     g_init_cells => c_block_init_cells
                 )
                 port map(
-                    i_clk => i_clk,
-                    i_rst => i_rst,
+                    i_clk_read => i_clk_read,
                     i_chunk_x => s1_chunk_x,
                     i_chunk_y => s1_chunk_y,
                     o_chunk => s_chunks(r, c),
+                    i_clk_stepper => i_clk_stepper,
+                    i_rst_stepper => i_rst_stepper,
                     i_do_frame => i_do_frame,
                     o_stepper_busy => s_stepper_busys(r, c),
                     i_top_edge => s_bottom_to_top_edges(c_prev_row, c),
@@ -183,14 +194,14 @@ begin
         end generate block_col_gen;
     end generate block_row_gen;
     
-    process(i_clk) is begin
-        if rising_edge(i_clk) then
+    process(i_clk_read) is begin
+        if rising_edge(i_clk_read) then
         
-            s1_s8_field_pixel_row <= s1_s8_field_pixel_row(s1_s8_field_pixel_row'high - 1 downto s1_s8_field_pixel_row'low) & i_row;
-            s1_s8_field_pixel_col <= s1_s8_field_pixel_col(s1_s8_field_pixel_col'high - 1 downto s1_s8_field_pixel_col'low) & i_col;
+            s1_s8_field_pixel_row <= s1_s8_field_pixel_row(s1_s8_field_pixel_row'high - 1 downto s1_s8_field_pixel_row'low) & s_row;
+            s1_s8_field_pixel_col <= s1_s8_field_pixel_col(s1_s8_field_pixel_col'high - 1 downto s1_s8_field_pixel_col'low) & s_col;
             
-            s1_chunk_x <= to_unsigned((to_integer(i_col)/c_chunk_width) mod c_block_num_chunk_cols, s1_chunk_x'length);
-            s1_chunk_y <= to_unsigned((to_integer(i_row)/c_chunk_height) mod c_block_num_chunk_rows, s1_chunk_y'length);
+            s1_chunk_x <= to_unsigned((to_integer(s_col)/c_chunk_width) mod c_block_num_chunk_cols, s1_chunk_x'length);
+            s1_chunk_y <= to_unsigned((to_integer(s_row)/c_chunk_height) mod c_block_num_chunk_rows, s1_chunk_y'length);
             
             s4_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(3))/c_block_num_cell_rows, s4_block_row'length);
             s4_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(3))/c_block_num_cell_cols, s4_block_col'length);

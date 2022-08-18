@@ -38,11 +38,14 @@ entity GOL_block is
         g_init_cells : t_block_chunk_arr := c_empty_block
     );
     port(
-        i_clk, i_rst : in std_logic;
+        i_clk_read : in std_logic;
         
         i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
         i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
         o_chunk : out t_chunk_type;
+        
+        i_clk_stepper : in std_logic;
+        i_rst_stepper : in std_logic;
         
         i_do_frame: in std_logic;
         o_stepper_busy : out std_logic;
@@ -59,7 +62,12 @@ end GOL_block;
 
 architecture Structural of GOL_block is
 
-    signal s_current_state_msb : std_logic;
+    --sync stages for current state MSB 
+    --(this means that chunks cannot be accurately read 
+    --immediately after i_do_frame is asserted, since this bit 
+    --will not have reached the reader until after this many cycles on the read clock)
+    signal s0_current_state_msb : std_logic;
+    signal s_current_state_msb_pline : std_logic_vector(2 downto 1);
     
     signal s_bram_enaa, s_bram_wea : std_logic;
     signal s_bram_addra : std_logic_vector(c_bram_addr_bits-1 downto 0);
@@ -78,8 +86,8 @@ begin
         g_init_cells => g_init_cells
     )
     port map(
-        i_clk => i_clk,
-        i_rst => i_rst,
+        i_clk => i_clk_stepper,
+        i_rst => i_rst_stepper,
         i_do_frame => i_do_frame,
         o_stepper_busy => o_stepper_busy,
         i_top_edge => i_top_edge,
@@ -103,7 +111,7 @@ begin
         o_top_right_bit => o_top_right_bit,
         o_bottom_left_bit => o_bottom_left_bit,
         o_bottom_right_bit => o_bottom_right_bit,
-        o_current_state_msb => s_current_state_msb
+        o_current_state_msb => s0_current_state_msb
     );
     
     bram_inst: entity work.bram_dp
@@ -111,13 +119,13 @@ begin
         g_init_cells => g_init_cells
     )
     port map(
-        i_clka => i_clk,
+        i_clka => i_clk_stepper,
         i_ena => s_bram_enaa,
         i_wea => s_bram_wea,
         i_addra => s_bram_addra,
         i_dina => s_bram_wr_dataa,
         o_douta => s_bram_rd_dataa,
-        i_clkb => i_clk,
+        i_clkb => i_clk_read,
         i_enb => s_bram_enab,
         i_web => s_bram_web,
         i_addrb => s_bram_addrb,
@@ -127,15 +135,23 @@ begin
     
     chunk_reader_inst: entity work.GOL_chunk_getter
     port map(
-        i_clk => i_clk,
+        i_clk => i_clk_read,
         i_chunk_x => i_chunk_x,
         i_chunk_y => i_chunk_y,
-        i_curr_state_msb => s_current_state_msb,
+        i_curr_state_msb => s_current_state_msb_pline(s_current_state_msb_pline'high),
         o_chunk => o_chunk,
         o_bram_ena => s_bram_enab,
         o_bram_addr => s_bram_addrb,
         i_bram_rd_data => s_bram_rd_datab
     );
+    
+    process(i_clk_read) is begin
+        if rising_edge(i_clk_read) then
+            s_current_state_msb_pline <= 
+                s_current_state_msb_pline(s_current_state_msb_pline'high - 1 downto s_current_state_msb_pline'low) & 
+                s0_current_state_msb;
+        end if;
+    end process;
     
     s_bram_web <= '0';
     s_bram_wr_datab <= (others => '0');
