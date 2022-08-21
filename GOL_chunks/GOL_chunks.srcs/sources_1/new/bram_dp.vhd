@@ -63,10 +63,13 @@ architecture Inferred of bram_dp is
     impure function InitRamFromChunks(i_chunk_arr : in t_block_chunk_arr) return t_ram_type is
         variable v_ram : t_ram_type;
         variable v_ram_idx : integer := 0;
+        variable v_slv : std_logic_vector(v_ram(v_ram'low)'range);
     begin
         for r in 0 to c_block_num_chunk_rows-1 loop
             for c in 0 to c_block_num_chunk_cols-1 loop
-                v_ram(v_ram_idx) := chunk_to_vector(i_chunk_arr(r, c));
+                v_slv := chunk_to_vector(i_chunk_arr(r, c));
+                v_ram(v_ram_idx) := v_slv;
+                v_ram(v_ram_idx + c_chunks_per_block) := v_slv; --copy to other half of RAM
                 v_ram_idx := v_ram_idx + 1;
             end loop;
         end loop;
