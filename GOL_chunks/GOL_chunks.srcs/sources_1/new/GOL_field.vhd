@@ -77,6 +77,8 @@ architecture Structural of GOL_field is
     type t_2d_array_type is array(natural range<>, natural range<>) of std_logic;
     type t_h_edge_2d_array_type is array(natural range<>, natural range<>) of std_logic_vector(c_block_num_cell_cols-1 downto 0);
     type t_v_edge_2d_array_type is array(natural range<>, natural range<>) of std_logic_vector(c_block_num_cell_rows-1 downto 0);
+    
+    attribute mark_debug : string;
         
     signal s_top_to_bottom_edges : t_h_edge_2d_array_type(
         c_field_num_block_rows-1 downto 0,
@@ -127,6 +129,9 @@ architecture Structural of GOL_field is
     signal s_col : unsigned(c_field_num_cell_col_bits-1 downto 0);
     signal s_row : unsigned(c_field_num_cell_row_bits-1 downto 0);
     
+    attribute mark_debug of s_col: signal is "true";
+    attribute mark_debug of s_row: signal is "true";
+    
     type t_row_pipeline is array(natural range<>) of unsigned(s_row'range);
     type t_col_pipeline is array(natural range<>) of unsigned(s_col'range);
     
@@ -135,6 +140,9 @@ architecture Structural of GOL_field is
     
     signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
     signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
+    
+    attribute mark_debug of s1_chunk_x: signal is "true";
+    attribute mark_debug of s1_chunk_y: signal is "true";
     
     signal s4_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
     signal s4_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);

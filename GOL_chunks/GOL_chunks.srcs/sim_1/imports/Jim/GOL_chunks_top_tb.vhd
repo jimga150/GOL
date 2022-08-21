@@ -37,7 +37,7 @@ architecture Behavioral of GOL_chunks_top_tb is
     signal i_rst_btn : std_logic := '1';
     
     --Inputs
-    signal i_frame_hold_btn : std_logic := '0';
+    signal i_frame_go_btn : std_logic := '1';
     signal i_frame_step_btn : std_logic := '0';
     
     --Outputs
@@ -62,7 +62,7 @@ begin
         i_clk_100mhz => i_clk_100mhz,
         i_rst_btn => i_rst_btn,
         o_vga_clk => s_vga_clk,
-        i_frame_hold_btn => i_frame_hold_btn,
+        i_frame_go_btn => i_frame_go_btn,
         i_frame_step_btn => i_frame_step_btn,
         o_h_sync => o_h_sync,
         o_v_sync => o_v_sync,
@@ -115,7 +115,7 @@ begin
         
             
             if (i = 3) then
-                i_frame_hold_btn <= '1';
+                i_frame_go_btn <= '0';
             end if;
             
             if (i = 4) then
@@ -123,7 +123,7 @@ begin
             end if;
             
             if (i = 5) then
-                i_frame_hold_btn <= '0';
+                i_frame_go_btn <= '1';
                 i_frame_step_btn <= '0';
             end if;
         

@@ -36,7 +36,7 @@ use work.GOL_field_init.all;
 entity GOL_chunks_top is
     port(
         i_clk_100mhz, i_rst_btn : in std_logic;
-        i_frame_hold_btn, i_frame_step_btn : in std_logic;
+        i_frame_go_btn, i_frame_step_btn : in std_logic;
         o_vga_clk : out std_logic;
         o_h_sync, o_v_sync : out std_logic;
         o_pixel_slv : out std_logic_vector(11 downto 0)
@@ -59,6 +59,8 @@ architecture Structural of GOL_chunks_top is
     end component;
 
     constant c_field_read_delay : integer := 6;
+    
+    attribute mark_debug : string;
 
     signal s_rst_sys : std_logic;
     signal s_rst_sys_pulse : std_logic;
@@ -71,9 +73,14 @@ architecture Structural of GOL_chunks_top is
     signal s_rst_vga_nolock, s_rst_vga, s_rst_vga_n : std_logic;
     
     signal s_col, s_row : integer;
+--    attribute mark_debug of s_col: signal is "true";
+--    attribute mark_debug of s_row: signal is "true";
     
     signal s0_hsync, s0_vsync : std_logic;
     signal s_hsync_pline, s_vsync_pline : std_logic_vector(c_field_read_delay downto 1);
+    
+    attribute mark_debug of s0_hsync: signal is "true";
+    attribute mark_debug of s0_vsync: signal is "true";
     
     signal s_pixel : std_logic;
     
@@ -195,7 +202,7 @@ begin
     port map(
         i_clk => s_clk_logic,
         i_rst => s_rst_logic,
-        i_btn => i_frame_hold_btn,
+        i_btn => i_frame_go_btn,
         o_debounced => s_hold_frame
     );
     
@@ -219,11 +226,11 @@ begin
         o_pos_pulse => s_vsync_logic
     );
         
-    s_do_frame <= (s_vsync_logic and (not s_hold_frame)) or s_frame_step;
+    s_do_frame <= (s_vsync_logic and s_hold_frame) or s_frame_step;
     
     field_inst: entity work.GOL_field
     generic map(
-        g_init_cells => c_init_vlinelrg
+        g_init_cells => c_init_alphanum
     )
     port map(
         i_clk_read => s_clk_vga,
