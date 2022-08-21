@@ -206,6 +206,7 @@ void MainWindow::loadStateGMIF(){
     }
     this->num_chunk_rows = chunk_rows;
     this->num_cell_rows = CHUNK_HEIGHT*num_chunk_rows;
+    this->ui->chunkRowsSpinbox->setValue(chunk_rows);
 
     int chunk_cols = cols_str.toInt(&ok);
     if (!ok){
@@ -213,6 +214,7 @@ void MainWindow::loadStateGMIF(){
     }
     this->num_chunk_cols = chunk_cols;
     this->num_cell_cols = CHUNK_WIDTH*num_chunk_cols;
+    this->ui->chunkColsSpinbox->setValue(chunk_cols);
 
     this->GOL_image = QImage(num_cell_cols, num_cell_rows, QImage::Format_Mono);
     this->GOL_image.fill(0);
