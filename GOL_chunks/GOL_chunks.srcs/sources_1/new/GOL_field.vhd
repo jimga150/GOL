@@ -135,8 +135,8 @@ architecture Structural of GOL_field is
     type t_row_pipeline is array(natural range<>) of unsigned(s_row'range);
     type t_col_pipeline is array(natural range<>) of unsigned(s_col'range);
     
-    signal s1_s8_field_pixel_row : t_row_pipeline(8 downto 1);
-    signal s1_s8_field_pixel_col : t_col_pipeline(8 downto 1);
+    signal s1_s8_field_pixel_row : t_row_pipeline(4 downto 1);
+    signal s1_s8_field_pixel_col : t_col_pipeline(4 downto 1);
     
     signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
     signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
