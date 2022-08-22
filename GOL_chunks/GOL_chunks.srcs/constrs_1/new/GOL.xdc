@@ -3,6 +3,9 @@
 ## - uncomment the lines corresponding to used pins
 ## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
 
+set_property CONFIG_VOLTAGE 3.3 [current_design]
+set_property CFGBVS VCCO [current_design]
+
 ## Clock signal
 set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk_100mhz }]; #IO_L12P_T1_MRCC_35 Sch=clk100mhz
 #create_clock -name clk_sys -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}]; #not required when using clock wizard on this pin
