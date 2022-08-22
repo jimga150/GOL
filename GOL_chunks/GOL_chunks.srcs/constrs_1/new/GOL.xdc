@@ -5,11 +5,11 @@
 
 ## Clock signal
 set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk_100mhz }]; #IO_L12P_T1_MRCC_35 Sch=clk100mhz
-create_clock -add -name clk_sys -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}];
+#create_clock -name clk_sys -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}]; #not required when using clock wizard on this pin
 
-set_clock_groups -asynchronous -group {clk_sys};
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins top_inst/clk_mmcm_inst/clk_out_vga]];
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins top_inst/clk_mmcm_inst/clk_out_logic]];
+#set_clock_groups -asynchronous -group {clk_sys};
+set_clock_groups -asynchronous -group [get_clocks  "*vga*" ];
+set_clock_groups -asynchronous -group [get_clocks  "*logic*" ];
 
 ##Switches
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_frame_go_btn }]; #IO_L24N_T3_RS0_15 Sch=sw[0]

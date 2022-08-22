@@ -45,12 +45,12 @@ end GOL_chunks_top;
 
 architecture Structural of GOL_chunks_top is
 
-    component clk_wiz_0
+    component clk_wiz_1
         port(
             -- Clock in ports
             clk_in1           : in     std_logic;
             -- Status and control signals
-            reset             : in     std_logic;
+--            reset             : in     std_logic;
             locked            : out    std_logic;
             -- Clock out ports
             clk_out_logic          : out    std_logic;
@@ -62,8 +62,8 @@ architecture Structural of GOL_chunks_top is
     
     attribute mark_debug : string;
 
-    signal s_rst_sys : std_logic;
-    signal s_rst_sys_pulse : std_logic;
+--    signal s_rst_sys : std_logic;
+--    signal s_rst_sys_pulse : std_logic;
 
     signal s_clks_locked : std_logic;
     
@@ -96,30 +96,30 @@ architecture Structural of GOL_chunks_top is
     signal s_vsync_logic : std_logic;
     signal s_do_frame : std_logic;
     
-    signal s_hold_frame, s_frame_step : std_logic;
+    signal s_hold_frame, s_frame_step : std_logic; --TODO
 
 begin
 
     o_vga_clk <= s_clk_vga;
 
-    rst_sysclk_conditioner_inst: entity work.button_conditioner
-    generic map(
-        g_metastability_stages => 4,
-        g_stable_cycles => 1000
-    )
-    port map(
-        i_clk => i_clk_100mhz,
-        i_btn => i_rst_btn,
-        o_stablized => s_rst_sys,
-        o_pos_pulse => s_rst_sys_pulse
-    );
+--    rst_sysclk_conditioner_inst: entity work.button_conditioner
+--    generic map(
+--        g_metastability_stages => 4,
+--        g_stable_cycles => 1000
+--    )
+--    port map(
+--        i_clk => i_clk_100mhz,
+--        i_btn => i_rst_btn,
+--        o_stablized => s_rst_sys,
+--        o_pos_pulse => s_rst_sys_pulse
+--    );
 
-    clk_mmcm_inst : clk_wiz_0
+    clk_mmcm_inst : clk_wiz_1
     port map (
         -- Clock in ports
         clk_in1 => i_clk_100mhz,
         -- Status and control signals                
-        reset => s_rst_sys_pulse,
+--        reset => s_rst_sys_pulse,
         locked => s_clks_locked,
         -- Clock out ports  
         clk_out_logic => s_clk_logic,
