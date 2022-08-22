@@ -47,11 +47,9 @@ architecture Behavioral of GOL_field_tb is
     --Outputs
     signal o_pixel : std_logic;
     signal o_stepper_busy : std_logic;
-    
-    constant c_read_delay : integer := 6;
-    
+        
     --tb signals
-    signal s_read_delay_pline : std_logic_vector(c_read_delay-1 downto 0) := (others => '0');
+    signal s_read_delay_pline : std_logic_vector(c_field_pix_read_delay-1 downto 0) := (others => '0');
     signal s_read_start : std_logic := '0';
     
     --Clock Periods

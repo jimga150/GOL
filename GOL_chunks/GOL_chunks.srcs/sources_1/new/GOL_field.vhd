@@ -135,8 +135,8 @@ architecture Structural of GOL_field is
     type t_row_pipeline is array(natural range<>) of unsigned(s_row'range);
     type t_col_pipeline is array(natural range<>) of unsigned(s_col'range);
     
-    signal s1_s8_field_pixel_row : t_row_pipeline(4 downto 1);
-    signal s1_s8_field_pixel_col : t_col_pipeline(4 downto 1);
+    signal s1_s8_field_pixel_row : t_row_pipeline(8 downto 1);
+    signal s1_s8_field_pixel_col : t_col_pipeline(8 downto 1);
     
     signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
     signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
@@ -144,14 +144,14 @@ architecture Structural of GOL_field is
     attribute mark_debug of s1_chunk_x: signal is "true";
     attribute mark_debug of s1_chunk_y: signal is "true";
     
-    signal s4_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
-    signal s4_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
+    signal s6_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
+    signal s6_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
     
-    signal s5_chunk : t_chunk_type;
-    signal s5_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
-    signal s5_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
+    signal s7_chunk : t_chunk_type;
+    signal s7_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
+    signal s7_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
     
-    signal s6_pixel : std_logic;
+    signal s8_pixel : std_logic;
 
 begin
 
@@ -219,18 +219,18 @@ begin
             s1_chunk_x <= resize((s_col/c_chunk_width_us) mod c_block_num_chunk_cols_us, s1_chunk_x'length);
             s1_chunk_y <= resize((s_row/c_chunk_height_us) mod c_block_num_chunk_rows_us, s1_chunk_y'length);
             
-            s4_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(3))/c_block_num_cell_rows, s4_block_row'length);
-            s4_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(3))/c_block_num_cell_cols, s4_block_col'length);
+            s6_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(5))/c_block_num_cell_rows, s6_block_row'length);
+            s6_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(5))/c_block_num_cell_cols, s6_block_col'length);
             
-            s5_chunk <= s_chunks(to_integer(s4_block_row), to_integer(s4_block_col));
-            s5_chunk_cell_x <= resize(s1_s8_field_pixel_col(4) mod c_chunk_width_us, s5_chunk_cell_x'length);
-            s5_chunk_cell_y <= resize(s1_s8_field_pixel_row(4) mod c_chunk_height_us, s5_chunk_cell_y'length);
+            s7_chunk <= s_chunks(to_integer(s6_block_row), to_integer(s6_block_col));
+            s7_chunk_cell_x <= resize(s1_s8_field_pixel_col(6) mod c_chunk_width_us, s7_chunk_cell_x'length);
+            s7_chunk_cell_y <= resize(s1_s8_field_pixel_row(6) mod c_chunk_height_us, s7_chunk_cell_y'length);
             
-            s6_pixel <= s5_chunk(to_integer(s5_chunk_cell_y))(to_integer(s5_chunk_cell_x));
+            s8_pixel <= s7_chunk(to_integer(s7_chunk_cell_y))(to_integer(s7_chunk_cell_x));
             
         end if;
     end process;
     
-    o_pixel <= s6_pixel;
+    o_pixel <= s8_pixel;
 
 end Structural;

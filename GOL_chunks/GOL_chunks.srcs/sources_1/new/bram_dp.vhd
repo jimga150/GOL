@@ -78,29 +78,58 @@ architecture Inferred of bram_dp is
     
     shared variable sv_ram : t_ram_type := InitRamFromChunks(g_init_cells);
     
+    signal s1_ena, s1_wea : std_logic;
+    signal s1_addra : std_logic_vector(i_addra'range);
+    signal s1_dina : std_logic_vector(i_dina'range);
+    
+    signal s1_enb, s1_web : std_logic;
+    signal s1_addrb : std_logic_vector(i_addrb'range);
+    signal s1_dinb : std_logic_vector(i_dinb'range);
+    
+    signal s2_douta : std_logic_vector(o_douta'range);
+    signal s2_doutb : std_logic_vector(o_doutb'range);
+    
 begin
 
     process(i_clka)
     begin
         if rising_edge(i_clka) then
-            if i_ena = '1' then
-                o_douta <= sv_ram(to_integer(unsigned(i_addra)));
-                if i_wea = '1' then
-                    sv_ram(to_integer(unsigned(i_addra))) := i_dina;
+        
+            s1_ena <= i_ena;
+            s1_wea <= i_wea;
+            s1_addra <= i_addra;
+            s1_dina <= i_dina;
+        
+            if s1_ena = '1' then
+                s2_douta <= sv_ram(to_integer(unsigned(s1_addra)));
+                if s1_wea = '1' then
+                    sv_ram(to_integer(unsigned(s1_addra))) := s1_dina;
                 end if;
             end if;
+            
+            o_douta <= s2_douta;
+            
         end if;
     end process;
     
     process(i_clkb)
     begin
         if rising_edge(i_clkb) then
-            if i_enb = '1' then
-                o_doutb <= sv_ram(to_integer(unsigned(i_addrb)));
-                if i_web = '1' then
-                    sv_ram(to_integer(unsigned(i_addrb))) := i_dinb;
+
+            s1_enb <= i_enb;
+            s1_web <= i_web;
+            s1_addrb <= i_addrb;
+            s1_dinb <= i_dinb;
+        
+            if s1_enb = '1' then
+                s2_doutb <= sv_ram(to_integer(unsigned(s1_addrb)));
+                if s1_web = '1' then
+                    sv_ram(to_integer(unsigned(s1_addrb))) := s1_dinb;
                 end if;
             end if;
+            
+            o_doutb <= s2_doutb;
+            
         end if;
     end process;
    
