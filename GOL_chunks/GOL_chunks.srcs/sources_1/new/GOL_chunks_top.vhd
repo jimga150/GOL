@@ -77,11 +77,13 @@ architecture Structural of GOL_chunks_top is
 --    attribute mark_debug of s_row: signal is "true";
     
     signal s0_hsync, s0_vsync : std_logic;
+    signal s0_disp_en : std_logic;
     signal s_hsync_pline, s_vsync_pline : std_logic_vector(c_field_read_delay downto 1);
+    signal s_disp_en_pline : std_logic_vector(c_field_read_delay downto 1);
     
     attribute mark_debug of s0_hsync: signal is "true";
     attribute mark_debug of s0_vsync: signal is "true";
-    
+        
     signal s_pixel : std_logic;
     
     -----------------------
@@ -150,7 +152,7 @@ begin
 		reset_n => s_rst_vga_n,
 		h_sync => s0_hsync,
 		v_sync => s0_vsync,
-		disp_ena => open,
+		disp_ena => s0_disp_en,
 		column => s_col,
 		row => s_row,
 		n_blank => open,
@@ -162,10 +164,12 @@ begin
         
             s_hsync_pline <= s_hsync_pline(s_hsync_pline'high-1 downto s_hsync_pline'low) & s0_hsync;
             s_vsync_pline <= s_vsync_pline(s_vsync_pline'high-1 downto s_vsync_pline'low) & s0_vsync;
+            s_disp_en_pline <= s_disp_en_pline(s_disp_en_pline'high-1 downto s_disp_en_pline'low) & s0_disp_en;
             
             if (s_rst_vga = '1') then
                 s_hsync_pline <= (others => '0');
                 s_vsync_pline <= (others => '0');
+                s_disp_en_pline <= (others => '0');
             end if;
             
         end if;
@@ -244,7 +248,7 @@ begin
     );
     
     gen_pixel: for i in o_pixel_slv'range generate
-        o_pixel_slv(i) <= s_pixel;
+        o_pixel_slv(i) <= s_pixel and s_disp_en_pline(s_disp_en_pline'high);
     end generate gen_pixel;
 
 end Structural;
