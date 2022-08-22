@@ -141,8 +141,8 @@ architecture Structural of GOL_field is
     signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
     signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
     
-    attribute mark_debug of s1_chunk_x: signal is "true";
-    attribute mark_debug of s1_chunk_y: signal is "true";
+--    attribute mark_debug of s1_chunk_x: signal is "true";
+--    attribute mark_debug of s1_chunk_y: signal is "true";
     
     signal s6_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
     signal s6_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
