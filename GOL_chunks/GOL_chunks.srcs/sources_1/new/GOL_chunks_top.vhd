@@ -98,7 +98,7 @@ architecture Structural of GOL_chunks_top is
     signal s_vsync_logic : std_logic;
     signal s_do_frame : std_logic;
     
-    signal s_hold_frame, s_frame_step : std_logic; --TODO
+    signal s_frame_go, s_frame_step : std_logic; --TODO
 
 begin
 
@@ -207,7 +207,7 @@ begin
         i_clk => s_clk_logic,
         i_rst => s_rst_logic,
         i_btn => i_frame_go_btn,
-        o_debounced => s_hold_frame
+        o_debounced => s_frame_go
     );
     
     frame_step_btn_cond: entity work.button_conditioner
@@ -230,7 +230,7 @@ begin
         o_pos_pulse => s_vsync_logic
     );
         
-    s_do_frame <= (s_vsync_logic and s_hold_frame) or s_frame_step;
+    s_do_frame <= (s_vsync_logic and s_frame_go) or s_frame_step;
     
     field_inst: entity work.GOL_field
     generic map(
