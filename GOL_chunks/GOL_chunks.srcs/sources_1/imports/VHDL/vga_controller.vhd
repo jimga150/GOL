@@ -22,105 +22,171 @@
 --    
 --------------------------------------------------------------------------------
 
-LIBRARY ieee;
-USE ieee.std_logic_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY vga_controller IS
-	GENERIC(
-		h_pulse 	:	INTEGER := 184;    	--horiztonal sync pulse width in pixels
-		h_bp	 	:	INTEGER := 288;		--horiztonal back porch width in pixels
-		h_pixels	:	INTEGER := 1680;		--horiztonal display width in pixels
-		h_fp	 	:	INTEGER := 104;		--horiztonal front porch width in pixels
-		h_pol		:	STD_LOGIC := '0';		--horizontal sync pulse polarity (1 = positive, 0 = negative)
-		v_pulse 	:	INTEGER := 3;			--vertical sync pulse width in rows
-		v_bp	 	:	INTEGER := 33;			--vertical back porch width in rows
-		v_pixels	:	INTEGER := 1050;		--vertical display width in rows
-		v_fp	 	:	INTEGER := 1;			--vertical front porch width in rows
-		v_pol		:	STD_LOGIC := '1');	--vertical sync pulse polarity (1 = positive, 0 = negative)
-	PORT(
-		pixel_clk	:	IN		STD_LOGIC;	--pixel clock at frequency of VGA mode being used
-		reset_n		:	IN		STD_LOGIC;	--active low asycnchronous reset
-		h_sync		:	OUT	STD_LOGIC;	--horiztonal sync pulse
-		v_sync		:	OUT	STD_LOGIC;	--vertical sync pulse
-		disp_ena	:	OUT	STD_LOGIC;	--display enable ('1' = display time, '0' = blanking time)
-		column		:	OUT	INTEGER;		--horizontal pixel coordinate
-		row			:	OUT	INTEGER;		--vertical pixel coordinate
-		n_blank		:	OUT	STD_LOGIC;	--direct blacking output to DAC
-		n_sync		:	OUT	STD_LOGIC); --sync-on-green output to DAC
-END vga_controller;
+entity vga_controller is
+    generic(
+        h_pixels	:	integer := 1680;		--horiztonal display width in pixels
+        h_fp	 	:	integer := 104;		--horiztonal front porch width in pixels
+        h_pulse 	:	integer := 184;    	--horiztonal sync pulse width in pixels --TODO: g
+        h_bp	 	:	integer := 288;		--horiztonal back porch width in pixels
+        h_pol		:	std_logic := '0';		--horizontal sync pulse polarity (1 = positive, 0 = negative)
+        v_pixels	:	integer := 1050;		--vertical display width in rows
+        v_fp	 	:	integer := 1;			--vertical front porch width in rows
+        v_pulse 	:	integer := 3;			--vertical sync pulse width in rows
+        v_bp	 	:	integer := 33;			--vertical back porch width in rows
+        v_pol		:	std_logic := '1'   --vertical sync pulse polarity (1 = positive, 0 = negative)
+    );	
+    port(
+        pixel_clk	:	in		std_logic;	--pixel clock at frequency of VGA mode being used
+        reset_n		:	in		std_logic;	--active low asycnchronous reset
+        h_sync		:	out	std_logic;	--horiztonal sync pulse
+        v_sync		:	out	std_logic;	--vertical sync pulse
+        disp_ena	:	out	std_logic;	--display enable ('1' = display time, '0' = blanking time)
+        column		:	out	integer range 0 to h_pixels - 1;		--horizontal pixel coordinate
+        row			:	out	integer range 0 to v_pixels - 1;		--vertical pixel coordinate
+        n_blank		:	out	std_logic;	--direct blacking output to DAC
+        n_sync		:	out	std_logic     --sync-on-green output to DAC
+    ); 
+end vga_controller;
 
-ARCHITECTURE behavior OF vga_controller IS
-	CONSTANT	h_period	:	INTEGER := h_pulse + h_bp + h_pixels + h_fp;  --total number of pixel clocks in a row
-	CONSTANT	v_period	:	INTEGER := v_pulse + v_bp + v_pixels + v_fp;  --total number of rows in column
-	
-	signal col_sig, row_sig : integer := 0;
-	
-BEGIN
+architecture behavior of vga_controller is
+    constant c_h_period	: integer := h_pulse + h_bp + h_pixels + h_fp;  --total number of pixel clocks in a row
+    constant c_v_period	: integer := v_pulse + v_bp + v_pixels + v_fp;  --total number of rows in column
+    
+    signal s_h_count : integer range 0 to c_h_period - 1 := 0;  --horizontal counter (counts the columns)
+    signal s_v_count : integer range 0 to c_v_period - 1 := 0;  --vertical counter (counts the rows)
+    
+    --high on the cycle where s_h_count = c_h_period - 1
+    signal s_h_count_is_max : std_logic := '0';
+    signal s_v_count_is_max : std_logic := '0';
+    
+    signal s1_h_sync : std_logic := '0';
+    signal s1_v_sync : std_logic := '0';
+    
+    signal s1_h_active : std_logic := '0';
+    signal s1_v_active : std_logic := '0';
+    
+    signal s2_h_sync : std_logic := '0';
+    signal s2_v_sync : std_logic := '0';
+    
+    signal s2_col : integer range 0 to h_pixels - 1 := 0;
+    signal s2_row : integer range 0 to v_pixels - 1 := 0;
+    
+    signal s2_disp_en : std_logic := '0';
+    
+begin
 
-	n_blank <= '1';  --no direct blanking
-	n_sync <= '0';   --no sync on green
-	
-	column <= col_sig;				--reset column pixel coordinate
-	row <= row_sig;
-	
-	PROCESS(pixel_clk, reset_n)
-		VARIABLE h_count	:	INTEGER RANGE 0 TO h_period - 1 := 0;  --horizontal counter (counts the columns)
-		VARIABLE v_count	:	INTEGER RANGE 0 TO v_period - 1 := 0;  --vertical counter (counts the rows)
-	BEGIN
-	
-		IF(reset_n = '0') THEN		--reset asserted
-			h_count := 0;				--reset horizontal counter
-			v_count := 0;				--reset vertical counter
-			h_sync <= NOT h_pol;		--deassert horizontal sync
-			v_sync <= NOT v_pol;		--deassert vertical sync
-			disp_ena <= '0';			--disable display
-			col_sig <= 0;				--reset column pixel coordinate
-			row_sig <= 0;					--reset row pixel coordinate
-			
-		ELSIF(pixel_clk'EVENT AND pixel_clk = '1') THEN
-
-			--counters
-			IF(h_count < h_period - 1) THEN		--horizontal counter (pixels)
-				h_count := h_count + 1;
-			ELSE
-				h_count := 0;
-				IF(v_count < v_period - 1) THEN	--veritcal counter (rows)
-					v_count := v_count + 1;
-				ELSE
-					v_count := 0;
-				END IF;
-			END IF;
-
-			--horizontal sync signal
-			IF(h_count < h_pixels + h_fp OR h_count >= h_pixels + h_fp + h_pulse) THEN
-				h_sync <= NOT h_pol;		--deassert horiztonal sync pulse
-			ELSE
-				h_sync <= h_pol;			--assert horiztonal sync pulse
-			END IF;
-			
-			--vertical sync signal
-			IF(v_count < v_pixels + v_fp OR v_count >= v_pixels + v_fp + v_pulse) THEN
-				v_sync <= NOT v_pol;		--deassert vertical sync pulse
-			ELSE
-				v_sync <= v_pol;			--assert vertical sync pulse
-			END IF;
-			
-			--set pixel coordinates
-			IF(h_count < h_pixels) THEN  	--horiztonal display time
-				col_sig <= h_count;			--set horiztonal pixel coordinate
-			END IF;
-			IF(v_count < v_pixels) THEN	--vertical display time
-				row_sig <= v_count;				--set vertical pixel coordinate
-			END IF;
-
-			--set display enable output
-			IF(h_count < h_pixels AND v_count < v_pixels) THEN  	--display time
-				disp_ena <= '1';											 	--enable display
-			ELSE																	--blanking time
-				disp_ena <= '0';												--disable display
-			END IF;
-
-		END IF;
-	END PROCESS;
-
-END behavior;
+    h_sync <= s2_h_sync;
+    v_sync <= s2_v_sync;
+    
+    disp_ena <= s2_disp_en;
+    
+    column <= s2_col;
+    row <= s2_row;
+    
+    n_blank <= '1';  --no direct blanking
+    n_sync <= '0';   --no sync on green
+    
+    process(pixel_clk) is begin
+        if (rising_edge(pixel_clk)) then
+            
+            s_h_count <= s_h_count + 1;
+            
+            s_h_count_is_max <= '0';
+            if (s_h_count = c_h_period - 2) then
+                s_h_count_is_max <= '1';
+            end if;
+            
+            if (s_h_count_is_max = '1') then
+            
+                s_h_count <= 0;
+                
+                s_v_count <= s_v_count + 1;
+                
+                s_v_count_is_max <= '0';
+                if (s_v_count = c_v_period - 2) then
+                    s_v_count_is_max <= '1';
+                end if;
+                
+                if (s_v_count_is_max = '1') then
+                    s_v_count <= 0;
+                end if;
+            end if;
+                   
+            
+            if (s_h_count = h_pixels - 1) then
+                s1_h_active <= '0'; --TODO: s1 is actually s0
+            end if;
+            
+            if (s_h_count = h_pixels + h_fp - 1) then
+                s1_h_sync <= h_pol;
+            end if;
+            
+            if (s_h_count = h_pixels + h_fp + h_pulse - 1) then
+                s1_h_sync <= not h_pol;
+            end if;
+            
+            if (s_h_count_is_max = '1') then
+            
+                s1_h_active <= '1';
+                
+                if (s_v_count = v_pixels - 1) then
+                    s1_v_active <= '0';
+                end if;
+                
+                if (s_v_count = v_pixels + v_fp - 1) then
+                    s1_v_sync <= v_pol;
+                end if;
+                
+                if (s_v_count = v_pixels + v_fp + v_pulse - 1) then
+                    s1_v_sync <= not v_pol;
+                end if;
+                
+                if (s_v_count_is_max = '1') then
+                    s1_v_active <= '1';
+                end if;
+                
+            end if;
+            
+            
+            s2_h_sync <= s1_h_sync;
+            s2_v_sync <= s1_v_sync;
+            
+            if (s1_h_active = '1') then
+                s2_col <= s_h_count;
+            end if;
+            
+            if (s1_v_active = '1') then
+                s2_row <= s_v_count;
+            end if;
+            
+            s2_disp_en <= s1_v_active and s1_h_active;
+            
+            
+            if(reset_n = '0') then
+            
+                s_h_count <= 0;
+                s_v_count <= 0;
+                
+                s_h_count_is_max <= '0';
+                s_v_count_is_max <= '0';
+                
+                s1_h_sync <= not h_pol;
+                s1_v_sync <= not v_pol;
+                s1_h_active <= '0';
+                s1_v_active <= '0';
+                
+                s2_h_sync <= not h_pol;
+                s2_v_sync <= not v_pol;
+                s2_col <= 0;
+                s2_row <= 0;
+                s2_disp_en <= '0';
+                
+            end if;
+            
+        end if;
+    end process;
+    
+end behavior;
