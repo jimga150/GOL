@@ -15,11 +15,11 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="25.468526 us"></ZoomEndTime>
-      <Cursor1Time time="1.847727 us"></Cursor1Time>
+      <ZoomEndTime time="2,864.000001 us"></ZoomEndTime>
+      <Cursor1Time time="0.000000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="185"></NameColumnWidth>
+      <NameColumnWidth column_width="181"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="18" />
@@ -162,42 +162,33 @@
    <wvobject fp_name="group797" type="group">
       <obj_property name="label">VGA Controller</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/pixel_clk" type="logic">
-         <obj_property name="ElementShortName">pixel_clk</obj_property>
-         <obj_property name="ObjectShortName">pixel_clk</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/i_clk" type="logic">
+         <obj_property name="ElementShortName">i_clk</obj_property>
+         <obj_property name="ObjectShortName">i_clk</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/reset_n" type="logic">
-         <obj_property name="ElementShortName">reset_n</obj_property>
-         <obj_property name="ObjectShortName">reset_n</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/i_rst_n" type="logic">
+         <obj_property name="ElementShortName">i_rst_n</obj_property>
+         <obj_property name="ObjectShortName">i_rst_n</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/h_sync" type="logic">
-         <obj_property name="ElementShortName">h_sync</obj_property>
-         <obj_property name="ObjectShortName">h_sync</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/o_h_sync" type="logic">
+         <obj_property name="ElementShortName">o_h_sync</obj_property>
+         <obj_property name="ObjectShortName">o_h_sync</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/v_sync" type="logic">
-         <obj_property name="ElementShortName">v_sync</obj_property>
-         <obj_property name="ObjectShortName">v_sync</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/o_v_sync" type="logic">
+         <obj_property name="ElementShortName">o_v_sync</obj_property>
+         <obj_property name="ObjectShortName">o_v_sync</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/disp_ena" type="logic">
-         <obj_property name="ElementShortName">disp_ena</obj_property>
-         <obj_property name="ObjectShortName">disp_ena</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/o_disp_ena" type="logic">
+         <obj_property name="ElementShortName">o_disp_ena</obj_property>
+         <obj_property name="ObjectShortName">o_disp_ena</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/column" type="other">
-         <obj_property name="ElementShortName">column</obj_property>
-         <obj_property name="ObjectShortName">column</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/o_column" type="other">
+         <obj_property name="ElementShortName">o_column</obj_property>
+         <obj_property name="ObjectShortName">o_column</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/row" type="other">
-         <obj_property name="ElementShortName">row</obj_property>
-         <obj_property name="ObjectShortName">row</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/n_blank" type="logic">
-         <obj_property name="ElementShortName">n_blank</obj_property>
-         <obj_property name="ObjectShortName">n_blank</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/n_sync" type="logic">
-         <obj_property name="ElementShortName">n_sync</obj_property>
-         <obj_property name="ObjectShortName">n_sync</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/o_row" type="other">
+         <obj_property name="ElementShortName">o_row</obj_property>
+         <obj_property name="ObjectShortName">o_row</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_h_count" type="other">
          <obj_property name="ElementShortName">s_h_count</obj_property>
@@ -207,6 +198,30 @@
          <obj_property name="ElementShortName">s_v_count</obj_property>
          <obj_property name="ObjectShortName">s_v_count</obj_property>
       </wvobject>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_h_count_is_max" type="logic">
+         <obj_property name="ElementShortName">s_h_count_is_max</obj_property>
+         <obj_property name="ObjectShortName">s_h_count_is_max</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_v_count_is_max" type="logic">
+         <obj_property name="ElementShortName">s_v_count_is_max</obj_property>
+         <obj_property name="ObjectShortName">s_v_count_is_max</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_h_sync" type="logic">
+         <obj_property name="ElementShortName">s_h_sync</obj_property>
+         <obj_property name="ObjectShortName">s_h_sync</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_v_sync" type="logic">
+         <obj_property name="ElementShortName">s_v_sync</obj_property>
+         <obj_property name="ObjectShortName">s_v_sync</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_h_active" type="logic">
+         <obj_property name="ElementShortName">s_h_active</obj_property>
+         <obj_property name="ObjectShortName">s_h_active</obj_property>
+      </wvobject>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s_v_active" type="logic">
+         <obj_property name="ElementShortName">s_v_active</obj_property>
+         <obj_property name="ObjectShortName">s_v_active</obj_property>
+      </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s1_h_sync" type="logic">
          <obj_property name="ElementShortName">s1_h_sync</obj_property>
          <obj_property name="ObjectShortName">s1_h_sync</obj_property>
@@ -215,73 +230,57 @@
          <obj_property name="ElementShortName">s1_v_sync</obj_property>
          <obj_property name="ObjectShortName">s1_v_sync</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s1_h_active" type="logic">
-         <obj_property name="ElementShortName">s1_h_active</obj_property>
-         <obj_property name="ObjectShortName">s1_h_active</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s1_col" type="other">
+         <obj_property name="ElementShortName">s1_col</obj_property>
+         <obj_property name="ObjectShortName">s1_col</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s1_v_active" type="logic">
-         <obj_property name="ElementShortName">s1_v_active</obj_property>
-         <obj_property name="ObjectShortName">s1_v_active</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s1_row" type="other">
+         <obj_property name="ElementShortName">s1_row</obj_property>
+         <obj_property name="ObjectShortName">s1_row</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s2_h_sync" type="logic">
-         <obj_property name="ElementShortName">s2_h_sync</obj_property>
-         <obj_property name="ObjectShortName">s2_h_sync</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s1_disp_en" type="logic">
+         <obj_property name="ElementShortName">s1_disp_en</obj_property>
+         <obj_property name="ObjectShortName">s1_disp_en</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s2_v_sync" type="logic">
-         <obj_property name="ElementShortName">s2_v_sync</obj_property>
-         <obj_property name="ObjectShortName">s2_v_sync</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_h_pixels" type="other">
+         <obj_property name="ElementShortName">g_h_pixels</obj_property>
+         <obj_property name="ObjectShortName">g_h_pixels</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s2_col" type="other">
-         <obj_property name="ElementShortName">s2_col</obj_property>
-         <obj_property name="ObjectShortName">s2_col</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_h_fp" type="other">
+         <obj_property name="ElementShortName">g_h_fp</obj_property>
+         <obj_property name="ObjectShortName">g_h_fp</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s2_row" type="other">
-         <obj_property name="ElementShortName">s2_row</obj_property>
-         <obj_property name="ObjectShortName">s2_row</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_h_pulse" type="other">
+         <obj_property name="ElementShortName">g_h_pulse</obj_property>
+         <obj_property name="ObjectShortName">g_h_pulse</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/s2_disp_en" type="logic">
-         <obj_property name="ElementShortName">s2_disp_en</obj_property>
-         <obj_property name="ObjectShortName">s2_disp_en</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_h_bp" type="other">
+         <obj_property name="ElementShortName">g_h_bp</obj_property>
+         <obj_property name="ObjectShortName">g_h_bp</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/h_fp" type="other">
-         <obj_property name="ElementShortName">h_fp</obj_property>
-         <obj_property name="ObjectShortName">h_fp</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_h_pol" type="logic">
+         <obj_property name="ElementShortName">g_h_pol</obj_property>
+         <obj_property name="ObjectShortName">g_h_pol</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/h_pulse" type="other">
-         <obj_property name="ElementShortName">h_pulse</obj_property>
-         <obj_property name="ObjectShortName">h_pulse</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_v_pixels" type="other">
+         <obj_property name="ElementShortName">g_v_pixels</obj_property>
+         <obj_property name="ObjectShortName">g_v_pixels</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/h_bp" type="other">
-         <obj_property name="ElementShortName">h_bp</obj_property>
-         <obj_property name="ObjectShortName">h_bp</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_v_fp" type="other">
+         <obj_property name="ElementShortName">g_v_fp</obj_property>
+         <obj_property name="ObjectShortName">g_v_fp</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/h_pixels" type="other">
-         <obj_property name="ElementShortName">h_pixels</obj_property>
-         <obj_property name="ObjectShortName">h_pixels</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_v_pulse" type="other">
+         <obj_property name="ElementShortName">g_v_pulse</obj_property>
+         <obj_property name="ObjectShortName">g_v_pulse</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/h_pol" type="logic">
-         <obj_property name="ElementShortName">h_pol</obj_property>
-         <obj_property name="ObjectShortName">h_pol</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_v_bp" type="other">
+         <obj_property name="ElementShortName">g_v_bp</obj_property>
+         <obj_property name="ObjectShortName">g_v_bp</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/v_fp" type="other">
-         <obj_property name="ElementShortName">v_fp</obj_property>
-         <obj_property name="ObjectShortName">v_fp</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/v_pulse" type="other">
-         <obj_property name="ElementShortName">v_pulse</obj_property>
-         <obj_property name="ObjectShortName">v_pulse</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/v_bp" type="other">
-         <obj_property name="ElementShortName">v_bp</obj_property>
-         <obj_property name="ObjectShortName">v_bp</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/v_pixels" type="other">
-         <obj_property name="ElementShortName">v_pixels</obj_property>
-         <obj_property name="ObjectShortName">v_pixels</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/v_pol" type="logic">
-         <obj_property name="ElementShortName">v_pol</obj_property>
-         <obj_property name="ObjectShortName">v_pol</obj_property>
+      <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/g_v_pol" type="logic">
+         <obj_property name="ElementShortName">g_v_pol</obj_property>
+         <obj_property name="ObjectShortName">g_v_pol</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/vga_cont_int/c_h_period" type="other">
          <obj_property name="ElementShortName">c_h_period</obj_property>

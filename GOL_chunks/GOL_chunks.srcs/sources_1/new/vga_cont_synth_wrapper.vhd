@@ -75,15 +75,13 @@ begin
 
     vga_cont_int: entity work.vga_controller
     port map(
-        pixel_clk => s_clk_vga,
-		reset_n => i_rst_btn,
-		h_sync => o_h_sync,
-		v_sync => o_v_sync,
-		disp_ena => o_disp_en,
-		column => s_col,
-		row => s_row,
-		n_blank => open,
-		n_sync => open
+        i_clk => s_clk_vga,
+		i_rst_n => i_rst_btn,
+		o_h_sync => o_h_sync,
+		o_v_sync => o_v_sync,
+		o_disp_ena => o_disp_en,
+		o_column => s_col,
+		o_row => s_row
     );
     
     process(s_col, s_row) is
