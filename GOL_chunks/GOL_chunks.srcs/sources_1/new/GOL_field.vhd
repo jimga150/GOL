@@ -202,21 +202,29 @@ begin
         end generate block_col_gen;
     end generate block_row_gen;
     
-    process(i_clk_read) is begin
+    process(i_clk_read) is
+    
+        constant c_chunk_height_us : unsigned(s_row'range) := to_unsigned(c_chunk_height, s_row'length);
+        constant c_block_num_chunk_rows_us : unsigned(s_row'range) := to_unsigned(c_block_num_chunk_rows, s_row'length);
+        
+        constant c_chunk_width_us : unsigned(s_col'range) := to_unsigned(c_chunk_width, s_col'length);
+        constant c_block_num_chunk_cols_us : unsigned(s_col'range) := to_unsigned(c_block_num_chunk_cols, s_col'length);
+    
+    begin
         if rising_edge(i_clk_read) then
         
             s1_s8_field_pixel_row <= s1_s8_field_pixel_row(s1_s8_field_pixel_row'high - 1 downto s1_s8_field_pixel_row'low) & s_row;
             s1_s8_field_pixel_col <= s1_s8_field_pixel_col(s1_s8_field_pixel_col'high - 1 downto s1_s8_field_pixel_col'low) & s_col;
             
-            s1_chunk_x <= to_unsigned((to_integer(s_col)/c_chunk_width) mod c_block_num_chunk_cols, s1_chunk_x'length);
-            s1_chunk_y <= to_unsigned((to_integer(s_row)/c_chunk_height) mod c_block_num_chunk_rows, s1_chunk_y'length);
+            s1_chunk_x <= resize((s_col/c_chunk_width_us) mod c_block_num_chunk_cols_us, s1_chunk_x'length);
+            s1_chunk_y <= resize((s_row/c_chunk_height_us) mod c_block_num_chunk_rows_us, s1_chunk_y'length);
             
             s4_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(3))/c_block_num_cell_rows, s4_block_row'length);
             s4_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(3))/c_block_num_cell_cols, s4_block_col'length);
             
             s5_chunk <= s_chunks(to_integer(s4_block_row), to_integer(s4_block_col));
-            s5_chunk_cell_x <= to_unsigned(to_integer(s1_s8_field_pixel_col(4)) mod c_chunk_width, s5_chunk_cell_x'length);
-            s5_chunk_cell_y <= to_unsigned(to_integer(s1_s8_field_pixel_row(4)) mod c_chunk_height, s5_chunk_cell_y'length);
+            s5_chunk_cell_x <= resize(s1_s8_field_pixel_col(4) mod c_chunk_width_us, s5_chunk_cell_x'length);
+            s5_chunk_cell_y <= resize(s1_s8_field_pixel_row(4) mod c_chunk_height_us, s5_chunk_cell_y'length);
             
             s6_pixel <= s5_chunk(to_integer(s5_chunk_cell_y))(to_integer(s5_chunk_cell_x));
             
