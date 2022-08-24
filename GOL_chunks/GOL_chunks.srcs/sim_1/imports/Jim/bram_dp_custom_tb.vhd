@@ -56,6 +56,8 @@ architecture Behavioral of bram_dp_custom_tb is
     constant i_clka_period : time := 10 ns;
     constant i_clkb_period : time := 6.123 ns;
     
+    constant c_read_delay : integer := 3;
+    
 begin
     
     UUT: entity work.bram_dp_custom
@@ -130,6 +132,10 @@ begin
             
             wait for i_clka_period;
             
+            i_addra <= (others => '0');
+            
+            wait for i_clka_period*(c_read_delay-1);
+            
             if (o_douta /= v_writes(i).data) then
                 v_pass := false;
                 report "Port A: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr)))
@@ -151,6 +157,10 @@ begin
             i_addrb <= v_writes(i).addr;
             
             wait for i_clkb_period;
+            
+            i_addrb <= (others => '0');
+            
+            wait for i_clkb_period*(c_read_delay-1);
             
             if (o_doutb /= v_writes(i).data) then
                 v_pass := false;
@@ -184,6 +194,10 @@ begin
             
             wait for i_clkb_period;
             
+            i_addrb <= (others => '0');
+            
+            wait for i_clkb_period*(c_read_delay-1);
+            
             if (o_doutb /= v_writes(i).data) then
                 v_pass := false;
                 report "Port B: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr)))
@@ -204,6 +218,10 @@ begin
             i_addra <= v_writes(i).addr;
             
             wait for i_clka_period;
+            
+            i_addra <= (others => '0');
+            
+            wait for i_clka_period*(c_read_delay-1);
             
             if (o_douta /= v_writes(i).data) then
                 v_pass := false;
