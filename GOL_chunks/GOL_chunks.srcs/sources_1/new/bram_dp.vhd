@@ -76,7 +76,13 @@ architecture Inferred of bram_dp is
         return v_ram;
     end function;
     
+    constant c_input_stages : integer := 1;
+    constant c_output_stages : integer := 3;
+    
     shared variable sv_ram : t_ram_type := InitRamFromChunks(g_init_cells);
+    
+    attribute ram_decomp : string;
+    attribute ram_decomp of sv_ram : variable is "power"; 
     
     signal s1_ena, s1_wea : std_logic;
     signal s1_addra : std_logic_vector(i_addra'range);
@@ -86,8 +92,9 @@ architecture Inferred of bram_dp is
     signal s1_addrb : std_logic_vector(i_addrb'range);
     signal s1_dinb : std_logic_vector(i_dinb'range);
     
-    signal s2_douta : std_logic_vector(o_douta'range);
-    signal s2_doutb : std_logic_vector(o_doutb'range);
+    type t_data_pline_type is array(natural range<>) of std_logic_vector(o_douta'range);
+    signal s_douta_pline : t_data_pline_type(c_output_stages downto 1);
+    signal s_doutb_pline : t_data_pline_type(c_output_stages downto 1);
     
 begin
 
@@ -101,13 +108,13 @@ begin
             s1_dina <= i_dina;
         
             if s1_ena = '1' then
-                s2_douta <= sv_ram(to_integer(unsigned(s1_addra)));
+                s_douta_pline <= s_douta_pline(s_douta_pline'high-1 downto s_douta_pline'low) & sv_ram(to_integer(unsigned(s1_addra)));
                 if s1_wea = '1' then
                     sv_ram(to_integer(unsigned(s1_addra))) := s1_dina;
                 end if;
             end if;
             
-            o_douta <= s2_douta;
+            o_douta <= s_douta_pline(s_douta_pline'high);
             
         end if;
     end process;
@@ -122,13 +129,13 @@ begin
             s1_dinb <= i_dinb;
         
             if s1_enb = '1' then
-                s2_doutb <= sv_ram(to_integer(unsigned(s1_addrb)));
+                s_doutb_pline <= s_doutb_pline(s_doutb_pline'high-1 downto s_doutb_pline'low) & sv_ram(to_integer(unsigned(s1_addrb)));
                 if s1_web = '1' then
                     sv_ram(to_integer(unsigned(s1_addrb))) := s1_dinb;
                 end if;
             end if;
             
-            o_doutb <= s2_doutb;
+            o_doutb <= s_doutb_pline(s_doutb_pline'high);
             
         end if;
     end process;
