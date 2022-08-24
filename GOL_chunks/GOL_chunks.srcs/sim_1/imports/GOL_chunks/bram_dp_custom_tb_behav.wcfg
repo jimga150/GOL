@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="bram_dp_custom_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="bram_dp_custom_tb" />
+            <top_module name="glbl" />
+            <top_module name="gol_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="918.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,187.001 ns"></ZoomEndTime>
+      <Cursor1Time time="1,035.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="220"></NameColumnWidth>
+      <ValueColumnWidth column_width="106"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="89" />
+   <wvobject fp_name="/bram_dp_custom_tb/i_clka" type="logic">
+      <obj_property name="ElementShortName">i_clka</obj_property>
+      <obj_property name="ObjectShortName">i_clka</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_clkb" type="logic">
+      <obj_property name="ElementShortName">i_clkb</obj_property>
+      <obj_property name="ObjectShortName">i_clkb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_ena" type="logic">
+      <obj_property name="ElementShortName">i_ena</obj_property>
+      <obj_property name="ObjectShortName">i_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_wea" type="logic">
+      <obj_property name="ElementShortName">i_wea</obj_property>
+      <obj_property name="ObjectShortName">i_wea</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_addra" type="array">
+      <obj_property name="ElementShortName">i_addra[16:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addra[16:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_dina" type="array">
+      <obj_property name="ElementShortName">i_dina[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dina[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_enb" type="logic">
+      <obj_property name="ElementShortName">i_enb</obj_property>
+      <obj_property name="ObjectShortName">i_enb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_web" type="logic">
+      <obj_property name="ElementShortName">i_web</obj_property>
+      <obj_property name="ObjectShortName">i_web</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_addrb" type="array">
+      <obj_property name="ElementShortName">i_addrb[16:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addrb[16:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_dinb" type="array">
+      <obj_property name="ElementShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/o_douta" type="array">
+      <obj_property name="ElementShortName">o_douta[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_douta[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/o_doutb" type="array">
+      <obj_property name="ElementShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_clka_period" type="other">
+      <obj_property name="ElementShortName">i_clka_period</obj_property>
+      <obj_property name="ObjectShortName">i_clka_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/i_clkb_period" type="other">
+      <obj_property name="ElementShortName">i_clkb_period</obj_property>
+      <obj_property name="ObjectShortName">i_clkb_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_clka" type="logic">
+      <obj_property name="ElementShortName">i_clka</obj_property>
+      <obj_property name="ObjectShortName">i_clka</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_ena" type="logic">
+      <obj_property name="ElementShortName">i_ena</obj_property>
+      <obj_property name="ObjectShortName">i_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_wea" type="logic">
+      <obj_property name="ElementShortName">i_wea</obj_property>
+      <obj_property name="ObjectShortName">i_wea</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_addra" type="array">
+      <obj_property name="ElementShortName">i_addra[16:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addra[16:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_dina" type="array">
+      <obj_property name="ElementShortName">i_dina[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dina[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/o_douta" type="array">
+      <obj_property name="ElementShortName">o_douta[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_douta[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_clkb" type="logic">
+      <obj_property name="ElementShortName">i_clkb</obj_property>
+      <obj_property name="ObjectShortName">i_clkb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_enb" type="logic">
+      <obj_property name="ElementShortName">i_enb</obj_property>
+      <obj_property name="ObjectShortName">i_enb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_web" type="logic">
+      <obj_property name="ElementShortName">i_web</obj_property>
+      <obj_property name="ObjectShortName">i_web</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_addrb" type="array">
+      <obj_property name="ElementShortName">i_addrb[16:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addrb[16:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/i_dinb" type="array">
+      <obj_property name="ElementShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/o_doutb" type="array">
+      <obj_property name="ElementShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_brama_addr" type="array">
+      <obj_property name="ElementShortName">s_brama_addr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">s_brama_addr[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_brama_sel" type="array">
+      <obj_property name="ElementShortName">s_brama_sel[6:0]</obj_property>
+      <obj_property name="ObjectShortName">s_brama_sel[6:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_bramb_addr" type="array">
+      <obj_property name="ElementShortName">s_bramb_addr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bramb_addr[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_bramb_sel" type="array">
+      <obj_property name="ElementShortName">s_bramb_sel[6:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bramb_sel[6:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_douta_arr" type="array">
+      <obj_property name="ElementShortName">s_douta_arr[127:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_douta_arr[127:0][35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_doutb_arr" type="array">
+      <obj_property name="ElementShortName">s_doutb_arr[127:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_doutb_arr[127:0][35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_enas" type="array">
+      <obj_property name="ElementShortName">s_enas[0:0,127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_enas[0:0,127:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_enbs" type="array">
+      <obj_property name="ElementShortName">s_enbs[0:0,127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_enbs[0:0,127:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_dinas" type="array">
+      <obj_property name="ElementShortName">s_dinas[0:0,127:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dinas[0:0,127:0][35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_dinbs" type="array">
+      <obj_property name="ElementShortName">s_dinbs[0:0,127:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dinbs[0:0,127:0][35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_doutas" type="array">
+      <obj_property name="ElementShortName">s_doutas[0:0,127:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_doutas[0:0,127:0][35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/s_doutbs" type="array">
+      <obj_property name="ElementShortName">s_doutbs[0:0,127:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_doutbs[0:0,127:0][35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_prim_num_addr_bits" type="other">
+      <obj_property name="ElementShortName">c_prim_num_addr_bits</obj_property>
+      <obj_property name="ObjectShortName">c_prim_num_addr_bits</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_prim_depth" type="other">
+      <obj_property name="ElementShortName">c_prim_depth</obj_property>
+      <obj_property name="ObjectShortName">c_prim_depth</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_prim_width" type="other">
+      <obj_property name="ElementShortName">c_prim_width</obj_property>
+      <obj_property name="ObjectShortName">c_prim_width</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_req_depth" type="other">
+      <obj_property name="ElementShortName">c_req_depth</obj_property>
+      <obj_property name="ObjectShortName">c_req_depth</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_req_width" type="other">
+      <obj_property name="ElementShortName">c_req_width</obj_property>
+      <obj_property name="ObjectShortName">c_req_width</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_prim_bits" type="other">
+      <obj_property name="ElementShortName">c_prim_bits</obj_property>
+      <obj_property name="ObjectShortName">c_prim_bits</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_num_req_bits" type="other">
+      <obj_property name="ElementShortName">c_num_req_bits</obj_property>
+      <obj_property name="ObjectShortName">c_num_req_bits</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_num_prims_wide" type="other">
+      <obj_property name="ElementShortName">c_num_prims_wide</obj_property>
+      <obj_property name="ObjectShortName">c_num_prims_wide</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_num_prims_deep" type="other">
+      <obj_property name="ElementShortName">c_num_prims_deep</obj_property>
+      <obj_property name="ObjectShortName">c_num_prims_deep</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_bram_sel_bits" type="other">
+      <obj_property name="ElementShortName">c_bram_sel_bits</obj_property>
+      <obj_property name="ObjectShortName">c_bram_sel_bits</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_num_input_stages" type="other">
+      <obj_property name="ElementShortName">c_num_input_stages</obj_property>
+      <obj_property name="ObjectShortName">c_num_input_stages</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/c_num_output_stages" type="other">
+      <obj_property name="ElementShortName">c_num_output_stages</obj_property>
+      <obj_property name="ObjectShortName">c_num_output_stages</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_clka" type="logic">
+      <obj_property name="ElementShortName">i_clka</obj_property>
+      <obj_property name="ObjectShortName">i_clka</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_ena" type="logic">
+      <obj_property name="ElementShortName">i_ena</obj_property>
+      <obj_property name="ObjectShortName">i_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_wea" type="logic">
+      <obj_property name="ElementShortName">i_wea</obj_property>
+      <obj_property name="ObjectShortName">i_wea</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_addra" type="array">
+      <obj_property name="ElementShortName">i_addra[9:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addra[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_dina" type="array">
+      <obj_property name="ElementShortName">i_dina[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dina[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/o_douta" type="array">
+      <obj_property name="ElementShortName">o_douta[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_douta[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_clkb" type="logic">
+      <obj_property name="ElementShortName">i_clkb</obj_property>
+      <obj_property name="ObjectShortName">i_clkb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_enb" type="logic">
+      <obj_property name="ElementShortName">i_enb</obj_property>
+      <obj_property name="ObjectShortName">i_enb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_web" type="logic">
+      <obj_property name="ElementShortName">i_web</obj_property>
+      <obj_property name="ObjectShortName">i_web</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_addrb" type="array">
+      <obj_property name="ElementShortName">i_addrb[9:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addrb[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/i_dinb" type="array">
+      <obj_property name="ElementShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dinb[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/o_doutb" type="array">
+      <obj_property name="ElementShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_doutb[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(0)\/bram_prim_inst/g_init_data" type="array">
+      <obj_property name="ElementShortName">g_init_data[1023:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">g_init_data[1023:0][35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_clka" type="logic">
+      <obj_property name="ElementShortName">i_clka</obj_property>
+      <obj_property name="ObjectShortName">i_clka</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_ena" type="logic">
+      <obj_property name="ElementShortName">i_ena</obj_property>
+      <obj_property name="ObjectShortName">i_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_wea" type="logic">
+      <obj_property name="ElementShortName">i_wea</obj_property>
+      <obj_property name="ObjectShortName">i_wea</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_addra" type="array">
+      <obj_property name="ElementShortName">i_addra[9:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addra[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_dina" type="array">
+      <obj_property name="ElementShortName">i_dina[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dina[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/o_douta" type="array">
+      <obj_property name="ElementShortName">o_douta[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_douta[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_clkb" type="logic">
+      <obj_property name="ElementShortName">i_clkb</obj_property>
+      <obj_property name="ObjectShortName">i_clkb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_enb" type="logic">
+      <obj_property name="ElementShortName">i_enb</obj_property>
+      <obj_property name="ObjectShortName">i_enb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_web" type="logic">
+      <obj_property name="ElementShortName">i_web</obj_property>
+      <obj_property name="ObjectShortName">i_web</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_addrb" type="array">
+      <obj_property name="ElementShortName">i_addrb[9:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addrb[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/i_dinb" type="array">
+      <obj_property name="ElementShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dinb[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/o_doutb" type="array">
+      <obj_property name="ElementShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_doutb[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(1)\/bram_prim_inst/g_init_data" type="array">
+      <obj_property name="ElementShortName">g_init_data[1023:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">g_init_data[1023:0][35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_clka" type="logic">
+      <obj_property name="ElementShortName">i_clka</obj_property>
+      <obj_property name="ObjectShortName">i_clka</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_ena" type="logic">
+      <obj_property name="ElementShortName">i_ena</obj_property>
+      <obj_property name="ObjectShortName">i_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_wea" type="logic">
+      <obj_property name="ElementShortName">i_wea</obj_property>
+      <obj_property name="ObjectShortName">i_wea</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_addra" type="array">
+      <obj_property name="ElementShortName">i_addra[9:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addra[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_dina" type="array">
+      <obj_property name="ElementShortName">i_dina[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dina[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/o_douta" type="array">
+      <obj_property name="ElementShortName">o_douta[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_douta[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_clkb" type="logic">
+      <obj_property name="ElementShortName">i_clkb</obj_property>
+      <obj_property name="ObjectShortName">i_clkb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_enb" type="logic">
+      <obj_property name="ElementShortName">i_enb</obj_property>
+      <obj_property name="ObjectShortName">i_enb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_web" type="logic">
+      <obj_property name="ElementShortName">i_web</obj_property>
+      <obj_property name="ObjectShortName">i_web</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_addrb" type="array">
+      <obj_property name="ElementShortName">i_addrb[9:0]</obj_property>
+      <obj_property name="ObjectShortName">i_addrb[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/i_dinb" type="array">
+      <obj_property name="ElementShortName">i_dinb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">i_dinb[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/o_doutb" type="array">
+      <obj_property name="ElementShortName">o_doutb[35:0]</obj_property>
+      <obj_property name="ObjectShortName">o_doutb[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bram_dp_custom_tb/UUT/\gen_prim_width(0)\/\gen_prim_depth(2)\/bram_prim_inst/g_init_data" type="array">
+      <obj_property name="ElementShortName">g_init_data[1023:0][35:0]</obj_property>
+      <obj_property name="ObjectShortName">g_init_data[1023:0][35:0]</obj_property>
+   </wvobject>
+</wave_config>

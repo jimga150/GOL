@@ -111,6 +111,7 @@ package GOL_pkg is
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     type t_field_chunk_arr is array(c_field_num_chunk_rows-1 downto 0, c_field_num_chunk_cols-1 downto 0) of t_chunk_type;
     type t_block_chunk_arr is array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) of t_chunk_type;
+    type t_bram_36k_arr is array(1023 downto 0) of std_logic_vector(35 downto 0);
     
     constant c_empty_chunk : t_chunk_type := (others => (others => '0'));
     constant c_empty_field : t_field_chunk_arr := (others => (others => c_empty_chunk));
