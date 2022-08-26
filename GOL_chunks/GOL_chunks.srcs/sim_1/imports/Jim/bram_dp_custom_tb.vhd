@@ -54,9 +54,9 @@ architecture Behavioral of bram_dp_custom_tb is
     
     --Clock Periods
     constant i_clka_period : time := 10 ns;
-    constant i_clkb_period : time := 6.123 ns;
+    constant i_clkb_period : time := 6.12 ns;
     
-    constant c_read_delay : integer := 3;
+    constant c_read_delay : integer := c_bram_read_delay;
     
 begin
     
@@ -85,7 +85,7 @@ begin
     
     stim_proc: process is
         
-        constant c_num_addrs_test : integer := 100;
+        constant c_num_addrs_test : integer := c_bram_depth;
         constant c_addr_step : integer := c_bram_depth/c_num_addrs_test;
         
         variable v_addr_int : integer;
@@ -101,6 +101,9 @@ begin
         variable v_pass : boolean := true;
         
     begin
+    
+        report "Address step: " & integer'image(c_addr_step);
+        assert c_addr_step > 0 report "address step must be at least 1!" severity failure;
         
         wait for i_clka_period;
         
@@ -138,8 +141,9 @@ begin
             
             if (o_douta /= v_writes(i).data) then
                 v_pass := false;
-                report "Port A: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr)))
-                severity error;
+                report "Port A: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr))) & 
+                    ": expected " & integer'image(to_integer(unsigned(v_writes(i).data))) & ", got " & integer'image(to_integer(unsigned(o_douta)))
+                    severity error;
             end if;
                 
             
@@ -164,8 +168,9 @@ begin
             
             if (o_doutb /= v_writes(i).data) then
                 v_pass := false;
-                report "Port B: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr)))
-                severity error;
+                report "Port B: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr))) & 
+                    ": expected " & integer'image(to_integer(unsigned(v_writes(i).data))) & ", got " & integer'image(to_integer(unsigned(o_doutb)))
+                    severity error;
             end if;
             
         end loop;
@@ -200,8 +205,9 @@ begin
             
             if (o_doutb /= v_writes(i).data) then
                 v_pass := false;
-                report "Port B: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr)))
-                severity error;
+                report "Port B: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr))) & 
+                    ": expected " & integer'image(to_integer(unsigned(v_writes(i).data))) & ", got " & integer'image(to_integer(unsigned(o_doutb)))
+                    severity error;
             end if;
             
         end loop;
@@ -225,8 +231,9 @@ begin
             
             if (o_douta /= v_writes(i).data) then
                 v_pass := false;
-                report "Port A: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr)))
-                severity error;
+                report "Port A: Data mismatch at address " & integer'image(to_integer(unsigned(v_writes(i).addr))) & 
+                    ": expected " & integer'image(to_integer(unsigned(v_writes(i).data))) & ", got " & integer'image(to_integer(unsigned(o_douta)))
+                    severity error;
             end if;
             
         end loop;

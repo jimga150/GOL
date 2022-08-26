@@ -100,7 +100,8 @@ package GOL_pkg is
     constant c_bram_width : integer := c_chunk_width*c_chunk_height;
     constant c_bram_depth : integer := c_chunks_per_block*2; --account for data doubling
     constant c_bram_addr_bits : integer := integer(ceil(log2(real(c_bram_depth))));
-    constant c_bram_read_delay : integer := 5;
+    constant c_bram_output_mux_stages : integer := 4;
+    constant c_bram_read_delay : integer := 4 + c_bram_output_mux_stages;
     
     constant c_chunk_getter_read_delay : integer := c_bram_read_delay + 2;
     constant c_field_pix_read_delay : integer := c_chunk_getter_read_delay + 3;
