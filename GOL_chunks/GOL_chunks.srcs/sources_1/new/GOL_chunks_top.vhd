@@ -26,6 +26,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
+use work.GOL_pkg.all;
 use work.GOL_field_init.all;
 
 -- Uncomment the following library declaration if instantiating
@@ -57,9 +58,7 @@ architecture Structural of GOL_chunks_top is
             clk_out_vga          : out    std_logic
         );
     end component;
-
-    constant c_field_read_delay : integer := 6;
-    
+        
     attribute mark_debug : string;
 
 --    signal s_rst_sys : std_logic;
@@ -78,8 +77,8 @@ architecture Structural of GOL_chunks_top is
     
     signal s0_hsync, s0_vsync : std_logic;
     signal s0_disp_en : std_logic;
-    signal s_hsync_pline, s_vsync_pline : std_logic_vector(c_field_read_delay downto 1);
-    signal s_disp_en_pline : std_logic_vector(c_field_read_delay downto 1);
+    signal s_hsync_pline, s_vsync_pline : std_logic_vector(c_field_pix_read_delay downto 1);
+    signal s_disp_en_pline : std_logic_vector(c_field_pix_read_delay downto 1);
     
     attribute mark_debug of s0_hsync: signal is "true";
     attribute mark_debug of s0_vsync: signal is "true";

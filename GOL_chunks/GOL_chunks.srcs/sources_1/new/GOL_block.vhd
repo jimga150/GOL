@@ -114,7 +114,7 @@ begin
         o_current_state_msb => s0_current_state_msb
     );
     
-    bram_inst: entity work.bram_dp
+    bram_inst: entity work.bram_dp_custom
     generic map(
         g_init_cells => g_init_cells
     )

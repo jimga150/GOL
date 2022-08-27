@@ -135,23 +135,29 @@ architecture Structural of GOL_field is
     type t_row_pipeline is array(natural range<>) of unsigned(s_row'range);
     type t_col_pipeline is array(natural range<>) of unsigned(s_col'range);
     
-    signal s1_s8_field_pixel_row : t_row_pipeline(8 downto 1);
-    signal s1_s8_field_pixel_col : t_col_pipeline(8 downto 1);
+    signal s_field_pixel_row_pline : t_row_pipeline(c_field_pix_read_delay downto 1);
+    signal s_field_pixel_col_pline : t_col_pipeline(c_field_pix_read_delay downto 1);
     
     signal s1_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0);
     signal s1_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0);
     
 --    attribute mark_debug of s1_chunk_x: signal is "true";
 --    attribute mark_debug of s1_chunk_y: signal is "true";
+
+    constant c_stageA : integer := 1 + c_chunk_getter_read_delay;
     
-    signal s6_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
-    signal s6_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
+    signal sA_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
+    signal sA_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
     
-    signal s7_chunk : t_chunk_type;
-    signal s7_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
-    signal s7_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
+    constant c_stageB : integer := c_stageA + 1;
     
-    signal s8_pixel : std_logic;
+    signal sB_chunk : t_chunk_type;
+    signal sB_chunk_cell_x : unsigned(c_chunk_num_cell_col_bits-1 downto 0);
+    signal sB_chunk_cell_y : unsigned(c_chunk_num_cell_row_bits-1 downto 0);
+    
+    constant c_stageC : integer := c_stageB + 1;
+    
+    signal sC_pixel : std_logic;
 
 begin
 
@@ -213,24 +219,24 @@ begin
     begin
         if rising_edge(i_clk_read) then
         
-            s1_s8_field_pixel_row <= s1_s8_field_pixel_row(s1_s8_field_pixel_row'high - 1 downto s1_s8_field_pixel_row'low) & s_row;
-            s1_s8_field_pixel_col <= s1_s8_field_pixel_col(s1_s8_field_pixel_col'high - 1 downto s1_s8_field_pixel_col'low) & s_col;
+            s_field_pixel_row_pline <= s_field_pixel_row_pline(s_field_pixel_row_pline'high - 1 downto s_field_pixel_row_pline'low) & s_row;
+            s_field_pixel_col_pline <= s_field_pixel_col_pline(s_field_pixel_col_pline'high - 1 downto s_field_pixel_col_pline'low) & s_col;
             
             s1_chunk_x <= resize((s_col/c_chunk_width_us) mod c_block_num_chunk_cols_us, s1_chunk_x'length);
             s1_chunk_y <= resize((s_row/c_chunk_height_us) mod c_block_num_chunk_rows_us, s1_chunk_y'length);
             
-            s6_block_row <= to_unsigned(to_integer(s1_s8_field_pixel_row(5))/c_block_num_cell_rows, s6_block_row'length);
-            s6_block_col <= to_unsigned(to_integer(s1_s8_field_pixel_col(5))/c_block_num_cell_cols, s6_block_col'length);
+            sA_block_row <= to_unsigned(to_integer(s_field_pixel_row_pline(c_stageA-1))/c_block_num_cell_rows, sA_block_row'length);
+            sA_block_col <= to_unsigned(to_integer(s_field_pixel_col_pline(c_stageA-1))/c_block_num_cell_cols, sA_block_col'length);
             
-            s7_chunk <= s_chunks(to_integer(s6_block_row), to_integer(s6_block_col));
-            s7_chunk_cell_x <= resize(s1_s8_field_pixel_col(6) mod c_chunk_width_us, s7_chunk_cell_x'length);
-            s7_chunk_cell_y <= resize(s1_s8_field_pixel_row(6) mod c_chunk_height_us, s7_chunk_cell_y'length);
+            sB_chunk <= s_chunks(to_integer(sA_block_row), to_integer(sA_block_col));
+            sB_chunk_cell_x <= resize(s_field_pixel_col_pline(c_stageB-1) mod c_chunk_width_us, sB_chunk_cell_x'length);
+            sB_chunk_cell_y <= resize(s_field_pixel_row_pline(c_stageB-1) mod c_chunk_height_us, sB_chunk_cell_y'length);
             
-            s8_pixel <= s7_chunk(to_integer(s7_chunk_cell_y))(to_integer(s7_chunk_cell_x));
+            sC_pixel <= sB_chunk(to_integer(sB_chunk_cell_y))(to_integer(sB_chunk_cell_x));
             
         end if;
     end process;
     
-    o_pixel <= s8_pixel;
+    o_pixel <= sC_pixel;
 
 end Structural;

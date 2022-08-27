@@ -60,7 +60,7 @@ architecture Behavioral of bram_dp_custom_tb is
     
 begin
     
-    UUT: entity work.bram_dp_custom
+    UUT: entity work.bram_dp
     generic map(
         g_init_cells => g_init_cells
     )
@@ -85,7 +85,7 @@ begin
     
     stim_proc: process is
         
-        constant c_num_addrs_test : integer := c_bram_depth;
+        constant c_num_addrs_test : integer := 100;
         constant c_addr_step : integer := c_bram_depth/c_num_addrs_test;
         
         variable v_addr_int : integer;
