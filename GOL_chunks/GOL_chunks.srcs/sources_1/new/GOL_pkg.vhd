@@ -100,7 +100,7 @@ package GOL_pkg is
     constant c_bram_width : integer := c_chunk_width*c_chunk_height;
     constant c_bram_depth : integer := c_chunks_per_block*2; --account for data doubling
     constant c_bram_addr_bits : integer := integer(ceil(log2(real(c_bram_depth))));
-    constant c_bram_output_mux_stages : integer := 4;
+    constant c_bram_output_mux_stages : integer := 1;
     constant c_bram_read_delay : integer := 4 + c_bram_output_mux_stages;
     
     constant c_chunk_getter_read_delay : integer := c_bram_read_delay + 2;
@@ -112,7 +112,10 @@ package GOL_pkg is
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     type t_field_chunk_arr is array(c_field_num_chunk_rows-1 downto 0, c_field_num_chunk_cols-1 downto 0) of t_chunk_type;
     type t_block_chunk_arr is array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) of t_chunk_type;
-    type t_bram_36k_arr is array(1023 downto 0) of std_logic_vector(35 downto 0);
+    
+    type t_ram_type is array(natural range<>) of std_logic_vector(c_bram_width-1 downto 0);
+    subtype t_ram_block_arr is t_ram_type(c_bram_depth-1 downto 0);
+    subtype t_bram_36k_arr is t_ram_type(1023 downto 0);
     
     constant c_empty_chunk : t_chunk_type := (others => (others => '0'));
     constant c_empty_field : t_field_chunk_arr := (others => (others => c_empty_chunk));

@@ -75,6 +75,37 @@ architecture Structural of bram_dp_custom is
     constant c_output_mux_s_bits_per_stage : integer := integer(ceil(log2(real(c_num_prims_deep))/real(c_num_output_stages)));
     constant c_output_mux_div : integer := 2**c_output_mux_s_bits_per_stage;
     
+    type t_prim_init_arr_type is array(c_num_prims_deep-1 downto 0) of t_bram_36k_arr;
+        
+    pure function InitRamFromChunks(i_chunk_arr : in t_block_chunk_arr) return t_prim_init_arr_type is
+        variable v_ans : t_prim_init_arr_type;
+        variable v_ram_idx : integer := 0;
+        variable v_prim_idx : integer;
+        variable v_prim_addr : integer;
+        variable v_slv : std_logic_vector(c_bram_width-1 downto 0);
+    begin
+        for r in 0 to c_block_num_chunk_rows-1 loop
+            for c in 0 to c_block_num_chunk_cols-1 loop
+                
+                v_slv := chunk_to_vector(i_chunk_arr(r, c));
+                
+                v_prim_idx := v_ram_idx/c_prim_depth;
+                v_prim_addr := v_ram_idx mod c_prim_depth;
+                v_ans(v_prim_idx)(v_prim_addr) := v_slv;
+                
+                v_prim_idx := (v_ram_idx + c_chunks_per_block)/c_prim_depth;
+                v_prim_addr := (v_ram_idx + c_chunks_per_block) mod c_prim_depth;
+                v_ans(v_prim_idx)(v_prim_addr) := v_slv; --copy to other half of RAM
+                
+                v_ram_idx := v_ram_idx + 1;
+                
+            end loop;
+        end loop;
+        return v_ans;
+    end function;
+    
+    constant c_ram_init : t_prim_init_arr_type := InitRamFromChunks(g_init_cells);
+    
     signal s1_brama_addr : std_logic_vector(c_prim_num_addr_bits-1 downto 0);
     signal s1_brama_sel : std_logic_vector(c_bram_sel_bits-1 downto 0);
     
@@ -239,6 +270,9 @@ begin
             
             
             bram_prim_inst: entity work.bram_dp_36k
+            generic map(
+                g_init_data => c_ram_init(y)
+            )
             port map(
                 i_clka => i_clka,
                 i_ena => s2_enas(x, y),
