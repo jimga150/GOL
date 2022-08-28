@@ -52,6 +52,7 @@ architecture Behavioral of GOL_chunks_top_tb is
     
     signal s_r : integer;
     signal s_c : integer;
+    signal s_count : integer;
     
     signal s_vga_clk : std_logic;
     
@@ -131,12 +132,17 @@ begin
             
             for cnt in 1 to c_v_pulse_cycles loop
                 wait until falling_edge(s_vga_clk);
+                s_count <= cnt;
             end loop;
             for cnt in 1 to c_v_bp_cycles loop
                 wait until falling_edge(s_vga_clk);
+                s_count <= cnt;
             end loop;
             
             for r in 0 to c_v_pixels-1 loop
+            
+                --wait an extra cycle for data
+                wait until falling_edge(s_vga_clk);
             
                 s_r <= r;
                                 
@@ -158,9 +164,11 @@ begin
 
                 for cnt in 1 to c_h_pulse loop
                     wait until falling_edge(s_vga_clk);
+                    s_count <= cnt;
                 end loop;
                 for cnt in 1 to c_h_bp loop
                     wait until falling_edge(s_vga_clk);
+                    s_count <= cnt;
                 end loop;
                 
             end loop;

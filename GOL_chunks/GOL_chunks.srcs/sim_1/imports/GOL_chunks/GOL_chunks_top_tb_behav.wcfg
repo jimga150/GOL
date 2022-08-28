@@ -14,15 +14,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="3,332.823340 us"></ZoomEndTime>
-      <Cursor1Time time="1,232.721635 us"></Cursor1Time>
+      <ZoomStartTime time="18,448,360.006 ns"></ZoomStartTime>
+      <ZoomEndTime time="18,448,614.807 ns"></ZoomEndTime>
+      <Cursor1Time time="18,448,510.806 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="177"></NameColumnWidth>
+      <NameColumnWidth column_width="173"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="19" />
    <wvobject fp_name="/GOL_chunks_top_tb/i_clk_100mhz" type="logic">
       <obj_property name="ElementShortName">i_clk_100mhz</obj_property>
       <obj_property name="ObjectShortName">i_clk_100mhz</obj_property>
@@ -71,21 +71,13 @@
       <obj_property name="ElementShortName">s_c</obj_property>
       <obj_property name="ObjectShortName">s_c</obj_property>
    </wvobject>
+   <wvobject fp_name="/GOL_chunks_top_tb/s_count" type="other">
+      <obj_property name="ElementShortName">s_count</obj_property>
+      <obj_property name="ObjectShortName">s_count</obj_property>
+   </wvobject>
    <wvobject fp_name="group2265" type="group">
       <obj_property name="label">Top</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_clks_locked" type="logic">
-         <obj_property name="ElementShortName">s_clks_locked</obj_property>
-         <obj_property name="ObjectShortName">s_clks_locked</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_clk_logic_locked" type="logic">
-         <obj_property name="ElementShortName">s_clk_logic_locked</obj_property>
-         <obj_property name="ObjectShortName">s_clk_logic_locked</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_clk_vga_locked" type="logic">
-         <obj_property name="ElementShortName">s_clk_vga_locked</obj_property>
-         <obj_property name="ObjectShortName">s_clk_vga_locked</obj_property>
-      </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_clk_vga" type="logic">
          <obj_property name="ElementShortName">s_clk_vga</obj_property>
          <obj_property name="ObjectShortName">s_clk_vga</obj_property>
@@ -94,10 +86,6 @@
          <obj_property name="ElementShortName">s_clk_logic</obj_property>
          <obj_property name="ObjectShortName">s_clk_logic</obj_property>
       </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_rst_vga_nolock" type="logic">
-         <obj_property name="ElementShortName">s_rst_vga_nolock</obj_property>
-         <obj_property name="ObjectShortName">s_rst_vga_nolock</obj_property>
-      </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_rst_vga" type="logic">
          <obj_property name="ElementShortName">s_rst_vga</obj_property>
          <obj_property name="ObjectShortName">s_rst_vga</obj_property>
@@ -105,10 +93,6 @@
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_rst_vga_n" type="logic">
          <obj_property name="ElementShortName">s_rst_vga_n</obj_property>
          <obj_property name="ObjectShortName">s_rst_vga_n</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_rst_logic_nolock" type="logic">
-         <obj_property name="ElementShortName">s_rst_logic_nolock</obj_property>
-         <obj_property name="ObjectShortName">s_rst_logic_nolock</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_rst_logic" type="logic">
          <obj_property name="ElementShortName">s_rst_logic</obj_property>
@@ -135,12 +119,12 @@
          <obj_property name="ObjectShortName">s0_vsync</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_hsync_pline" type="array">
-         <obj_property name="ElementShortName">s_hsync_pline[10:1]</obj_property>
-         <obj_property name="ObjectShortName">s_hsync_pline[10:1]</obj_property>
+         <obj_property name="ElementShortName">s_hsync_pline[11:1]</obj_property>
+         <obj_property name="ObjectShortName">s_hsync_pline[11:1]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_vsync_pline" type="array">
-         <obj_property name="ElementShortName">s_vsync_pline[10:1]</obj_property>
-         <obj_property name="ObjectShortName">s_vsync_pline[10:1]</obj_property>
+         <obj_property name="ElementShortName">s_vsync_pline[11:1]</obj_property>
+         <obj_property name="ObjectShortName">s_vsync_pline[11:1]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/s_vsync_logic" type="logic">
          <obj_property name="ElementShortName">s_vsync_logic</obj_property>
@@ -323,44 +307,40 @@
          <obj_property name="ObjectShortName">o_stepper_busy</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_top_to_bottom_edges" type="array">
-         <obj_property name="ElementShortName">s_top_to_bottom_edges[0:0,0:0][1679:0]</obj_property>
-         <obj_property name="ObjectShortName">s_top_to_bottom_edges[0:0,0:0][1679:0]</obj_property>
+         <obj_property name="ElementShortName">s_top_to_bottom_edges[1:0,1:0][839:0]</obj_property>
+         <obj_property name="ObjectShortName">s_top_to_bottom_edges[1:0,1:0][839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_bottom_to_top_edges" type="array">
-         <obj_property name="ElementShortName">s_bottom_to_top_edges[0:0,0:0][1679:0]</obj_property>
-         <obj_property name="ObjectShortName">s_bottom_to_top_edges[0:0,0:0][1679:0]</obj_property>
+         <obj_property name="ElementShortName">s_bottom_to_top_edges[1:0,1:0][839:0]</obj_property>
+         <obj_property name="ObjectShortName">s_bottom_to_top_edges[1:0,1:0][839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_left_to_right_edges" type="array">
-         <obj_property name="ElementShortName">s_left_to_right_edges[0:0,0:0][1049:0]</obj_property>
-         <obj_property name="ObjectShortName">s_left_to_right_edges[0:0,0:0][1049:0]</obj_property>
+         <obj_property name="ElementShortName">s_left_to_right_edges[1:0,1:0][527:0]</obj_property>
+         <obj_property name="ObjectShortName">s_left_to_right_edges[1:0,1:0][527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_right_to_left_edges" type="array">
-         <obj_property name="ElementShortName">s_right_to_left_edges[0:0,0:0][1049:0]</obj_property>
-         <obj_property name="ObjectShortName">s_right_to_left_edges[0:0,0:0][1049:0]</obj_property>
+         <obj_property name="ElementShortName">s_right_to_left_edges[1:0,1:0][527:0]</obj_property>
+         <obj_property name="ObjectShortName">s_right_to_left_edges[1:0,1:0][527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_top_left_to_bottom_right_corners" type="array">
-         <obj_property name="ElementShortName">s_top_left_to_bottom_right_corners[0:0,0:0]</obj_property>
-         <obj_property name="ObjectShortName">s_top_left_to_bottom_right_corners[0:0,0:0]</obj_property>
+         <obj_property name="ElementShortName">s_top_left_to_bottom_right_corners[1:0,1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_top_left_to_bottom_right_corners[1:0,1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_top_right_to_bottom_left_corners" type="array">
-         <obj_property name="ElementShortName">s_top_right_to_bottom_left_corners[0:0,0:0]</obj_property>
-         <obj_property name="ObjectShortName">s_top_right_to_bottom_left_corners[0:0,0:0]</obj_property>
+         <obj_property name="ElementShortName">s_top_right_to_bottom_left_corners[1:0,1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_top_right_to_bottom_left_corners[1:0,1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_bottom_left_to_top_right_corners" type="array">
-         <obj_property name="ElementShortName">s_bottom_left_to_top_right_corners[0:0,0:0]</obj_property>
-         <obj_property name="ObjectShortName">s_bottom_left_to_top_right_corners[0:0,0:0]</obj_property>
+         <obj_property name="ElementShortName">s_bottom_left_to_top_right_corners[1:0,1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_bottom_left_to_top_right_corners[1:0,1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_bottom_right_to_top_left_corners" type="array">
-         <obj_property name="ElementShortName">s_bottom_right_to_top_left_corners[0:0,0:0]</obj_property>
-         <obj_property name="ObjectShortName">s_bottom_right_to_top_left_corners[0:0,0:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_chunks" type="array">
-         <obj_property name="ElementShortName">s_chunks[0:0,0:0][5:0,5:0]</obj_property>
-         <obj_property name="ObjectShortName">s_chunks[0:0,0:0][5:0,5:0]</obj_property>
+         <obj_property name="ElementShortName">s_bottom_right_to_top_left_corners[1:0,1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_bottom_right_to_top_left_corners[1:0,1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_stepper_busys" type="array">
-         <obj_property name="ElementShortName">s_stepper_busys[0:0,0:0]</obj_property>
-         <obj_property name="ObjectShortName">s_stepper_busys[0:0,0:0]</obj_property>
+         <obj_property name="ElementShortName">s_stepper_busys[1:0,1:0]</obj_property>
+         <obj_property name="ObjectShortName">s_stepper_busys[1:0,1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_col" type="array">
          <obj_property name="ElementShortName">s_col[10:0]</obj_property>
@@ -371,28 +351,20 @@
          <obj_property name="ObjectShortName">s_row[10:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_field_pixel_row_pline" type="array">
-         <obj_property name="ElementShortName">s_field_pixel_row_pline[10:1][10:0]</obj_property>
-         <obj_property name="ObjectShortName">s_field_pixel_row_pline[10:1][10:0]</obj_property>
+         <obj_property name="ElementShortName">s_field_pixel_row_pline[11:1][10:0]</obj_property>
+         <obj_property name="ObjectShortName">s_field_pixel_row_pline[11:1][10:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s_field_pixel_col_pline" type="array">
-         <obj_property name="ElementShortName">s_field_pixel_col_pline[10:1][10:0]</obj_property>
-         <obj_property name="ObjectShortName">s_field_pixel_col_pline[10:1][10:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s1_chunk_x" type="array">
-         <obj_property name="ElementShortName">s1_chunk_x[8:0]</obj_property>
-         <obj_property name="ObjectShortName">s1_chunk_x[8:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/s1_chunk_y" type="array">
-         <obj_property name="ElementShortName">s1_chunk_y[7:0]</obj_property>
-         <obj_property name="ObjectShortName">s1_chunk_y[7:0]</obj_property>
+         <obj_property name="ElementShortName">s_field_pixel_col_pline[11:1][10:0]</obj_property>
+         <obj_property name="ObjectShortName">s_field_pixel_col_pline[11:1][10:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/sA_block_row" type="array">
-         <obj_property name="ElementShortName">sA_block_row[0:0]</obj_property>
-         <obj_property name="ObjectShortName">sA_block_row[0:0]</obj_property>
+         <obj_property name="ElementShortName">sA_block_row[1:0]</obj_property>
+         <obj_property name="ObjectShortName">sA_block_row[1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/sA_block_col" type="array">
-         <obj_property name="ElementShortName">sA_block_col[0:0]</obj_property>
-         <obj_property name="ObjectShortName">sA_block_col[0:0]</obj_property>
+         <obj_property name="ElementShortName">sA_block_col[1:0]</obj_property>
+         <obj_property name="ObjectShortName">sA_block_col[1:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/sB_chunk" type="array">
          <obj_property name="ElementShortName">sB_chunk[5:0][5:0]</obj_property>
@@ -431,12 +403,12 @@
          <obj_property name="ObjectShortName">i_clk_read</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_chunk_x" type="array">
-         <obj_property name="ElementShortName">i_chunk_x[8:0]</obj_property>
-         <obj_property name="ObjectShortName">i_chunk_x[8:0]</obj_property>
+         <obj_property name="ElementShortName">i_chunk_x[7:0]</obj_property>
+         <obj_property name="ObjectShortName">i_chunk_x[7:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_chunk_y" type="array">
-         <obj_property name="ElementShortName">i_chunk_y[7:0]</obj_property>
-         <obj_property name="ObjectShortName">i_chunk_y[7:0]</obj_property>
+         <obj_property name="ElementShortName">i_chunk_y[6:0]</obj_property>
+         <obj_property name="ObjectShortName">i_chunk_y[6:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/o_chunk" type="array">
          <obj_property name="ElementShortName">o_chunk[5:0][5:0]</obj_property>
@@ -459,20 +431,20 @@
          <obj_property name="ObjectShortName">o_stepper_busy</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_top_edge" type="array">
-         <obj_property name="ElementShortName">i_top_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">i_top_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">i_top_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">i_top_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_bottom_edge" type="array">
-         <obj_property name="ElementShortName">i_bottom_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">i_bottom_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">i_bottom_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">i_bottom_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_right_edge" type="array">
-         <obj_property name="ElementShortName">i_right_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">i_right_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">i_right_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">i_right_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_left_edge" type="array">
-         <obj_property name="ElementShortName">i_left_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">i_left_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">i_left_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">i_left_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/i_top_left_bit" type="logic">
          <obj_property name="ElementShortName">i_top_left_bit</obj_property>
@@ -491,20 +463,20 @@
          <obj_property name="ObjectShortName">i_bottom_right_bit</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/o_top_edge" type="array">
-         <obj_property name="ElementShortName">o_top_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">o_top_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">o_top_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">o_top_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/o_bottom_edge" type="array">
-         <obj_property name="ElementShortName">o_bottom_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">o_bottom_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">o_bottom_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">o_bottom_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/o_right_edge" type="array">
-         <obj_property name="ElementShortName">o_right_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">o_right_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">o_right_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">o_right_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/o_left_edge" type="array">
-         <obj_property name="ElementShortName">o_left_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">o_left_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">o_left_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">o_left_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/o_top_left_bit" type="logic">
          <obj_property name="ElementShortName">o_top_left_bit</obj_property>
@@ -539,8 +511,8 @@
          <obj_property name="ObjectShortName">s_bram_wea</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/s_bram_addra" type="array">
-         <obj_property name="ElementShortName">s_bram_addra[16:0]</obj_property>
-         <obj_property name="ObjectShortName">s_bram_addra[16:0]</obj_property>
+         <obj_property name="ElementShortName">s_bram_addra[14:0]</obj_property>
+         <obj_property name="ObjectShortName">s_bram_addra[14:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/s_bram_wr_dataa" type="array">
          <obj_property name="ElementShortName">s_bram_wr_dataa[35:0]</obj_property>
@@ -559,8 +531,8 @@
          <obj_property name="ObjectShortName">s_bram_web</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/s_bram_addrb" type="array">
-         <obj_property name="ElementShortName">s_bram_addrb[16:0]</obj_property>
-         <obj_property name="ObjectShortName">s_bram_addrb[16:0]</obj_property>
+         <obj_property name="ElementShortName">s_bram_addrb[14:0]</obj_property>
+         <obj_property name="ObjectShortName">s_bram_addrb[14:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/s_bram_wr_datab" type="array">
          <obj_property name="ElementShortName">s_bram_wr_datab[35:0]</obj_property>
@@ -579,13 +551,13 @@
          <obj_property name="ObjectShortName">i_clk</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/chunk_reader_inst/i_chunk_x" type="array">
-         <obj_property name="ElementShortName">i_chunk_x[8:0]</obj_property>
-         <obj_property name="ObjectShortName">i_chunk_x[8:0]</obj_property>
+         <obj_property name="ElementShortName">i_chunk_x[7:0]</obj_property>
+         <obj_property name="ObjectShortName">i_chunk_x[7:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/chunk_reader_inst/i_chunk_y" type="array">
-         <obj_property name="ElementShortName">i_chunk_y[7:0]</obj_property>
-         <obj_property name="ObjectShortName">i_chunk_y[7:0]</obj_property>
+         <obj_property name="ElementShortName">i_chunk_y[6:0]</obj_property>
+         <obj_property name="ObjectShortName">i_chunk_y[6:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/chunk_reader_inst/i_curr_state_msb" type="logic">
@@ -601,8 +573,8 @@
          <obj_property name="ObjectShortName">o_bram_ena</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/chunk_reader_inst/o_bram_addr" type="array">
-         <obj_property name="ElementShortName">o_bram_addr[16:0]</obj_property>
-         <obj_property name="ObjectShortName">o_bram_addr[16:0]</obj_property>
+         <obj_property name="ElementShortName">o_bram_addr[14:0]</obj_property>
+         <obj_property name="ObjectShortName">o_bram_addr[14:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/chunk_reader_inst/i_bram_rd_data" type="array">
          <obj_property name="ElementShortName">i_bram_rd_data[35:0]</obj_property>
@@ -629,20 +601,20 @@
          <obj_property name="ObjectShortName">o_stepper_busy</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/i_top_edge" type="array">
-         <obj_property name="ElementShortName">i_top_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">i_top_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">i_top_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">i_top_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/i_bottom_edge" type="array">
-         <obj_property name="ElementShortName">i_bottom_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">i_bottom_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">i_bottom_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">i_bottom_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/i_right_edge" type="array">
-         <obj_property name="ElementShortName">i_right_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">i_right_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">i_right_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">i_right_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/i_left_edge" type="array">
-         <obj_property name="ElementShortName">i_left_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">i_left_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">i_left_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">i_left_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/i_top_left_bit" type="logic">
          <obj_property name="ElementShortName">i_top_left_bit</obj_property>
@@ -669,8 +641,8 @@
          <obj_property name="ObjectShortName">o_bram_we</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_bram_addr" type="array">
-         <obj_property name="ElementShortName">o_bram_addr[16:0]</obj_property>
-         <obj_property name="ObjectShortName">o_bram_addr[16:0]</obj_property>
+         <obj_property name="ElementShortName">o_bram_addr[14:0]</obj_property>
+         <obj_property name="ObjectShortName">o_bram_addr[14:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_bram_wr_data" type="array">
          <obj_property name="ElementShortName">o_bram_wr_data[35:0]</obj_property>
@@ -681,20 +653,20 @@
          <obj_property name="ObjectShortName">i_bram_rd_data[35:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_top_edge" type="array">
-         <obj_property name="ElementShortName">o_top_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">o_top_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">o_top_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">o_top_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_bottom_edge" type="array">
-         <obj_property name="ElementShortName">o_bottom_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">o_bottom_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">o_bottom_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">o_bottom_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_right_edge" type="array">
-         <obj_property name="ElementShortName">o_right_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">o_right_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">o_right_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">o_right_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_left_edge" type="array">
-         <obj_property name="ElementShortName">o_left_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">o_left_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">o_left_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">o_left_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/o_top_left_bit" type="logic">
          <obj_property name="ElementShortName">o_top_left_bit</obj_property>
@@ -797,20 +769,20 @@
          <obj_property name="ObjectShortName">s_we_bottom_right_bit_pline[5:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_block_top_edge" type="array">
-         <obj_property name="ElementShortName">s_block_top_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">s_block_top_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">s_block_top_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">s_block_top_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_block_bottom_edge" type="array">
-         <obj_property name="ElementShortName">s_block_bottom_edge[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">s_block_bottom_edge[1679:0]</obj_property>
+         <obj_property name="ElementShortName">s_block_bottom_edge[839:0]</obj_property>
+         <obj_property name="ObjectShortName">s_block_bottom_edge[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_block_right_edge" type="array">
-         <obj_property name="ElementShortName">s_block_right_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">s_block_right_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">s_block_right_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">s_block_right_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_block_left_edge" type="array">
-         <obj_property name="ElementShortName">s_block_left_edge[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">s_block_left_edge[1049:0]</obj_property>
+         <obj_property name="ElementShortName">s_block_left_edge[527:0]</obj_property>
+         <obj_property name="ObjectShortName">s_block_left_edge[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_block_top_left_bit" type="logic">
          <obj_property name="ElementShortName">s_block_top_left_bit</obj_property>
@@ -829,12 +801,12 @@
          <obj_property name="ObjectShortName">s_block_bottom_right_bit</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_current_chunk_x" type="array">
-         <obj_property name="ElementShortName">s_current_chunk_x[8:0]</obj_property>
-         <obj_property name="ObjectShortName">s_current_chunk_x[8:0]</obj_property>
+         <obj_property name="ElementShortName">s_current_chunk_x[7:0]</obj_property>
+         <obj_property name="ObjectShortName">s_current_chunk_x[7:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_current_chunk_y" type="array">
-         <obj_property name="ElementShortName">s_current_chunk_y[7:0]</obj_property>
-         <obj_property name="ObjectShortName">s_current_chunk_y[7:0]</obj_property>
+         <obj_property name="ElementShortName">s_current_chunk_y[6:0]</obj_property>
+         <obj_property name="ObjectShortName">s_current_chunk_y[6:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/s_current_chunk_x_int" type="other">
          <obj_property name="ElementShortName">s_current_chunk_x_int</obj_property>
@@ -865,20 +837,20 @@
          <obj_property name="ObjectShortName">s_last_write</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/c_block_top_edge_rst" type="array">
-         <obj_property name="ElementShortName">c_block_top_edge_rst[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">c_block_top_edge_rst[1679:0]</obj_property>
+         <obj_property name="ElementShortName">c_block_top_edge_rst[839:0]</obj_property>
+         <obj_property name="ObjectShortName">c_block_top_edge_rst[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/c_block_bottom_edge_rst" type="array">
-         <obj_property name="ElementShortName">c_block_bottom_edge_rst[1679:0]</obj_property>
-         <obj_property name="ObjectShortName">c_block_bottom_edge_rst[1679:0]</obj_property>
+         <obj_property name="ElementShortName">c_block_bottom_edge_rst[839:0]</obj_property>
+         <obj_property name="ObjectShortName">c_block_bottom_edge_rst[839:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/c_block_right_edge_rst" type="array">
-         <obj_property name="ElementShortName">c_block_right_edge_rst[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">c_block_right_edge_rst[1049:0]</obj_property>
+         <obj_property name="ElementShortName">c_block_right_edge_rst[527:0]</obj_property>
+         <obj_property name="ObjectShortName">c_block_right_edge_rst[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/c_block_left_edge_rst" type="array">
-         <obj_property name="ElementShortName">c_block_left_edge_rst[1049:0]</obj_property>
-         <obj_property name="ObjectShortName">c_block_left_edge_rst[1049:0]</obj_property>
+         <obj_property name="ElementShortName">c_block_left_edge_rst[527:0]</obj_property>
+         <obj_property name="ObjectShortName">c_block_left_edge_rst[527:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/GOL_chunks_top_tb/UUT/field_inst/\block_row_gen(0)\/\block_col_gen(0)\/block_inst/block_stepper_inst/c_block_top_left_bit_rst" type="logic">
          <obj_property name="ElementShortName">c_block_top_left_bit_rst</obj_property>
