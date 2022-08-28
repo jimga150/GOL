@@ -52,7 +52,7 @@ architecture Structural of GOL_chunks_top is
             clk_in1           : in     std_logic;
             -- Status and control signals
 --            reset             : in     std_logic;
-            locked            : out    std_logic;
+--            locked            : out    std_logic;
             -- Clock out ports
             clk_out_logic          : out    std_logic;
             clk_out_vga          : out    std_logic
@@ -64,12 +64,13 @@ architecture Structural of GOL_chunks_top is
 --    signal s_rst_sys : std_logic;
 --    signal s_rst_sys_pulse : std_logic;
 
-    signal s_clks_locked : std_logic;
+--    signal s_clks_locked : std_logic;
     
     signal s_clk_vga : std_logic;
-    signal s_clk_vga_locked : std_logic;
+--    signal s_clk_vga_locked : std_logic;
     
-    signal s_rst_vga_nolock, s_rst_vga, s_rst_vga_n : std_logic;
+--    signal s_rst_vga_nolock : std_logic;
+    signal s_rst_vga, s_rst_vga_n : std_logic;
     
     signal s_col, s_row : integer;
 --    attribute mark_debug of s_col: signal is "true";
@@ -90,9 +91,10 @@ architecture Structural of GOL_chunks_top is
     -----------------------
     
     signal s_clk_logic : std_logic;
-    signal s_clk_logic_locked : std_logic;
+--    signal s_clk_logic_locked : std_logic;
 
-    signal s_rst_logic_nolock, s_rst_logic, s_rst_logic_n : std_logic;
+--    signal s_rst_logic_nolock : std_logic;
+    signal s_rst_logic, s_rst_logic_n : std_logic;
     
     signal s_vsync_logic : std_logic;
     signal s_do_frame : std_logic;
@@ -121,7 +123,7 @@ begin
         clk_in1 => i_clk_100mhz,
         -- Status and control signals                
 --        reset => s_rst_sys_pulse,
-        locked => s_clks_locked,
+--        locked => s_clks_locked,
         -- Clock out ports  
         clk_out_logic => s_clk_logic,
         clk_out_vga => s_clk_vga
@@ -131,19 +133,22 @@ begin
     --VGA-clocked stuff below here
     ------------------------------------------------------------------
     
-    locked_vga_conditioner_inst: entity work.button_conditioner
-    port map(
-        i_clk => s_clk_vga,
-        i_btn => s_clks_locked,
-        o_stablized => s_clk_vga_locked
-    );
+--    locked_vga_conditioner_inst: entity work.button_conditioner
+--    port map(
+--        i_clk => s_clk_vga,
+--        i_btn => s_clks_locked,
+--        o_stablized => s_clk_vga_locked
+--    );
     
     rst_vga_conditioner_inst: entity work.button_conditioner
     port map(
         i_clk => s_clk_vga,
         i_btn => i_rst_btn,
-        o_debounced => s_rst_vga_nolock
+        o_debounced => s_rst_vga --s_rst_vga_nolock
     );
+    
+--    s_rst_vga <= s_rst_vga_nolock or (not s_clk_vga_locked);
+    s_rst_vga_n <= not s_rst_vga;
     
     vga_cont_int: entity work.vga_controller
     port map(
@@ -179,24 +184,21 @@ begin
     --Stepper logic-clocked stuff below here
     ------------------------------------------------------------------
     
-    locked_logic_conditioner_inst: entity work.button_conditioner
-    port map(
-        i_clk => s_clk_logic,
-        i_btn => s_clks_locked,
-        o_stablized => s_clk_logic_locked
-    );
-    
-    s_rst_vga <= s_rst_vga_nolock or (not s_clk_vga_locked);
-    s_rst_vga_n <= not s_rst_vga;
+--    locked_logic_conditioner_inst: entity work.button_conditioner
+--    port map(
+--        i_clk => s_clk_logic,
+--        i_btn => s_clks_locked,
+--        o_stablized => s_clk_logic_locked
+--    );
     
     rst_logic_conditioner_inst: entity work.button_conditioner
     port map(
         i_clk => s_clk_logic,
         i_btn => i_rst_btn,
-        o_debounced => s_rst_logic_nolock
+        o_debounced => s_rst_logic --s_rst_logic_nolock
     );
     
-    s_rst_logic <= s_rst_logic_nolock or (not s_clk_logic_locked);
+--    s_rst_logic <= s_rst_logic_nolock or (not s_clk_logic_locked);
     s_rst_logic_n <= not s_rst_logic;
     
     frame_hold_btn_cond: entity work.button_conditioner
