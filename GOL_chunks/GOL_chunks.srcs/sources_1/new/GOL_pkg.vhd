@@ -49,8 +49,8 @@ package GOL_pkg is
     constant c_chunk_height : integer := 6;
     
     --number of rows and columns, in blocks per field.
-    constant c_field_num_block_cols : integer := 1;
-    constant c_field_num_block_rows : integer := 1;
+    constant c_field_num_block_cols : integer := 2;
+    constant c_field_num_block_rows : integer := 2;
     
     --number of rows and columns, in chunks. Doesn't need to be powers of 2.
     constant c_block_num_chunk_cols : integer := integer(ceil((real(c_screen_width)/real(c_field_num_block_cols))/real(c_chunk_width)));
@@ -104,7 +104,7 @@ package GOL_pkg is
     constant c_bram_read_delay : integer := 4 + c_bram_output_mux_stages;
     
     constant c_chunk_getter_read_delay : integer := c_bram_read_delay + 2;
-    constant c_field_pix_read_delay : integer := c_chunk_getter_read_delay + 3;
+    constant c_field_pix_read_delay : integer := c_chunk_getter_read_delay + 4;
     
     constant c_block_stepper_cycles_per_chunk : integer := 11 + c_bram_read_delay;
     constant c_cycles_per_block : integer := c_block_stepper_cycles_per_chunk*c_chunks_per_block;

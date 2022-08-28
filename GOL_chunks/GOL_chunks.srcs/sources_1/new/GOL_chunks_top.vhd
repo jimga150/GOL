@@ -231,7 +231,7 @@ begin
     
     field_inst: entity work.GOL_field
     generic map(
-        g_init_cells => c_init_glidergun
+        g_init_cells => c_init_vline1680x1050
     )
     port map(
         i_clk_read => s_clk_vga,

@@ -64,6 +64,13 @@ package GOL_field_init is
         others => (others => c_empty_chunk)
     );
     
+    constant c_init_vline1680x1050 : t_field_chunk_arr := (
+        others => (
+            140 => ("000001", "000001", "000001", "000001", "000001", "000001"),
+            others => c_empty_chunk
+        )
+    );
+    
     constant c_init_hline_plussome : t_field_chunk_arr := (
         0 => (
             32 => ("000000", "000000", "100000", "010000", "011000", "000100"),
