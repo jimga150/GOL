@@ -11,8 +11,9 @@ set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk_
 #create_clock -name clk_sys -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}]; #not required when using clock wizard on this pin
 
 #set_clock_groups -asynchronous -group {clk_sys};
-set_clock_groups -asynchronous -group [get_clocks  "*vga*" ];
-set_clock_groups -asynchronous -group [get_clocks  "*logic*" ];
+set_clock_groups -asynchronous -group [get_clocks *vga*]
+set_clock_groups -asynchronous -group [get_clocks *logic*]
+create_waiver -type METHODOLOGY -id {TIMING-47} -desc "clock groups on MMCM outputs are okay if you do sync registers between the domains"
 
 ##Switches
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_frame_go_btn }]; #IO_L24N_T3_RS0_15 Sch=sw[0]
