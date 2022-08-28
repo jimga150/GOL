@@ -80,8 +80,8 @@ architecture Structural of GOL_chunks_top is
     signal s_hsync_pline, s_vsync_pline : std_logic_vector(c_field_pix_read_delay downto 1);
     signal s_disp_en_pline : std_logic_vector(c_field_pix_read_delay downto 1);
     
-    attribute mark_debug of s0_hsync: signal is "true";
-    attribute mark_debug of s0_vsync: signal is "true";
+--    attribute mark_debug of s0_hsync: signal is "true";
+--    attribute mark_debug of s0_vsync: signal is "true";
         
     signal s_pixel : std_logic;
     

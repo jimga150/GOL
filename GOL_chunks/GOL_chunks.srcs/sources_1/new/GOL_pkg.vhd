@@ -410,6 +410,7 @@ package body GOL_pkg is
         return v_ans;
     end function;
     
+    --NOT synthesizable, even in static elaboration, in Vivado.
     impure function field_chunk_arr_from_gmif(i_gmif_filename : in string) return t_field_chunk_arr is
         FILE RamFile : text open read_mode is i_gmif_filename;
         variable RamFileLine : line;

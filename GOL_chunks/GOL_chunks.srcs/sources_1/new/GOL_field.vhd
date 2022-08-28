@@ -129,8 +129,8 @@ architecture Structural of GOL_field is
     signal s_col : unsigned(c_field_num_cell_col_bits-1 downto 0);
     signal s_row : unsigned(c_field_num_cell_row_bits-1 downto 0);
     
-    attribute mark_debug of s_col: signal is "true";
-    attribute mark_debug of s_row: signal is "true";
+--    attribute mark_debug of s_col: signal is "true";
+--    attribute mark_debug of s_row: signal is "true";
     
     type t_row_pipeline is array(natural range<>) of unsigned(s_row'range);
     type t_col_pipeline is array(natural range<>) of unsigned(s_col'range);
