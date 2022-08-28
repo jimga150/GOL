@@ -15,6 +15,8 @@ set_clock_groups -asynchronous -group [get_clocks *vga*]
 set_clock_groups -asynchronous -group [get_clocks *logic*]
 create_waiver -type METHODOLOGY -id {TIMING-47} -desc "clock groups on MMCM outputs are okay if you do sync registers between the domains"
 
+create_waiver -type METHODOLOGY -id {SYNTH-9} -desc "small multipliers are OK"
+
 ##Switches
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_frame_go_btn }]; #IO_L24N_T3_RS0_15 Sch=sw[0]
 #set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { SW[1] }]; #IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]
