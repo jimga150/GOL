@@ -15,41 +15,21 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="2">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Chunk Columns</string>
+    <item row="1" column="4">
+     <widget class="QSpinBox" name="chunkColsSpinbox">
+      <property name="maximum">
+       <number>1000</number>
       </property>
      </widget>
     </item>
-    <item row="1" column="9">
+    <item row="2" column="8">
      <widget class="QPushButton" name="clearButton">
       <property name="text">
        <string>Clear</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="4">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Zoom</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="10">
-     <widget class="QGraphicsView" name="GOLgraphicsView"/>
-    </item>
-    <item row="1" column="7">
-     <widget class="QPushButton" name="saveButton">
-      <property name="text">
-       <string>Save</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="5">
+    <item row="1" column="6">
      <widget class="QDoubleSpinBox" name="doubleSpinBox">
       <property name="buttonSymbols">
        <enum>QAbstractSpinBox::PlusMinus</enum>
@@ -80,6 +60,27 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="3">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Chunk Columns</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="7">
+     <widget class="QPushButton" name="copyDeclButton">
+      <property name="text">
+       <string>Copy Declaration</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Pixel Columns</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="8">
      <widget class="QPushButton" name="loadButton">
       <property name="text">
@@ -87,33 +88,60 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
+    <item row="1" column="5">
+     <widget class="QLabel" name="label">
       <property name="text">
-       <string>Chunk Rows</string>
+       <string>Zoom</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="7">
+     <widget class="QPushButton" name="saveButton">
+      <property name="text">
+       <string>Save</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QSpinBox" name="pixColsSpinbox">
+      <property name="maximum">
+       <number>5000</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QSpinBox" name="pixRowsSpinbox">
+      <property name="maximum">
+       <number>5000</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
      <widget class="QSpinBox" name="chunkRowsSpinbox">
       <property name="maximum">
        <number>1000</number>
       </property>
      </widget>
     </item>
-    <item row="1" column="3">
-     <widget class="QSpinBox" name="chunkColsSpinbox">
-      <property name="maximum">
-       <number>1000</number>
+    <item row="1" column="1">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Chunk Rows</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="6">
-     <widget class="QPushButton" name="copyDeclButton">
+    <item row="2" column="1">
+     <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>Copy Declaration</string>
+       <string>Pixel Rows</string>
       </property>
      </widget>
+    </item>
+    <item row="0" column="1" colspan="8">
+     <widget class="QGraphicsView" name="GOLgraphicsView"/>
     </item>
    </layout>
   </widget>

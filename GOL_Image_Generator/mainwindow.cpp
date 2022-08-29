@@ -29,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->scene, &CustomScene::mouseReleased, this, &MainWindow::handleMouseRelease);
     
     this->on_doubleSpinBox_valueChanged(this->ui->doubleSpinBox->value());
+
+    this->on_chunkColsSpinbox_editingFinished();
+    this->on_chunkRowsSpinbox_editingFinished();
 }
 
 MainWindow::~MainWindow()
@@ -371,6 +374,8 @@ void MainWindow::on_chunkColsSpinbox_editingFinished()
     this->num_cell_cols = new_num_cell_cols;
     this->num_chunk_cols = new_num_chunk_cols;
 
+    this->ui->pixColsSpinbox->setValue(new_num_cell_cols);
+
     this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
 }
 
@@ -391,11 +396,31 @@ void MainWindow::on_chunkRowsSpinbox_editingFinished()
     this->num_cell_rows = new_num_cell_rows;
     this->num_chunk_rows = new_num_chunk_rows;
 
+    this->ui->pixRowsSpinbox->setValue(new_num_cell_rows);
+
     this->pm_item->setPixmap(QPixmap::fromImage(this->GOL_image));
 }
 
 void MainWindow::on_copyDeclButton_clicked()
 {
     this->copyConstDecl();
+}
+
+
+void MainWindow::on_pixColsSpinbox_editingFinished()
+{
+    float pixels = this->ui->pixColsSpinbox->value();
+    int chunks = ceil(pixels/CHUNK_WIDTH);
+    this->ui->chunkColsSpinbox->setValue(chunks);
+    this->on_chunkColsSpinbox_editingFinished();
+}
+
+
+void MainWindow::on_pixRowsSpinbox_editingFinished()
+{
+    float pixels = this->ui->pixRowsSpinbox->value();
+    int chunks = ceil(pixels/CHUNK_HEIGHT);
+    this->ui->chunkRowsSpinbox->setValue(chunks);
+    this->on_chunkRowsSpinbox_editingFinished();
 }
 

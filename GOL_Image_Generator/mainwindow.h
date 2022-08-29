@@ -130,5 +130,7 @@ private slots:
     void on_chunkColsSpinbox_editingFinished();
     void on_chunkRowsSpinbox_editingFinished();
     void on_copyDeclButton_clicked();
+    void on_pixColsSpinbox_editingFinished();
+    void on_pixRowsSpinbox_editingFinished();
 };
 #endif // MAINWINDOW_H
