@@ -10,6 +10,11 @@ set_property CFGBVS VCCO [current_design]
 set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk_100mhz }]; #IO_L12P_T1_MRCC_35 Sch=clk100mhz
 #create_clock -name clk_sys -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}]; #not required when using clock wizard on this pin
 
+set vga_clk_f_mhz 147.11864
+set vga_clk_period_ns [expr 1000/$vga_clk_f_mhz]
+create_clock -name clk_vga -period $vga_clk_period_ns
+#create_generated_clock -name clk_vga [get_pins top_inst/clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT0]
+
 #set_clock_groups -asynchronous -group {clk_sys};
 set_clock_groups -asynchronous -group [get_clocks *vga*]
 set_clock_groups -asynchronous -group [get_clocks *logic*]
@@ -19,6 +24,7 @@ create_waiver -type METHODOLOGY -id {SYNTH-9} -desc "small multipliers are OK"
 
 ##Switches
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_frame_go_btn }]; #IO_L24N_T3_RS0_15 Sch=sw[0]
+set_false_path -from [get_ports { i_frame_go_btn }]
 #set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { SW[1] }]; #IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]
 #set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { SW[2] }]; #IO_L6N_T0_D08_VREF_14 Sch=sw[2]
 #set_property -dict { PACKAGE_PIN R15   IOSTANDARD LVCMOS33 } [get_ports { SW[3] }]; #IO_L13N_T2_MRCC_14 Sch=sw[3]
@@ -84,10 +90,12 @@ set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_fram
 
 ##Buttons
 set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports { i_frame_step_btn }]; #IO_L9P_T1_DQS_14 Sch=btnc
+set_false_path -from [get_ports { i_frame_step_btn }]
 #set_property -dict { PACKAGE_PIN M18   IOSTANDARD LVCMOS33 } [get_ports { BTNU }]; #IO_L4N_T0_D05_14 Sch=btnu
 #set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports { BTNL }]; #IO_L12P_T1_MRCC_14 Sch=btnl
 #set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports { BTNR }]; #IO_L10N_T1_D15_14 Sch=btnr
 set_property -dict { PACKAGE_PIN P18   IOSTANDARD LVCMOS33 } [get_ports { i_rst_btn }]; #IO_L9N_T1_DQS_D13_14 Sch=btnd
+set_false_path -from [get_ports { i_rst_btn }]
 
 
 ##Pmod Headers
@@ -156,6 +164,14 @@ set_property -dict { PACKAGE_PIN D7    IOSTANDARD LVCMOS33 } [get_ports { o_pixe
 set_property -dict { PACKAGE_PIN D8    IOSTANDARD LVCMOS33 } [get_ports { o_pixel_slv[11]}]; #IO_L4P_T0_35 Sch=vga_b[3]
 set_property -dict { PACKAGE_PIN B11   IOSTANDARD LVCMOS33 } [get_ports { o_h_sync }]; #IO_L4P_T0_15 Sch=vga_hs
 set_property -dict { PACKAGE_PIN B12   IOSTANDARD LVCMOS33 } [get_ports { o_v_sync }]; #IO_L3N_T0_DQS_AD1N_15 Sch=vga_vs
+
+set setup_slack 6.054
+set_output_delay -clock clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_pixel_slv[*] }];
+set_output_delay -clock clk_vga -min [expr 0] [get_ports { o_pixel_slv[*] }];
+set_output_delay -clock clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_h_sync }];
+set_output_delay -clock clk_vga -min [expr 0] [get_ports { o_h_sync }];
+set_output_delay -clock clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_v_sync }];
+set_output_delay -clock clk_vga -min [expr 0] [get_ports { o_v_sync }];
 
 ##Micro SD Connector
 #set_property -dict { PACKAGE_PIN E2    IOSTANDARD LVCMOS33 } [get_ports { SD_RESET }]; #IO_L14P_T2_SRCC_35 Sch=sd_reset
