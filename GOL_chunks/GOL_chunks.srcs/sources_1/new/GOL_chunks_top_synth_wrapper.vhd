@@ -35,6 +35,7 @@ entity GOL_chunks_top_synth_wrapper is
     port(
         i_clk_100mhz, i_rst_btn : in std_logic;
         i_frame_go_btn, i_frame_step_btn : in std_logic;
+--        o_vga_clk : out std_logic;
         o_h_sync, o_v_sync : out std_logic;
         o_pixel_slv : out std_logic_vector(11 downto 0)
     );
