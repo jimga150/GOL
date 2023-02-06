@@ -174,11 +174,17 @@ begin
                 s_disp_en_pline <= (others => '0');
             end if;
             
+            o_h_sync <= s_hsync_pline(s_hsync_pline'high);
+            o_v_sync <= s_vsync_pline(s_vsync_pline'high);
+            
+            gen_pixel: for i in o_pixel_slv'range loop
+                o_pixel_slv(i) <= s_pixel and s_disp_en_pline(s_disp_en_pline'high);
+            end loop;
+            
         end if;
     end process;
     
-    o_h_sync <= s_hsync_pline(s_hsync_pline'high);
-    o_v_sync <= s_vsync_pline(s_vsync_pline'high);
+    
     
     ------------------------------------------------------------------
     --Stepper logic-clocked stuff below here
@@ -245,9 +251,5 @@ begin
         i_do_frame => s_do_frame,
         o_stepper_busy => open
     );
-    
-    gen_pixel: for i in o_pixel_slv'range generate
-        o_pixel_slv(i) <= s_pixel and s_disp_en_pline(s_disp_en_pline'high);
-    end generate gen_pixel;
 
 end Structural;

@@ -12,15 +12,22 @@ set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk_
 
 set vga_clk_f_mhz 147.11864
 set vga_clk_period_ns [expr 1000/$vga_clk_f_mhz]
-create_clock -name clk_vga -period $vga_clk_period_ns
-#create_generated_clock -name clk_vga [get_pins top_inst/clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT0]
+#create_clock -name clk_vga -period $vga_clk_period_ns
+set clk_vga [get_clocks -of_objects [get_pins top_inst/clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT0]]
+
+set clk_logic [get_clocks -of_objects [get_pins top_inst/clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT1]]
 
 #set_clock_groups -asynchronous -group {clk_sys};
-set_clock_groups -asynchronous -group [get_clocks *vga*]
-set_clock_groups -asynchronous -group [get_clocks *logic*]
+set_clock_groups -asynchronous -group $clk_vga
+set_clock_groups -asynchronous -group $clk_logic
 create_waiver -type METHODOLOGY -id {TIMING-47} -desc "clock groups on MMCM outputs are okay if you do sync registers between the domains"
 
 create_waiver -type METHODOLOGY -id {SYNTH-9} -desc "small multipliers are OK"
+create_waiver -type METHODOLOGY -id {SYNTH-11} -desc "Yes, i know, the DSP elements are not fully pipelined, thank you"
+create_waiver -type METHODOLOGY -id {SYNTH-12} -desc "Yes, i know, the DSP elements are not fully pipelined, thank you"
+create_waiver -type METHODOLOGY -id {SYNTH-13} -desc "combinational multipliers are OK"
+
+create_waiver -type DRC -id {DPIP-1} -desc "non-pipelined DSP is ok" 
 
 ##Switches
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { i_frame_go_btn }]; #IO_L24N_T3_RS0_15 Sch=sw[0]
@@ -165,13 +172,21 @@ set_property -dict { PACKAGE_PIN D8    IOSTANDARD LVCMOS33 } [get_ports { o_pixe
 set_property -dict { PACKAGE_PIN B11   IOSTANDARD LVCMOS33 } [get_ports { o_h_sync }]; #IO_L4P_T0_15 Sch=vga_hs
 set_property -dict { PACKAGE_PIN B12   IOSTANDARD LVCMOS33 } [get_ports { o_v_sync }]; #IO_L3N_T0_DQS_AD1N_15 Sch=vga_vs
 
-set setup_slack 6.054
-set_output_delay -clock clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_pixel_slv[*] }];
-set_output_delay -clock clk_vga -min [expr 0] [get_ports { o_pixel_slv[*] }];
-set_output_delay -clock clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_h_sync }];
-set_output_delay -clock clk_vga -min [expr 0] [get_ports { o_h_sync }];
-set_output_delay -clock clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_v_sync }];
-set_output_delay -clock clk_vga -min [expr 0] [get_ports { o_v_sync }];
+set_property IOB TRUE [get_ports { o_pixel_slv[*] }];
+set_property IOB TRUE [get_ports { o_h_sync }];
+set_property IOB TRUE [get_ports { o_v_sync }];
+
+set_false_path -to [get_ports { o_pixel_slv[*] }];
+set_false_path -to [get_ports { o_h_sync }];
+set_false_path -to [get_ports { o_v_sync }];
+
+#set setup_slack 10.3
+#set_output_delay -clock $clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_pixel_slv[*] }];
+#set_output_delay -clock $clk_vga -min [expr 0] [get_ports { o_pixel_slv[*] }];
+#set_output_delay -clock $clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_h_sync }];
+#set_output_delay -clock $clk_vga -min [expr 0] [get_ports { o_h_sync }];
+#set_output_delay -clock $clk_vga -max [expr $vga_clk_period_ns - $setup_slack] [get_ports { o_v_sync }];
+#set_output_delay -clock $clk_vga -min [expr 0] [get_ports { o_v_sync }];
 
 ##Micro SD Connector
 #set_property -dict { PACKAGE_PIN E2    IOSTANDARD LVCMOS33 } [get_ports { SD_RESET }]; #IO_L14P_T2_SRCC_35 Sch=sd_reset
