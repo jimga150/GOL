@@ -62,12 +62,15 @@ end GOL_block;
 
 architecture Structural of GOL_block is
 
+    attribute ASYNC_REG : boolean;
+
     --sync stages for current state MSB 
     --(this means that chunks cannot be accurately read 
     --immediately after i_do_frame is asserted, since this bit 
     --will not have reached the reader until after this many cycles on the read clock)
     signal s0_current_state_msb : std_logic;
     signal s_current_state_msb_pline : std_logic_vector(2 downto 1);
+    attribute ASYNC_REG of s_current_state_msb_pline : signal is TRUE;
     
     signal s_bram_enaa, s_bram_wea : std_logic;
     signal s_bram_addra : std_logic_vector(c_bram_addr_bits-1 downto 0);
