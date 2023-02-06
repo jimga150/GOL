@@ -47,6 +47,7 @@
 **/work/*.c
 **/ieee/*.c
 **/sim/*.c
+**/*.sim/**/*.mif
 **/sysc/*.c
 **/work/*.cpp
 **/ieee/*.cpp
