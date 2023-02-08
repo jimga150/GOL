@@ -59,20 +59,20 @@
     <Option Name="UseIPStaticLibs" Val="0"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="nexys-a7-100t"/>
-    <Option Name="WTXSimLaunchSim" Val="350"/>
+    <Option Name="WTXSimLaunchSim" Val="358"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="28"/>
-    <Option Name="WTModelSimExportSim" Val="28"/>
-    <Option Name="WTQuestaExportSim" Val="28"/>
+    <Option Name="WTXSimExportSim" Val="29"/>
+    <Option Name="WTModelSimExportSim" Val="29"/>
+    <Option Name="WTQuestaExportSim" Val="29"/>
     <Option Name="WTIesExportSim" Val="23"/>
-    <Option Name="WTVcsExportSim" Val="28"/>
-    <Option Name="WTRivieraExportSim" Val="28"/>
-    <Option Name="WTActivehdlExportSim" Val="28"/>
+    <Option Name="WTVcsExportSim" Val="29"/>
+    <Option Name="WTRivieraExportSim" Val="29"/>
+    <Option Name="WTActivehdlExportSim" Val="29"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -260,7 +260,6 @@
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/GOL.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
@@ -282,11 +281,11 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sim_1/imports/Jim/bram_dp_custom_tb.vhd">
+      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_field_tb.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../bram_dp_custom_tb.vhd"/>
-          <Attr Name="ImportTime" Val="1661294692"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_field_tb.vhd"/>
+          <Attr Name="ImportTime" Val="1659813308"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -300,23 +299,41 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_field_tb.vhd">
+      <File Path="$PSRCDIR/sim_1/new/GOL_block_stepper_tb.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_field_tb.vhd"/>
-          <Attr Name="ImportTime" Val="1659813308"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_chunk_logic_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_chunk_logic_tb.vhd"/>
+          <Attr Name="ImportTime" Val="1659535640"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_cell_logic_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_cell_logic_tb.vhd"/>
+          <Attr Name="ImportTime" Val="1659494350"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/imports/Jim/bram_dp_custom_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../bram_dp_custom_tb.vhd"/>
+          <Attr Name="ImportTime" Val="1661294692"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sim_1/new/chunk_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/GOL_block_stepper_tb.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -333,15 +350,6 @@
       <File Path="$PSRCDIR/sim_1/new/bram_dp_36k_tb.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_cell_logic_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_cell_logic_tb.vhd"/>
-          <Attr Name="ImportTime" Val="1659494350"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -369,15 +377,6 @@
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../Bitmap-VHDL-Package/sim/bmp_source_sink_TB.vhd"/>
           <Attr Name="ImportTime" Val="1659715241"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/imports/Jim/GOL_chunk_logic_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../GOL_chunk_logic_tb.vhd"/>
-          <Attr Name="ImportTime" Val="1659535640"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -564,9 +563,9 @@
         <Step Id="synth_design">
           <Option Id="ResourceSharing">2</Option>
           <Option Id="KeepEquivalentRegisters">1</Option>
-          <Option Id="FsmExtraction">1</Option>
           <Option Id="Directive">7</Option>
           <Option Id="NoCombineLuts">1</Option>
+          <Option Id="FsmExtraction">1</Option>
           <Option Id="ShregMinSize">5</Option>
         </Step>
       </Strategy>
