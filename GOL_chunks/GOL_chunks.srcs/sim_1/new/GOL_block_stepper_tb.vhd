@@ -39,7 +39,7 @@ architecture Behavioral of GOL_block_stepper_tb is
 
     --General inputs
     signal i_do_frame : STD_LOGIC := '0';
-    signal i_bram_rd_data : std_logic_vector(35 downto 0) := (others => '0');
+    signal i_bram_rd_data : std_logic_vector(c_bram_width-1 downto 0) := (others => '0');
     
     --Intermediate signals
     signal s_top_to_bottom_edge : STD_LOGIC_VECTOR(c_block_num_cell_cols-1 downto 0) := ( others => '0');
@@ -55,8 +55,8 @@ architecture Behavioral of GOL_block_stepper_tb is
     signal o_stepper_busy : std_logic;
     signal o_bram_ena : std_logic;
     signal o_bram_we : std_logic;
-    signal o_bram_addr : std_logic_vector(9 downto 0);
-    signal o_bram_wr_data : std_logic_vector(35 downto 0);
+    signal o_bram_addr : std_logic_vector(c_bram_addr_bits-1 downto 0);
+    signal o_bram_wr_data : std_logic_vector(c_bram_width-1 downto 0);
     signal o_current_state_msb : std_logic;
 
     --Clock Periods
