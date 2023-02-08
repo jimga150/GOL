@@ -28,6 +28,8 @@ use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 use std.textio.all;
 
+use work.type_pkg.all;
+
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
@@ -36,6 +38,21 @@ use std.textio.all;
 package GOL_pkg is
 
     constant c_project_path : string := "C:\Users\Jim\Desktop\Code\VHDL\GOL\GOL_chunks";
+    
+    type t_GOL_rules is record
+        e_born : t_bool_arr(8 downto 0);
+        e_stay : t_bool_arr(8 downto 0);
+    end record t_GOL_rules;
+    
+    constant c_GOL_default : t_GOL_rules := (
+        e_born => (3 => true, others => false),
+        e_stay => (2 => true, 3 => true, others => false)
+    );
+    
+    constant c_GOL_maze : t_GOL_rules := (
+        e_born => (3 => true, others => false),
+        e_stay => (1 => true, 2 => true, 3 => true, 4 => true, 5 => true, others => false)
+    );
     
     --cell count will be greater than or equal to the screen size
     constant c_screen_width : integer := 1680;

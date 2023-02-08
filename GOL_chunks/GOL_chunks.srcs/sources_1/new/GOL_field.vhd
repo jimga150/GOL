@@ -35,7 +35,8 @@ use work.GOL_pkg.all;
 
 entity GOL_field is
     generic(
-        g_init_cells : t_field_chunk_arr := c_empty_field
+        g_init_cells : t_field_chunk_arr := c_empty_field;
+        g_rules : t_GOL_rules := c_GOL_default
     );
     port(
         i_clk_read : in std_logic;
@@ -180,7 +181,8 @@ begin
             --5 cycles delay between (x, y) update and o_chunk
             block_inst: entity work.GOL_block
                 generic map(
-                    g_init_cells => c_block_init_cells
+                    g_init_cells => c_block_init_cells,
+                    g_rules => g_rules
                 )
                 port map(
                     i_clk_read => i_clk_read,

@@ -31,7 +31,13 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+use work.type_pkg.all;
+use work.GOL_pkg.all;
+
 entity GOL_cell_logic is
+    generic(
+        g_rules : t_GOL_rules := c_GOL_default
+    );
     port(
         i_top_left, i_top_center, i_top_right : in std_logic;
         i_middle_left, i_center, i_middle_right : in std_logic;
@@ -41,41 +47,65 @@ entity GOL_cell_logic is
 end GOL_cell_logic;
 
 --Uses 6 LUTs on Artix A7 100T
-architecture Summation of GOL_cell_logic is
-    
-    signal s_top_sum, s_middle_sum, s_bottom_sum : unsigned(1 downto 0);
-    signal s_bit_sum : unsigned(3 downto 0);
-
-begin
-
-    s_top_sum <= unsigned'('0' & i_top_left) + unsigned'('0' & i_top_center) + unsigned'('0' & i_top_right);
-    s_middle_sum <= unsigned'('0' & i_middle_left) + unsigned'('0' & i_center) + unsigned'('0' & i_middle_right);
-    s_bottom_sum <= unsigned'('0' & i_bottom_left) + unsigned'('0' & i_bottom_center) + unsigned'('0' & i_bottom_right);
-    
-    s_bit_sum <= ("00" & s_top_sum) + s_middle_sum + s_bottom_sum;
-
-    o_cell <= '1' when to_integer(s_bit_sum) = 3 or (to_integer(s_bit_sum) = 4 and i_center = '1') else '0';
-
-end Summation;
-
---Uses 5 LUTs on Artix A7 100T
---Paradoxically, this results in MORE LUT usage in the overall design, probably thanks to less LUT combining in chunks.
---architecture NeighborSummation of GOL_cell_logic is
+--architecture Summation of GOL_cell_logic is
     
 --    signal s_top_sum, s_middle_sum, s_bottom_sum : unsigned(1 downto 0);
---    signal s_num_neighbors : unsigned(3 downto 0);
+--    signal s_bit_sum : unsigned(3 downto 0);
 
 --begin
 
 --    s_top_sum <= unsigned'('0' & i_top_left) + unsigned'('0' & i_top_center) + unsigned'('0' & i_top_right);
---    s_middle_sum <= unsigned'('0' & i_middle_left) + unsigned'('0' & i_middle_right);
+--    s_middle_sum <= unsigned'('0' & i_middle_left) + unsigned'('0' & i_center) + unsigned'('0' & i_middle_right);
 --    s_bottom_sum <= unsigned'('0' & i_bottom_left) + unsigned'('0' & i_bottom_center) + unsigned'('0' & i_bottom_right);
     
---    s_num_neighbors <= ("00" & s_top_sum) + s_middle_sum + s_bottom_sum;
+--    s_bit_sum <= ("00" & s_top_sum) + s_middle_sum + s_bottom_sum;
+
+--    o_cell <= '1' when to_integer(s_bit_sum) = 3 or (to_integer(s_bit_sum) = 4 and i_center = '1') else '0';
+
+--end Summation;
+
+--Uses 6 LUTs on Artix A7 100T (default rules)
+architecture NeighborSummation of GOL_cell_logic is
+    
+    signal s_top_sum, s_middle_sum, s_bottom_sum : unsigned(1 downto 0);
+    signal s_num_neighbors : unsigned(3 downto 0);
+
+begin
+
+    s_top_sum <= unsigned'('0' & i_top_left) + unsigned'('0' & i_top_center) + unsigned'('0' & i_top_right);
+    s_middle_sum <= unsigned'('0' & i_middle_left) + unsigned'('0' & i_middle_right);
+    s_bottom_sum <= unsigned'('0' & i_bottom_left) + unsigned'('0' & i_bottom_center) + unsigned'('0' & i_bottom_right);
+    
+    s_num_neighbors <= ("00" & s_top_sum) + s_middle_sum + s_bottom_sum;
 
 --    o_cell <= '1' when to_integer(s_num_neighbors) = 3 or (to_integer(s_num_neighbors) = 2 and i_center = '1') else '0';
+    process(s_num_neighbors, i_center) is
+        variable v_cell : std_logic;
+        variable v_sum_neighbors_int : integer;
+    begin
+        
+        v_cell := '0';
+        v_sum_neighbors_int := to_integer(s_num_neighbors);
+    
+        if (i_center = '1') then
+            for i in g_rules.e_stay'range loop
+                if (g_rules.e_stay(i)) then
+                    v_cell := v_cell or bool_to_std_logic(v_sum_neighbors_int = i);
+                end if;
+            end loop;
+        end if;
+        
+        for i in g_rules.e_born'range loop
+            if (g_rules.e_born(i)) then
+                v_cell := v_cell or bool_to_std_logic(v_sum_neighbors_int = i);
+            end if;
+        end loop;
+        
+        o_cell <= v_cell;
+    
+    end process;
 
---end NeighborSummation;
+end NeighborSummation;
 
 --Uses 7 LUTs on Artix A7 100T
 --Generated with excel. I did not type this all out.

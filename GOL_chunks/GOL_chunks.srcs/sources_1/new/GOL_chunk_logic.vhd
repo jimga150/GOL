@@ -33,6 +33,9 @@ use work.GOL_pkg.all;
 --use UNISIM.VComponents.all;
 
 entity GOL_chunk_logic is
+    generic(
+        g_rules : t_GOL_rules := c_GOL_default
+    );
     Port (
         i_chunk : in t_chunk_type;
         i_top_row, i_bottom_row : in std_logic_vector(c_chunk_width-1 downto 0);
@@ -136,6 +139,9 @@ begin
             
         
             gol_cell_logic_inst: entity work.GOL_cell_logic
+                generic map(
+                    g_rules => g_rules
+                )
                 port map(
                     i_top_left => s_top_left,
                     i_top_center => s_top_center,

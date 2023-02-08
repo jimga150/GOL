@@ -35,7 +35,8 @@ use work.GOL_pkg.all;
 
 entity GOL_block_stepper is
     generic(
-        g_init_cells : t_block_chunk_arr := c_empty_block
+        g_init_cells : t_block_chunk_arr := c_empty_block;
+        g_rules : t_GOL_rules := c_GOL_default
     );
     Port (
         i_clk, i_rst, i_do_frame : in std_logic;
@@ -157,6 +158,9 @@ begin
     s_current_chunk_y_int <= to_integer(s_current_chunk_y);
     
     chunk_logic_inst: entity work.GOL_chunk_logic
+    generic map(
+        g_rules => g_rules
+    )
     port map(
         i_chunk => s_cache_center_chunk,
         i_top_row => s_cache_top_edge, 
