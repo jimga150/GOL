@@ -22,7 +22,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+
 use work.GOL_pkg.all;
+use work.GOL_field_init.all;
 
 entity GOL_chunk_getter_tb is
 end GOL_chunk_getter_tb;
@@ -36,13 +38,13 @@ architecture Behavioral of GOL_chunk_getter_tb is
     signal i_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
     signal i_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0) := (others => '0');
     signal i_curr_state_msb : std_logic := '0';
-    signal i_bram_rd_data : std_logic_vector(35 downto 0);
+    signal i_bram_rd_data : std_logic_vector(c_bram_width-1 downto 0);
 
     --Outputs
     signal o_chunk : t_chunk_type;
     signal o_bram_clk : std_logic;
     signal o_bram_ena : std_logic;
-    signal o_bram_addr : std_logic_vector(9 downto 0);
+    signal o_bram_addr : std_logic_vector(c_bram_addr_bits-1 downto 0);
 
     --Clock Periods
     constant i_clk_period : time := 10 ns;
@@ -61,21 +63,40 @@ begin
         i_bram_rd_data => i_bram_rd_data
     );
     
-    bram_inst: entity work.bram_dp_36k
-	port map(
-		i_clka => i_clk,
-		i_ena => o_bram_ena,
-		i_wea => '0',
-		i_addra => o_bram_addr,
-		i_dina => (others => '0'),
-		o_douta => i_bram_rd_data,
-		i_clkb => '0',
-		i_enb => '0',
-		i_web => '0',
-		i_addrb => (others => '0'),
-		i_dinb => (others => '0'),
-		o_doutb => open
-	);
+--    bram_inst: entity work.bram_dp_36k
+--	port map(
+--		i_clka => i_clk,
+--		i_ena => o_bram_ena,
+--		i_wea => '0',
+--		i_addra => o_bram_addr,
+--		i_dina => (others => '0'),
+--		o_douta => i_bram_rd_data,
+--		i_clkb => '0',
+--		i_enb => '0',
+--		i_web => '0',
+--		i_addrb => (others => '0'),
+--		i_dinb => (others => '0'),
+--		o_doutb => open
+--	);
+	
+	bram_inst: entity work.bram_dp_custom
+    generic map(
+        g_init_cells => block_chunk_arr_from_field(c_init_vline1680x1050_diamond, 0, 0)
+    )
+    port map(
+        i_clka => i_clk,
+        i_ena => o_bram_ena,
+        i_wea => '0',
+        i_addra => o_bram_addr,
+        i_dina => (others => '0'),
+        o_douta => i_bram_rd_data,
+        i_clkb => '0',
+        i_enb => '0',
+        i_web => '0',
+        i_addrb => (others => '0'),
+        i_dinb => (others => '0'),
+        o_doutb => open
+    );
 
     --Clock Drivers
     i_clk <= not i_clk after i_clk_period/2;
