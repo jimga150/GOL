@@ -117,7 +117,7 @@ begin
 --        o_pos_pulse => s_rst_sys_pulse
 --    );
 
-    clk_mmcm_inst : clk_wiz_1
+    clk_mmcm_1_inst : clk_wiz_1
     port map (
         -- Clock in ports
         clk_in1 => i_clk_100mhz,

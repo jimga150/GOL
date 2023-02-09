@@ -72,6 +72,7 @@ package GOL_pkg is
     --number of rows and columns, in chunks. Doesn't need to be powers of 2.
     constant c_block_num_chunk_cols : integer := integer(ceil((real(c_screen_width)/real(c_field_num_block_cols))/real(c_chunk_width)));
     constant c_block_num_chunk_rows : integer := integer(ceil((real(c_screen_height)/real(c_field_num_block_rows))/real(c_chunk_height)));
+    constant c_chunks_per_block : integer := c_block_num_chunk_rows*c_block_num_chunk_cols;
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_chunk_num_cell_col_bits : integer := integer(floor(log2(real(c_chunk_width))+1.0));
@@ -85,8 +86,7 @@ package GOL_pkg is
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_block_num_chunk_col_bits : integer := integer(floor(log2(real(c_block_num_chunk_cols))+1.0));
     constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
-    
-    
+    constant c_chunks_per_block_bits : integer := integer(floor(log2(real(c_chunks_per_block))+1.0));
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_field_num_block_col_bits : integer := integer(floor(log2(real(c_field_num_block_cols))+1.0));
@@ -111,8 +111,6 @@ package GOL_pkg is
     constant c_field_num_cell_col_bits : integer := integer(floor(log2(real(c_field_num_cell_cols))+1.0));
     constant c_field_num_cell_row_bits : integer := integer(floor(log2(real(c_field_num_cell_rows))+1.0));
     
-    constant c_chunks_per_block : integer := c_block_num_chunk_rows*c_block_num_chunk_cols;
-    
     --Block RAM stuff
     constant c_bram_width : integer := c_chunk_width*c_chunk_height;
     constant c_bram_depth : integer := c_chunks_per_block*2; --account for data doubling
@@ -120,8 +118,13 @@ package GOL_pkg is
     constant c_bram_output_mux_stages : integer := 1;
     constant c_bram_read_delay : integer := 4 + c_bram_output_mux_stages;
     
-    constant c_chunk_getter_read_delay : integer := c_bram_read_delay + 2;
-    constant c_field_pix_read_delay : integer := c_chunk_getter_read_delay + 4;
+    constant c_chunk_getter_addr_decode_delay : integer := 2;
+    constant c_chunk_getter_data_decode_delay : integer := 1;
+    constant c_chunk_getter_read_delay : integer := c_chunk_getter_addr_decode_delay + c_bram_read_delay + c_chunk_getter_data_decode_delay;
+    
+    constant c_pre_chunk_getter_field_delay : integer := 2;
+    constant c_post_chunk_getter_field_delay : integer := 2;
+    constant c_field_pix_read_delay : integer := c_pre_chunk_getter_field_delay + c_chunk_getter_read_delay + c_post_chunk_getter_field_delay;
     
     constant c_block_stepper_cycles_per_chunk : integer := 11 + c_bram_read_delay;
     constant c_cycles_per_block : integer := c_block_stepper_cycles_per_chunk*c_chunks_per_block;

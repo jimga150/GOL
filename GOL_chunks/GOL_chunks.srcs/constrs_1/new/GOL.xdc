@@ -13,9 +13,9 @@ set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { i_clk_
 set vga_clk_f_mhz 147.11864
 set vga_clk_period_ns [expr 1000/$vga_clk_f_mhz]
 #create_clock -name clk_vga -period $vga_clk_period_ns
-set clk_vga [get_clocks -of_objects [get_pins top_inst/clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT0]]
+set clk_vga [get_clocks -of_objects [get_pins top_inst/clk_mmcm_1_inst/inst/mmcm_adv_inst/CLKOUT0]]
 
-set clk_logic [get_clocks -of_objects [get_pins top_inst/clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT1]]
+set clk_logic [get_clocks -of_objects [get_pins top_inst/clk_mmcm_1_inst/inst/mmcm_adv_inst/CLKOUT1]]
 
 #set_clock_groups -asynchronous -group {clk_sys};
 set_clock_groups -asynchronous -group $clk_vga
