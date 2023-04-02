@@ -61,7 +61,7 @@ architecture Structural of bram_dp_synth_wrapper is
             clk_in1           : in     std_logic;
             -- Status and control signals
 --            reset             : in     std_logic;
-            locked            : out    std_logic;
+--            locked            : out    std_logic;
             -- Clock out ports
             clk_out_logic          : out    std_logic;
             clk_out_vga          : out    std_logic
@@ -83,7 +83,7 @@ begin
         clk_in1 => i_clk_100mhz,
         -- Status and control signals                
 --        reset => s_rst_sys_pulse,
-        locked => open,
+--        locked => open,
         -- Clock out ports  
         clk_out_logic => s_clk_logic,
         clk_out_vga => s_clk_vga
@@ -103,6 +103,11 @@ begin
 
 
     bram_inst: entity work.bram_dp_custom
+    generic map(
+        g_read_delay => 3+3,
+        g_data_width => c_bram_width,
+        g_word_depth => 2**c_bram_addr_bits
+    )
     port map(
         i_clka => s_clk_logic,
         i_ena => s_input_pline_logic(1),

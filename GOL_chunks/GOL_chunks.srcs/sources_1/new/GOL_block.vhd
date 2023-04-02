@@ -121,7 +121,10 @@ begin
     
     bram_inst: entity work.bram_dp_custom
     generic map(
-        g_init_cells => g_init_cells
+        g_init_cells => g_init_cells,
+        g_read_delay => c_bram_read_delay,
+        g_data_width => c_bram_width,
+        g_word_depth => c_bram_depth
     )
     port map(
         i_clka => i_clk_stepper,
