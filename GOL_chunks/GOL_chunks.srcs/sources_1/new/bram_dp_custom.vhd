@@ -36,44 +36,47 @@ use work.GOL_pkg.all;
 
 entity bram_dp_custom is
     generic(
-        g_init_cells : t_block_chunk_arr := c_empty_block
+        --g_init_cells is tightly coupled with the codebase this file was made in, 
+        --because the alternative is a whole package and frankly i dont feel like it.
+        --you'll have to modify the initialization for your own code.
+        g_init_cells : t_block_chunk_arr := c_empty_block;
+        g_read_delay : integer := 5+3;
+        g_data_width : integer := 36;
+        g_word_depth : integer := 32*1024; --32k
+        --------------------------------------------------------------------
+        --DO NOT OVERRIDE ANYTHING BELOW THIS LINE IN INSTANTIATION
+        --------------------------------------------------------------------
+        g_addr_width : integer := integer(ceil(log2(real(g_word_depth))))
     );
     PORT (
         i_clka : in std_logic;
         i_ena : in std_logic;
         i_wea : in std_logic;
-        i_addra : in std_logic_vector(c_bram_addr_bits-1 downto 0);
-        i_dina : in std_logic_vector(c_bram_width-1 downto 0);
-        o_douta : out std_logic_vector(c_bram_width-1 downto 0);
+        i_addra : in std_logic_vector(g_addr_width-1 downto 0);
+        i_dina : in std_logic_vector(g_data_width-1 downto 0);
+        o_douta : out std_logic_vector(g_data_width-1 downto 0);
         
         i_clkb : in std_logic;
         i_enb : in std_logic;
         i_web : in std_logic;
-        i_addrb : in std_logic_vector(c_bram_addr_bits-1 downto 0);
-        i_dinb : in std_logic_vector(c_bram_width-1 downto 0);
-        o_doutb : out std_logic_vector(c_bram_width-1 downto 0)
+        i_addrb : in std_logic_vector(g_addr_width-1 downto 0);
+        i_dinb : in std_logic_vector(g_data_width-1 downto 0);
+        o_doutb : out std_logic_vector(g_data_width-1 downto 0)
       );
 end bram_dp_custom;
 
 architecture Structural of bram_dp_custom is
 
-    constant c_prim_num_addr_bits : integer := 10;
-
-    constant c_prim_depth : integer := 2**c_prim_num_addr_bits;
-    constant c_prim_width : integer := 36;
+    constant c_primitive_data_width : integer := 36;
+    constant c_primitive_addr_width : integer := 10;
+    constant c_primitive_word_depth : integer := 2**c_primitive_addr_width;
+    constant c_primitive_delay : integer := 1;
     
-    constant c_req_depth : integer := c_bram_depth;
-    constant c_req_width : integer := c_bram_width;
+    --how many primitives to instantiate
+    --currently assumes one primitive will handle one word address
+    constant c_num_prims_deep : integer := integer(ceil(real(g_word_depth)/real(c_primitive_word_depth)));
     
-    constant c_num_prims_wide : integer := integer(ceil(real(c_req_width)/real(c_prim_width)));
-    constant c_num_prims_deep : integer := integer(ceil(real(c_req_depth)/real(c_prim_depth)));
-    
-    constant c_bram_sel_bits : integer := integer(floor(log2(real(c_num_prims_deep))+1.0));
-    
-    constant c_num_output_stages : integer := c_bram_output_mux_stages;
-    --number of busses selected for per mux stage
-    constant c_output_mux_s_bits_per_stage : integer := integer(ceil(log2(real(c_num_prims_deep))/real(c_num_output_stages)));
-    constant c_output_mux_div : integer := 2**c_output_mux_s_bits_per_stage;
+    --TODO: this currently assumes the requested data width = primitive word width. fix that.
     
     type t_prim_init_arr_type is array(c_num_prims_deep-1 downto 0) of t_bram_36k_arr;
         
@@ -89,12 +92,12 @@ architecture Structural of bram_dp_custom is
                 
                 v_slv := chunk_to_vector(i_chunk_arr(r, c));
                 
-                v_prim_idx := v_ram_idx/c_prim_depth;
-                v_prim_addr := v_ram_idx mod c_prim_depth;
+                v_prim_idx := v_ram_idx/c_primitive_word_depth;
+                v_prim_addr := v_ram_idx mod c_primitive_word_depth;
                 v_ans(v_prim_idx)(v_prim_addr) := v_slv;
                 
-                v_prim_idx := (v_ram_idx + c_chunks_per_block)/c_prim_depth;
-                v_prim_addr := (v_ram_idx + c_chunks_per_block) mod c_prim_depth;
+                v_prim_idx := (v_ram_idx + c_chunks_per_block)/c_primitive_word_depth;
+                v_prim_addr := (v_ram_idx + c_chunks_per_block) mod c_primitive_word_depth;
                 v_ans(v_prim_idx)(v_prim_addr) := v_slv; --copy to other half of RAM
                 
                 v_ram_idx := v_ram_idx + 1;
@@ -106,189 +109,222 @@ architecture Structural of bram_dp_custom is
     
     constant c_ram_init : t_prim_init_arr_type := InitRamFromChunks(g_init_cells);
     
-    signal s1_brama_addr : std_logic_vector(c_prim_num_addr_bits-1 downto 0);
-    signal s1_brama_sel : std_logic_vector(c_bram_sel_bits-1 downto 0);
+    --the cycles of delay between data in and the BRAM primitives
+    constant c_input_delay : integer := 2;
     
-    signal s1_bramb_addr : std_logic_vector(c_prim_num_addr_bits-1 downto 0);
-    signal s1_bramb_sel : std_logic_vector(c_bram_sel_bits-1 downto 0);
+    --delay between input and primitive output
+    constant c_primitive_dout_stage_idx : integer := c_input_delay + c_primitive_delay;
     
-    type t_prim_addr_pline is array(natural range<>) of std_logic_vector(c_prim_num_addr_bits-1 downto 0);
-    type t_bram_sel_pline is array(natural range<>) of std_logic_vector(c_bram_sel_bits-1 downto 0);
+    --the number of registered stages to make the pipelined multiplexers for the data outputs.
+    constant c_mux_stages : integer := g_read_delay - c_primitive_dout_stage_idx; --subtract 1 for the primitive read delay
     
-    signal s_brama_addr_pline : t_prim_addr_pline(3 + c_num_output_stages - 1 downto 2);
-    signal s_brama_sel_pline : t_bram_sel_pline(3 + c_num_output_stages downto 2);
+    --the number of inputs every individual mux will have
+    --on Vivado 2022.1, this line wont elaborate without this patch:
+    --https://support.xilinx.com/s/article/2022-1-Vivado-Synthesis-Change-in-Parser-Behavior?language=en_US
+    --also, calling ceil() on results of floating point math that aould otherwise evaluate to an exact integer
+    --sometimes results in evaluating to the next integer up, not the integer you want.
+    --subtract a tiny amount to adjust for this
+    constant c_mux_depth : integer := integer(ceil( c_num_prims_deep**(1.0/real(c_mux_stages)) - 0.0001 ));
     
-    signal s_bramb_addr_pline : t_prim_addr_pline(3 + c_num_output_stages - 1 downto 2);
-    signal s_bramb_sel_pline : t_bram_sel_pline(3 + c_num_output_stages downto 2);
+    --round c_num_prims_deep up to the nearest multiple of c_mux_depth to ensure the signals exist for the first stage of mux inputs
+    constant c_num_stage0_mux_ins : integer := integer(ceil(real(c_num_prims_deep)/real(c_mux_depth)))*c_mux_depth;
     
-    type t_2d_logic_arr is array(natural range<>, natural range<>) of std_logic;
-    signal s2_enas, s2_enbs : t_2d_logic_arr(c_num_prims_wide-1 downto 0, c_num_prims_deep-1 downto 0);
+    --for a given stage index, returns the number of muxes that stage should have
+    --0 = first stage of muxes, prims/mux depth
+    pure function getNumMuxesForStage(i_stage_idx : in integer) return integer is
+        variable v_ans : integer;
+    begin
+        v_ans := integer(ceil( real(c_num_prims_deep)/real(c_mux_depth**(i_stage_idx+1)) - 0.0001 ));
+        return v_ans;
+    end function;
     
-    signal s1_s2_wea, s1_s2_web : std_logic_vector(2 downto 1);
+    --write enable pipelines
+    signal s_wea_pline, s_web_pline : std_logic_vector(c_input_delay downto 1);
     
-    type t_data_pline is array(natural range<>) of std_logic_vector(c_bram_width-1 downto 0);
-    signal s1_s2_dina, s1_s2_dinb : t_data_pline(2 downto 1);
+    --data 1D and 2D array types
+    type t_data_arr is array(natural range<>) of std_logic_vector(g_data_width-1 downto 0);
+    type t_data_2d_arr is array(natural range<>, natural range<>) of std_logic_vector(g_data_width-1 downto 0);
     
-    type t_dat_arr is array(natural range<>) of std_logic_vector(c_req_width-1 downto 0);
-    type t_dat_arr_pline is array(c_num_output_stages + 3 downto 3) of t_dat_arr(c_num_prims_deep-1 downto 0);
-    signal s_douta_arr_pline, s_doutb_arr_pline : t_dat_arr_pline;
-    signal s_douta_arr_pline_reg, s_doutb_arr_pline_reg : t_dat_arr_pline;
+    --data in pipelines
+    signal s_dina_pline, s_dinb_pline : t_data_arr(c_input_delay downto 1);
     
-    type t_dout_sel_pline is array(natural range<>) of unsigned(c_output_mux_s_bits_per_stage-1 downto 0);
-    signal s_douta_sel_pline, s_doutb_sel_pline : t_dout_sel_pline(s_brama_sel_pline'range);
+    --major address pipelines
+    type t_int_arr is array(natural range<>) of integer;
+    signal s_major_addra_pline, s_major_addrb_pline : t_int_arr(g_read_delay downto 2);
     
-    type t_2d_slv_primdat_arr is array(natural range<>, natural range<>) of std_logic_vector(c_prim_width-1 downto 0);
-    signal s2_dinas, s2_dinbs : t_2d_slv_primdat_arr(c_num_prims_wide-1 downto 0, c_num_prims_deep-1 downto 0);
-    signal s3_doutas, s3_doutbs : t_2d_slv_primdat_arr(c_num_prims_wide-1 downto 0, c_num_prims_deep-1 downto 0);
-
+    --major address: address to select between primitives
+    signal s1_major_addra, s1_major_addrb : integer;
+    
+    --minor address: address to feed primitives to select for word within
+    signal s1_minor_addra, s1_minor_addrb : integer;
+    
+    signal s1_ena, s1_enb : std_logic;
+    
+    
+    signal s2_minor_addra, s2_minor_addrb : std_logic_vector(c_primitive_addr_width-1 downto 0);
+    
+    --data outputs right from primitives
+    signal s3_doutas, s3_doutbs : t_data_arr(c_num_stage0_mux_ins-1 downto 0);
+    
+    
+    --the outputs of all muxes in all stages
+    signal s_mux_outs_a, s_mux_outs_b : t_data_2d_arr(c_mux_stages-1 downto 0, getNumMuxesForStage(0)-1 downto 0);
+        
 begin
 
-    process(i_clka) is begin
-        if rising_edge(i_clka) then
+    gen_dout_mux_stages: for gv_stage_idx in 0 to c_mux_stages-1 generate
+        --gv_stage_idx is the stage index, where 0 is the first stage of muxes 
+        --and the last one is the final mux that drives the data output.
         
-            s1_brama_addr <= std_logic_vector(resize(unsigned(i_addra) mod to_unsigned(c_prim_depth, i_addra'length), s1_brama_addr'length));
-            s1_brama_sel <= std_logic_vector(resize(unsigned(i_addra) / to_unsigned(c_prim_depth, i_addra'length), s1_brama_sel'length));
-            
-            s_brama_addr_pline <= s_brama_addr_pline(s_brama_addr_pline'high-1 downto s_brama_addr_pline'low) & s1_brama_addr;
-            s_brama_sel_pline <= s_brama_sel_pline(s_brama_sel_pline'high-1 downto s_brama_sel_pline'low) & s1_brama_sel;
-            
-            s1_s2_wea <= s1_s2_wea(s1_s2_wea'high-1 downto s1_s2_wea'low) & i_wea;
-            
-            s1_s2_dina <= s1_s2_dina(s1_s2_dina'high-1 downto s1_s2_dina'low) & i_dina;
-            
-            s_douta_arr_pline_reg(s_douta_arr_pline_reg'high downto s_douta_arr_pline_reg'low+1) <= s_douta_arr_pline(s_douta_arr_pline'high-1 downto s_douta_arr_pline'low);
-            
-            o_douta <= s_douta_arr_pline(s_douta_arr_pline_reg'high)(0);
-
-        end if;
-    end process;
-    
-    gen_outmuxa: for s in s_douta_arr_pline'high downto s_douta_arr_pline'low+1 generate
-    
-        --0 = first layer
-        constant c_layer_idx : integer := s-s_douta_arr_pline'low-1;
-        constant c_layer_idx_us : unsigned(c_bram_sel_bits-1 downto 0) := to_unsigned(c_layer_idx, c_bram_sel_bits);
+        --number of muxes this stage wil have
+        constant c_num_muxes : integer := getNumMuxesForStage(gv_stage_idx);
         
-        constant c_start_s_bit_idx : integer := c_layer_idx*c_output_mux_s_bits_per_stage;
-        constant c_end_s_bit_idx : integer := int_min((c_layer_idx+1)*c_output_mux_s_bits_per_stage - 1, c_bram_sel_bits-1);
+        --delay index within pipeline--the stage of delay this mux stage will be taking input from.
+        --this stage will output to delay stage c_pline_idx+1.
+        constant c_pline_idx : integer := gv_stage_idx + c_primitive_dout_stage_idx;
         
-        --number of muxes on this layer, should be 1 on last layer
-        constant c_num_outputs : integer := integer(ceil(real(c_num_prims_deep)/real(c_output_mux_div**(c_layer_idx+1))));
+        --the amount to divide down the primitive address to isolate 
+        --the part of the address pertaining to this stage of muxes
+        constant c_mux_mag : integer := c_mux_depth**gv_stage_idx;
         
+        --select input to all muxes for this stage
+        signal s_sela, s_selb : integer range 0 to c_mux_depth-1;
+            
     begin
     
-        --select signal for all the muxes on this layer
-        s_douta_sel_pline(s) <= resize(unsigned(s_brama_sel_pline(s)(c_end_s_bit_idx downto c_start_s_bit_idx)), s_douta_sel_pline(s)'length);
-        s_doutb_sel_pline(s) <= resize(unsigned(s_bramb_sel_pline(s)(c_end_s_bit_idx downto c_start_s_bit_idx)), s_doutb_sel_pline(s)'length);
-    
-        gen_mux: for i in 0 to c_num_outputs - 1 generate
+        process(i_clka) is begin
+            if rising_edge(i_clka) then
+                s_sela <= (s_major_addra_pline(c_pline_idx-1)/c_mux_mag) mod c_mux_depth;
+            end if;
+        end process;
         
-            constant c_start_idx : integer := i*c_output_mux_div;
-            constant c_end_idx : integer := int_min((i+1)*c_output_mux_div - 1, c_num_prims_deep-1);
-            constant c_mux_length : integer := c_end_idx - c_start_idx + 1;
+        process(i_clkb) is begin
+            if rising_edge(i_clkb) then
+                s_selb <= (s_major_addrb_pline(c_pline_idx-1)/c_mux_mag) mod c_mux_depth;
+            end if;
+        end process;
             
-            signal s_muxa_inp_arr, s_muxb_inp_arr : t_dat_arr(c_mux_length-1 downto 0);
-            
+        gen_dout_muxes: for gv_mux_idx in 0 to c_num_muxes-1 generate
+            --gv_mux_idx is this multiplexer's index within the stage. 
+            --it selects between c_mux_depth data values from the last stage.
+        
+            --array to multiplex between on this mux
+            signal s_mux_inputs_a, s_mux_inputs_b : t_data_arr(c_mux_depth-1 downto 0);
+        
         begin
-        
-            s_muxa_inp_arr <= s_douta_arr_pline_reg(s)(c_end_idx downto c_start_idx);
-            s_muxb_inp_arr <= s_doutb_arr_pline_reg(s)(c_end_idx downto c_start_idx);
             
-            s_douta_arr_pline(s)(i) <= s_muxa_inp_arr(to_integer(s_douta_sel_pline(s)));
-            s_doutb_arr_pline(s)(i) <= s_muxb_inp_arr(to_integer(s_doutb_sel_pline(s)));
-            
-        end generate gen_mux;
-        
-    end generate gen_outmuxa;
-    
-    process(i_clkb) is begin
-        if rising_edge(i_clkb) then
-        
-            s1_bramb_addr <= std_logic_vector(resize(unsigned(i_addrb) mod to_unsigned(c_prim_depth, i_addrb'length), s1_bramb_addr'length));
-            s1_bramb_sel <= std_logic_vector(resize(unsigned(i_addrb) / to_unsigned(c_prim_depth, i_addrb'length), s1_bramb_sel'length));
-            
-            s_bramb_addr_pline <= s_bramb_addr_pline(s_bramb_addr_pline'high-1 downto s_bramb_addr_pline'low) & s1_bramb_addr;
-            s_bramb_sel_pline <= s_bramb_sel_pline(s_bramb_sel_pline'high-1 downto s_bramb_sel_pline'low) & s1_bramb_sel;
-            
-            s1_s2_web <= s1_s2_web(s1_s2_web'high-1 downto s1_s2_web'low) & i_web;
-            
-            s1_s2_dinb <= s1_s2_dinb(s1_s2_dinb'high-1 downto s1_s2_dinb'low) & i_dinb;
-            
-            s_doutb_arr_pline_reg(s_doutb_arr_pline_reg'high downto s_doutb_arr_pline_reg'low+1) <= s_doutb_arr_pline(s_doutb_arr_pline'high-1 downto s_doutb_arr_pline'low);
-            
-            o_doutb <= s_doutb_arr_pline(s_doutb_arr_pline_reg'high)(0);
-            
-        end if;
-    end process;
-    
---    o_douta <= s3_douta_arr(to_integer(unsigned(s_brama_sel_pline(3))));
---    o_doutb <= s3_doutb_arr(to_integer(unsigned(s_bramb_sel_pline(3))));
-
-    gen_prim_width: for x in 0 to c_num_prims_wide-1 generate
-        gen_prim_depth: for y in 0 to c_num_prims_deep-1 generate
-            constant c_dat_unused_bits : integer := int_max((x+1)*c_prim_width - 1 - s1_s2_dina(2)'high, 0);
-        begin
-        
             process(i_clka) is begin
                 if rising_edge(i_clka) then
-                    s2_enas(x, y) <= '0';
-                    if (to_integer(unsigned(s1_brama_sel)) = y) then
-                        s2_enas(x, y) <= '1';
-                    end if;
+                    s_mux_outs_a(gv_stage_idx, gv_mux_idx) <= s_mux_inputs_a(s_sela);
                 end if;
             end process;
             
             process(i_clkb) is begin
                 if rising_edge(i_clkb) then
-                    s2_enbs(x, y) <= '0';
-                    if (to_integer(unsigned(s1_bramb_sel)) = y) then
-                        s2_enbs(x, y) <= '1';
-                    end if;
+                    s_mux_outs_b(gv_stage_idx, gv_mux_idx) <= s_mux_inputs_b(s_selb);
                 end if;
             end process;
-                        
-            gen_dat_overhead: if c_dat_unused_bits > 0 generate
             
-                s2_dinas(x, y)(s2_dinas(x, y)'high - c_dat_unused_bits downto 0) <= s1_s2_dina(2)(s1_s2_dina(2)'high downto x*c_prim_width);
-                s2_dinas(x, y)(s2_dinas(x, y)'high downto s2_dinas(x, y)'high - c_dat_unused_bits + 1) <= (others => '0');
-                s2_dinbs(x, y)(s2_dinbs(x, y)'high - c_dat_unused_bits downto 0) <= s1_s2_dinb(2)(s1_s2_dinb(2)'high downto x*c_prim_width);
-                s2_dinbs(x, y)(s2_dinbs(x, y)'high downto s2_dinbs(x, y)'high - c_dat_unused_bits + 1) <= (others => '0');
+            gen_mux_inputs: if (gv_stage_idx = 0) generate
+                s_mux_inputs_a <= s3_doutas(c_mux_depth*(gv_mux_idx+1) - 1 downto c_mux_depth*gv_mux_idx);
+                s_mux_inputs_b <= s3_doutbs(c_mux_depth*(gv_mux_idx+1) - 1 downto c_mux_depth*gv_mux_idx);
+            else generate
+                gen_nth_stage_inputs: for gv_mux_in_idx in 0 to c_mux_depth - 1 generate
+                    --assign mux inputs with a for generate since slices arent supported in 2D arrays in Vivado's VHDL 2008.
+                    --gv_mux_in_idx is the index of the multiplexer's input, representing one data bus.
+                    s_mux_inputs_a(gv_mux_in_idx) <= s_mux_outs_a(gv_stage_idx-1, gv_mux_in_idx + c_mux_depth*gv_mux_idx);
+                    s_mux_inputs_b(gv_mux_in_idx) <= s_mux_outs_b(gv_stage_idx-1, gv_mux_in_idx + c_mux_depth*gv_mux_idx);
+                end generate;
+            end generate;
+            
+        end generate;
+        
+    end generate;
+    
+    o_douta <= s_mux_outs_a(c_mux_stages-1, 0);
+    o_doutb <= s_mux_outs_b(c_mux_stages-1, 0);
+
+    process(i_clka) is begin
+        if rising_edge(i_clka) then
+            
+            s_wea_pline <= s_wea_pline(s_wea_pline'high-1 downto s_wea_pline'low) & i_wea;
+            s_dina_pline <= s_dina_pline(s_dina_pline'high-1 downto s_dina_pline'low) & i_dina;
+            s_major_addra_pline <= s_major_addra_pline(s_major_addra_pline'high-1 downto s_major_addra_pline'low) & s1_major_addra;
+            
+            s1_major_addra <= to_integer(unsigned(i_addra)) / c_primitive_word_depth; --TODO: this is a power of 2 so simplify it
+            s1_minor_addra <= to_integer(unsigned(i_addra)) mod c_primitive_word_depth;
+            s1_ena <= i_ena;
+            
+            s2_minor_addra <= std_logic_vector(to_unsigned(s1_minor_addra, s2_minor_addra'length));
+
+        end if;
+    end process;
+    
+    process(i_clkb) is begin
+        if rising_edge(i_clkb) then
+        
+            s_web_pline <= s_web_pline(s_web_pline'high-1 downto s_web_pline'low) & i_web;
+            s_dinb_pline <= s_dinb_pline(s_dinb_pline'high-1 downto s_dinb_pline'low) & i_dinb;
+            s_major_addrb_pline <= s_major_addrb_pline(s_major_addrb_pline'high-1 downto s_major_addrb_pline'low) & s1_major_addrb;
+            
+            s1_major_addrb <= to_integer(unsigned(i_addrb)) / c_primitive_word_depth;
+            s1_minor_addrb <= to_integer(unsigned(i_addrb)) mod c_primitive_word_depth;
+            s1_enb <= i_enb;
+            
+            s2_minor_addrb <= std_logic_vector(to_unsigned(s1_minor_addrb, s2_minor_addrb'length));
+            
+        end if;
+    end process;
+
+    gen_prims: for i in 0 to c_num_prims_deep-1 generate
+        
+        signal s2_ena, s2_enb : std_logic;
+        
+    begin
+    
+        process(i_clka) is begin
+            if rising_edge(i_clka) then
                 
-                s_douta_arr_pline(3)(y)(s_douta_arr_pline(3)(y)'high downto x*c_prim_width) <= s3_doutas(x, y)(s3_doutas(x, y)'high - c_dat_unused_bits downto 0);
-                s_doutb_arr_pline(3)(y)(s_doutb_arr_pline(3)(y)'high downto x*c_prim_width) <= s3_doutbs(x, y)(s3_doutbs(x, y)'high - c_dat_unused_bits downto 0);
+                s2_ena <= '0';
+                if (s1_major_addra = i) then
+                    s2_ena <= s1_ena;
+                end if;
                 
-            end generate gen_dat_overhead;
-            gen_dat_nooverhead: if c_dat_unused_bits = 0 generate
-            
-                s2_dinas(x, y) <= s1_s2_dina(2)((x+1)*c_prim_width - 1 downto x*c_prim_width);
-                s2_dinbs(x, y) <= s1_s2_dinb(2)((x+1)*c_prim_width - 1 downto x*c_prim_width);
+            end if;
+        end process;
+        
+        process(i_clkb) is begin
+            if rising_edge(i_clkb) then
                 
-                s_douta_arr_pline(3)(y)((x+1)*c_prim_width - 1 downto x*c_prim_width) <= s3_doutas(x, y);
-                s_doutb_arr_pline(3)(y)((x+1)*c_prim_width - 1 downto x*c_prim_width) <= s3_doutbs(x, y);
+                s2_enb <= '0';
+                if (s1_major_addrb = i) then
+                    s2_enb <= s1_enb;
+                end if;
                 
-            end generate gen_dat_nooverhead;
-            
-            
-            bram_prim_inst: entity work.bram_dp_36k
-            generic map(
-                g_init_data => c_ram_init(y)
-            )
-            port map(
-                i_clka => i_clka,
-                i_ena => s2_enas(x, y),
-                i_wea => s1_s2_wea(2),
-                i_addra => s_brama_addr_pline(2),
-                i_dina => s2_dinas(x, y),
-                o_douta => s3_doutas(x, y),
-                i_clkb => i_clkb,
-                i_enb => s2_enbs(x, y),
-                i_web => s1_s2_web(2),
-                i_addrb => s_bramb_addr_pline(2),
-                i_dinb => s2_dinbs(x, y),
-                o_doutb => s3_doutbs(x, y)
-            );
-            
-        end generate gen_prim_depth;
-    end generate gen_prim_width;
+            end if;
+        end process;
+    
+        bram_prim_inst: entity work.bram_dp_36k
+        generic map(
+            g_init_data => c_ram_init(i)
+        )
+        port map(
+            i_clka => i_clka,
+            i_ena => s2_ena,
+            i_wea => s_wea_pline(2),
+            i_addra => s2_minor_addra,
+            i_dina => s_dina_pline(2),
+            o_douta => s3_doutas(i),
+            i_clkb => i_clkb,
+            i_enb => s2_enb,
+            i_web => s_web_pline(2),
+            i_addrb => s2_minor_addrb,
+            i_dinb => s_dinb_pline(2),
+            o_doutb => s3_doutbs(i)
+        );
+    end generate;
+    
+    s3_doutas(s3_doutas'high downto c_num_prims_deep) <= (others => (others => '0'));
+    s3_doutbs(s3_doutas'high downto c_num_prims_deep) <= (others => (others => '0'));
 
 end Structural;

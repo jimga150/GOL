@@ -32,7 +32,11 @@ architecture Behavioral of bram_dp_custom_tb is
     
     --Generics
     constant g_init_cells : t_block_chunk_arr := c_empty_block;
+    constant g_read_delay : integer := 5+3;
+    constant g_data_width : integer := 36;
+    constant g_word_depth : integer := 32*1024; --32k
     
+    constant g_addr_width : integer := integer(ceil(log2(real(g_word_depth))));
     
     --Clocks
     signal i_clka : std_logic := '0';
@@ -41,28 +45,31 @@ architecture Behavioral of bram_dp_custom_tb is
     --General inputs
     signal i_ena : std_logic := '0';
     signal i_wea : std_logic := '0';
-    signal i_addra : std_logic_vector(c_bram_addr_bits-1 downto 0) := (others => '0');
-    signal i_dina : std_logic_vector(c_bram_width-1 downto 0) := (others => '0');
+    signal i_addra : std_logic_vector(g_addr_width-1 downto 0) := (others => '0');
+    signal i_dina : std_logic_vector(g_data_width-1 downto 0) := (others => '0');
     signal i_enb : std_logic := '0';
     signal i_web : std_logic := '0';
-    signal i_addrb : std_logic_vector(c_bram_addr_bits-1 downto 0) := (others => '0');
-    signal i_dinb : std_logic_vector(c_bram_width-1 downto 0) := (others => '0');
+    signal i_addrb : std_logic_vector(g_addr_width-1 downto 0) := (others => '0');
+    signal i_dinb : std_logic_vector(g_data_width-1 downto 0) := (others => '0');
     
     --Outputs
-    signal o_douta : std_logic_vector(c_bram_width-1 downto 0);
-    signal o_doutb : std_logic_vector(c_bram_width-1 downto 0);
+    signal o_douta : std_logic_vector(g_data_width-1 downto 0);
+    signal o_doutb : std_logic_vector(g_data_width-1 downto 0);
     
     --Clock Periods
     constant i_clka_period : time := 10 ns;
     constant i_clkb_period : time := 6.12 ns;
     
-    constant c_read_delay : integer := c_bram_read_delay;
+    constant c_read_delay : integer := g_read_delay;
     
 begin
     
-    UUT: entity work.bram_dp
+    UUT: entity work.bram_dp_custom
     generic map(
-        g_init_cells => g_init_cells
+        g_init_cells => g_init_cells,
+        g_read_delay => g_read_delay,
+        g_data_width => g_data_width,
+        g_word_depth => g_word_depth
     )
     port map(
         i_clka => i_clka,
@@ -100,6 +107,12 @@ begin
         
         variable v_pass : boolean := true;
         
+        variable v_seed1, v_seed2 : positive;
+        variable v_rnd : real;
+        constant c_rng_max_width : integer := 16;
+        
+        variable v_idx_low, v_idx_high, v_data_width, v_max_data_val : natural;
+        
     begin
     
         report "Address step: " & integer'image(c_addr_step);
@@ -117,7 +130,15 @@ begin
         
             v_addr_int := i*c_addr_step;
             v_writes(i).addr := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).addr'length));
-            v_writes(i).data := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).data'length));
+            
+            for j in 0 to integer(floor(real(c_bram_width)/real(c_rng_max_width))) loop
+                uniform(v_seed1, v_seed2, v_rnd);
+                v_idx_low := j*c_rng_max_width;
+                v_idx_high := int_min((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
+                v_data_width := v_idx_high + 1 - v_idx_low;
+                v_max_data_val := 2**v_data_width;
+                v_writes(i).data(v_idx_high downto v_idx_low) := std_logic_vector(to_unsigned(integer(v_rnd*v_max_data_val), v_data_width));
+            end loop;
             
             i_addra <= v_writes(i).addr;
             i_dina <= v_writes(i).data;
@@ -180,9 +201,20 @@ begin
         
         for i in 0 to c_num_addrs_test-1 loop
         
+            uniform(v_seed1, v_seed2, v_rnd);
+        
             v_addr_int := i*c_addr_step;
             v_writes(i).addr := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).addr'length));
-            v_writes(i).data := std_logic_vector(to_unsigned(v_addr_int + 7, v_writes(i).data'length));
+            
+            for j in 0 to integer(floor(real(c_bram_width)/real(c_rng_max_width))) loop
+                uniform(v_seed1, v_seed2, v_rnd);
+                v_idx_low := j*c_rng_max_width;
+                v_idx_high := int_min((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
+                v_data_width := v_idx_high + 1 - v_idx_low;
+                v_max_data_val := 2**v_data_width;
+                v_writes(i).data(v_idx_high downto v_idx_low) := std_logic_vector(to_unsigned(integer(v_rnd*v_max_data_val), v_data_width));
+            end loop;
+            
             i_addrb <= v_writes(i).addr;
             i_dinb <= v_writes(i).data;
             
