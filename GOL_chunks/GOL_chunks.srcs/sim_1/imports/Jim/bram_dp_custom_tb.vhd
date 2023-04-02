@@ -33,7 +33,7 @@ architecture Behavioral of bram_dp_custom_tb is
     --Generics
     constant g_init_cells : t_block_chunk_arr := c_empty_block;
     constant g_read_delay : integer := 8+3;
-    constant g_data_width : integer := 72;
+    constant g_data_width : integer := 8;
     constant g_word_depth : integer := 40*1024; --32k
     
     constant g_addr_width : integer := integer(ceil(log2(real(g_word_depth))));
@@ -93,7 +93,7 @@ begin
     stim_proc: process is
         
         constant c_num_addrs_test : integer := 100;
-        constant c_addr_step : integer := c_bram_depth/c_num_addrs_test;
+        constant c_addr_step : integer := g_word_depth/c_num_addrs_test;
         
         variable v_addr_int : integer;
         
@@ -131,7 +131,7 @@ begin
             v_addr_int := i*c_addr_step;
             v_writes(i).addr := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).addr'length));
             
-            for j in 0 to integer(floor(real(c_bram_width)/real(c_rng_max_width))) loop
+            for j in 0 to integer(floor(real(g_data_width)/real(c_rng_max_width))) loop
                 uniform(v_seed1, v_seed2, v_rnd);
                 v_idx_low := j*c_rng_max_width;
                 v_idx_high := int_min((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
@@ -206,7 +206,7 @@ begin
             v_addr_int := i*c_addr_step;
             v_writes(i).addr := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).addr'length));
             
-            for j in 0 to integer(floor(real(c_bram_width)/real(c_rng_max_width))) loop
+            for j in 0 to integer(floor(real(g_data_width)/real(c_rng_max_width))) loop
                 uniform(v_seed1, v_seed2, v_rnd);
                 v_idx_low := j*c_rng_max_width;
                 v_idx_high := int_min((j+1)*c_rng_max_width - 1, v_writes(i).data'high);

@@ -41,7 +41,7 @@ entity bram_dp_custom is
         --you'll have to modify the initialization for your own code.
         g_init_cells : t_block_chunk_arr := c_empty_block;
         g_read_delay : integer := 6+3;
-        g_data_width : integer := 72;
+        g_data_width : integer := 8;
         g_word_depth : integer := 35*1024; --32k
         --------------------------------------------------------------------
         --DO NOT OVERRIDE ANYTHING BELOW THIS LINE IN INSTANTIATION
@@ -184,6 +184,12 @@ begin
         report "Output multiplexer has more pipeline stages than it can use to interleave logic. The maximum number of stages it can use is " 
         & integer'image(integer(ceil( log2(real(c_num_prims_deep)) + 0.0001 )))
         & " (read delay of " & integer'image(c_primitive_dout_stage_idx + integer(ceil( log2(real(c_num_prims_deep)) + 0.0001 ))) & ")"
+        severity warning;
+        
+    assert g_data_width >= c_primitive_data_width
+        report "The requested data width is smaller than the data width of the primitives generated in this component. " & 
+        "You might save area by implying a RAM module and letting the synthesizer come up with a configuration. " & 
+        "This component does not support configuring primitives to be a different data width and depth." 
         severity warning;
 
     gen_dout_mux_stages: for gv_stage_idx in 0 to c_mux_stages-1 generate
