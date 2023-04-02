@@ -32,9 +32,9 @@ architecture Behavioral of bram_dp_custom_tb is
     
     --Generics
     constant g_init_cells : t_block_chunk_arr := c_empty_block;
-    constant g_read_delay : integer := 5+3;
+    constant g_read_delay : integer := 8+3;
     constant g_data_width : integer := 36;
-    constant g_word_depth : integer := 32*1024; --32k
+    constant g_word_depth : integer := 40*1024; --32k
     
     constant g_addr_width : integer := integer(ceil(log2(real(g_word_depth))));
     
@@ -98,8 +98,8 @@ begin
         variable v_addr_int : integer;
         
         type t_write_rec_type is record
-            addr : std_logic_vector(c_bram_addr_bits-1 downto 0);
-            data : std_logic_vector(c_bram_width-1 downto 0);
+            addr : std_logic_vector(i_addra'range);
+            data : std_logic_vector(i_dina'range);
         end record t_write_rec_type;
         type t_writes_type is array(c_num_addrs_test-1 downto 0) of t_write_rec_type;
         

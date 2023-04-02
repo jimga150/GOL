@@ -40,9 +40,9 @@ entity bram_dp_custom is
         --because the alternative is a whole package and frankly i dont feel like it.
         --you'll have to modify the initialization for your own code.
         g_init_cells : t_block_chunk_arr := c_empty_block;
-        g_read_delay : integer := 5+3;
+        g_read_delay : integer := 6+3;
         g_data_width : integer := 36;
-        g_word_depth : integer := 32*1024; --32k
+        g_word_depth : integer := 35*1024; --32k
         --------------------------------------------------------------------
         --DO NOT OVERRIDE ANYTHING BELOW THIS LINE IN INSTANTIATION
         --------------------------------------------------------------------
@@ -138,6 +138,9 @@ architecture Structural of bram_dp_custom is
         return v_ans;
     end function;
     
+    --round the stage 0 mux count up to the nearest multiple of c_mux_depth to ensure the signals exist for the second stage of mux inputs
+    constant c_num_stage1_mux_ins : integer := integer(ceil(real(getNumMuxesForStage(0))/real(c_mux_depth)))*c_mux_depth;
+    
     --write enable pipelines
     signal s_wea_pline, s_web_pline : std_logic_vector(c_input_delay downto 1);
     
@@ -168,9 +171,20 @@ architecture Structural of bram_dp_custom is
     
     
     --the outputs of all muxes in all stages
-    signal s_mux_outs_a, s_mux_outs_b : t_data_2d_arr(c_mux_stages-1 downto 0, getNumMuxesForStage(0)-1 downto 0);
+    signal s_mux_outs_a, s_mux_outs_b : t_data_2d_arr(c_mux_stages-1 downto 0, c_num_stage1_mux_ins-1 downto 0);
         
 begin
+
+    --TODO
+    assert c_primitive_data_width = g_data_width report "Data width must match primitive data width!" severity failure;
+    
+    assert g_read_delay > c_primitive_dout_stage_idx report "Read delay must be greater than " & integer'image(c_primitive_dout_stage_idx) severity failure;
+    
+    assert 2**c_mux_stages <= c_num_prims_deep 
+        report "Output multiplexer has more pipeline stages than it can use to interleave logic. The maximum number of stages it can use is " 
+        & integer'image(integer(ceil( log2(real(c_num_prims_deep)) + 0.0001 )))
+        & " (read delay of " & integer'image(c_primitive_dout_stage_idx + integer(ceil( log2(real(c_num_prims_deep)) + 0.0001 ))) & ")"
+        severity warning;
 
     gen_dout_mux_stages: for gv_stage_idx in 0 to c_mux_stages-1 generate
         --gv_stage_idx is the stage index, where 0 is the first stage of muxes 
