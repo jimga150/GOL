@@ -265,8 +265,8 @@ begin
             s_dina_pline <= s_dina_pline(s_dina_pline'high-1 downto s_dina_pline'low) & i_dina;
             s_major_addra_pline <= s_major_addra_pline(s_major_addra_pline'high-1 downto s_major_addra_pline'low) & s1_major_addra;
             
-            s1_major_addra <= to_integer(unsigned(i_addra)) / c_primitive_word_depth; --TODO: this is a power of 2 so simplify it
-            s1_minor_addra <= to_integer(unsigned(i_addra)) mod c_primitive_word_depth;
+            s1_major_addra <= to_integer(unsigned(i_addra(i_addra'high downto c_primitive_addr_width)));
+            s1_minor_addra <= to_integer(unsigned(i_addra(c_primitive_addr_width-1 downto 0)));
             s1_ena <= i_ena;
             
             s2_minor_addra <= std_logic_vector(to_unsigned(s1_minor_addra, s2_minor_addra'length));
@@ -281,8 +281,8 @@ begin
             s_dinb_pline <= s_dinb_pline(s_dinb_pline'high-1 downto s_dinb_pline'low) & i_dinb;
             s_major_addrb_pline <= s_major_addrb_pline(s_major_addrb_pline'high-1 downto s_major_addrb_pline'low) & s1_major_addrb;
             
-            s1_major_addrb <= to_integer(unsigned(i_addrb)) / c_primitive_word_depth;
-            s1_minor_addrb <= to_integer(unsigned(i_addrb)) mod c_primitive_word_depth;
+            s1_major_addrb <= to_integer(unsigned(i_addrb(i_addrb'high downto c_primitive_addr_width)));
+            s1_minor_addrb <= to_integer(unsigned(i_addrb(c_primitive_addr_width-1 downto 0)));
             s1_enb <= i_enb;
             
             s2_minor_addrb <= std_logic_vector(to_unsigned(s1_minor_addrb, s2_minor_addrb'length));
