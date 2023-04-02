@@ -33,7 +33,7 @@ architecture Behavioral of bram_dp_custom_tb is
     --Generics
     constant g_init_cells : t_block_chunk_arr := c_empty_block;
     constant g_read_delay : integer := 8+3;
-    constant g_data_width : integer := 36;
+    constant g_data_width : integer := 72;
     constant g_word_depth : integer := 40*1024; --32k
     
     constant g_addr_width : integer := integer(ceil(log2(real(g_word_depth))));

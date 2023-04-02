@@ -41,7 +41,7 @@ entity bram_dp_custom is
         --you'll have to modify the initialization for your own code.
         g_init_cells : t_block_chunk_arr := c_empty_block;
         g_read_delay : integer := 6+3;
-        g_data_width : integer := 36;
+        g_data_width : integer := 72;
         g_word_depth : integer := 35*1024; --32k
         --------------------------------------------------------------------
         --DO NOT OVERRIDE ANYTHING BELOW THIS LINE IN INSTANTIATION
@@ -72,11 +72,14 @@ architecture Structural of bram_dp_custom is
     constant c_primitive_word_depth : integer := 2**c_primitive_addr_width;
     constant c_primitive_delay : integer := 1;
     
-    --how many primitives to instantiate
-    --currently assumes one primitive will handle one word address
+    --how many rows of primitives to instantiate
+    --where each row is one major address
     constant c_num_prims_deep : integer := integer(ceil(real(g_word_depth)/real(c_primitive_word_depth)));
     
-    --TODO: this currently assumes the requested data width = primitive word width. fix that.
+    --how many primitives to instantiate per row
+    --one row of primitives handles one address, and together the primitives handle one data word
+    --data words wider than the primitive data word will need to be shared across multiple primitives
+    constant c_num_prims_wide : integer := integer(ceil(real(g_data_width)/real(c_primitive_data_width)));
     
     type t_prim_init_arr_type is array(c_num_prims_deep-1 downto 0) of t_bram_36k_arr;
         
@@ -174,9 +177,6 @@ architecture Structural of bram_dp_custom is
     signal s_mux_outs_a, s_mux_outs_b : t_data_2d_arr(c_mux_stages-1 downto 0, c_num_stage1_mux_ins-1 downto 0);
         
 begin
-
-    --TODO
-    assert c_primitive_data_width = g_data_width report "Data width must match primitive data width!" severity failure;
     
     assert g_read_delay > c_primitive_dout_stage_idx report "Read delay must be greater than " & integer'image(c_primitive_dout_stage_idx) severity failure;
     
@@ -290,7 +290,7 @@ begin
         end if;
     end process;
 
-    gen_prims: for i in 0 to c_num_prims_deep-1 generate
+    gen_prims: for gv_prim_row_idx in 0 to c_num_prims_deep-1 generate
         
         signal s2_ena, s2_enb : std_logic;
         
@@ -300,7 +300,7 @@ begin
             if rising_edge(i_clka) then
                 
                 s2_ena <= '0';
-                if (s1_major_addra = i) then
+                if (s1_major_addra = gv_prim_row_idx) then
                     s2_ena <= s1_ena;
                 end if;
                 
@@ -311,31 +311,60 @@ begin
             if rising_edge(i_clkb) then
                 
                 s2_enb <= '0';
-                if (s1_major_addrb = i) then
+                if (s1_major_addrb = gv_prim_row_idx) then
                     s2_enb <= s1_enb;
                 end if;
                 
             end if;
         end process;
     
-        bram_prim_inst: entity work.bram_dp_36k
-        generic map(
-            g_init_data => c_ram_init(i)
-        )
-        port map(
-            i_clka => i_clka,
-            i_ena => s2_ena,
-            i_wea => s_wea_pline(2),
-            i_addra => s2_minor_addra,
-            i_dina => s_dina_pline(2),
-            o_douta => s3_doutas(i),
-            i_clkb => i_clkb,
-            i_enb => s2_enb,
-            i_web => s_web_pline(2),
-            i_addrb => s2_minor_addrb,
-            i_dinb => s_dinb_pline(2),
-            o_doutb => s3_doutbs(i)
-        );
+        gen_prim_row: for gv_prim_col_idx in 0 to c_num_prims_wide-1 generate
+        
+            pure function int_min(i_a, i_b : in integer) return integer is begin
+                if (i_a < i_b) then
+                    return i_a;
+                end if;
+                return i_b;
+            end function;
+        
+            constant c_data_low_idx : integer := gv_prim_col_idx*c_primitive_data_width;
+            constant c_data_high_idx : integer := int_min((gv_prim_col_idx+1)*c_primitive_data_width - 1, g_data_width-1);
+            constant c_data_used : integer := c_data_high_idx - c_data_low_idx + 1;
+            
+            --stage 3
+            signal s_dina, s_dinb, s_douta, s_doutb : std_logic_vector(c_primitive_data_width-1 downto 0);
+            
+        begin
+        
+            s_dina(c_data_used-1 downto 0) <= s_dina_pline(2)(c_data_high_idx downto c_data_low_idx);
+            s_dina(s_dina'high downto c_data_used) <= (others => '0');
+            s_dinb(c_data_used-1 downto 0) <= s_dinb_pline(2)(c_data_high_idx downto c_data_low_idx);
+            s_dinb(s_dinb'high downto c_data_used) <= (others => '0');
+            
+            s3_doutas(gv_prim_row_idx)(c_data_high_idx downto c_data_low_idx) <= s_douta(c_data_used-1 downto 0);
+            s3_doutbs(gv_prim_row_idx)(c_data_high_idx downto c_data_low_idx) <= s_doutb(c_data_used-1 downto 0);
+            
+            bram_prim_inst: entity work.bram_dp_36k
+            generic map(
+                g_init_data => c_ram_init(gv_prim_row_idx)
+            )
+            port map(
+                i_clka => i_clka,
+                i_ena => s2_ena,
+                i_wea => s_wea_pline(2),
+                i_addra => s2_minor_addra,
+                i_dina => s_dina,
+                o_douta => s_douta,
+                i_clkb => i_clkb,
+                i_enb => s2_enb,
+                i_web => s_web_pline(2),
+                i_addrb => s2_minor_addrb,
+                i_dinb => s_dinb,
+                o_doutb => s_doutb
+            );
+            
+        end generate;
+        
     end generate;
     
     s3_doutas(s3_doutas'high downto c_num_prims_deep) <= (others => (others => '0'));
