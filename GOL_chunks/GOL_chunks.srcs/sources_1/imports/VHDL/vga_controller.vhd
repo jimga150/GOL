@@ -27,25 +27,25 @@ use ieee.std_logic_1164.all;
 
 entity vga_controller is
     generic(
-        g_h_pixels  :   integer := 1680;		--horiztonal display width in pixels
-        g_h_fp	 	:	integer := 104;		--horiztonal front porch width in pixels
-        g_h_pulse 	:	integer := 184;    	--horiztonal sync pulse width in pixels
-        g_h_bp	 	:	integer := 288;		--horiztonal back porch width in pixels
-        g_h_pol		:	std_logic := '0';		--horizontal sync pulse polarity (1 = positive, 0 = negative)
-        g_v_pixels	:	integer := 1050;		--vertical display width in rows
-        g_v_fp	 	:	integer := 1;			--vertical front porch width in rows
-        g_v_pulse 	:	integer := 3;			--vertical sync pulse width in rows
-        g_v_bp	 	:	integer := 33;			--vertical back porch width in rows
-        g_v_pol		:	std_logic := '1'   --vertical sync pulse polarity (1 = positive, 0 = negative)
+        g_h_pixels  :   integer := 1680;    --horizontal display width in pixels
+        g_h_fp      :   integer := 104;     --horizontal front porch width in pixels
+        g_h_pulse   :   integer := 184;     --horizontal sync pulse width in pixels
+        g_h_bp      :   integer := 288;     --horizontal back porch width in pixels
+        g_h_pol     :   std_logic := '0';   --horizontal sync pulse polarity (1 = positive, 0 = negative)
+        g_v_pixels  :   integer := 1050;    --vertical display width in rows
+        g_v_fp      :   integer := 1;       --vertical front porch width in rows
+        g_v_pulse   :   integer := 3;       --vertical sync pulse width in rows
+        g_v_bp      :   integer := 33;      --vertical back porch width in rows
+        g_v_pol     :   std_logic := '1'    --vertical sync pulse polarity (1 = positive, 0 = negative)
     );	
     port(
-        i_clk	:	in		std_logic;	--pixel clock at frequency of VGA mode being used
-        i_rst_n		:	in		std_logic;	--active low synchronous reset
-        o_h_sync		:	out	std_logic;	--horiztonal sync pulse
-        o_v_sync		:	out	std_logic;	--vertical sync pulse
-        o_disp_ena	:	out	std_logic;	--display enable ('1' = display time, '0' = blanking time)
-        o_column		:	out	integer range 0 to g_h_pixels - 1;		--horizontal pixel coordinate
-        o_row			:	out	integer range 0 to g_v_pixels - 1		--vertical pixel coordinate
+        i_clk       :   in  std_logic;  --pixel clock at frequency of VGA mode being used
+        i_rst_n     :   in  std_logic;  --active low synchronous reset
+        o_h_sync    :   out std_logic;  --horizontal sync pulse
+        o_v_sync    :   out std_logic;  --vertical sync pulse
+        o_disp_ena  :   out std_logic;  --display enable ('1' = display time, '0' = blanking time)
+        o_column    :   out integer range 0 to g_h_pixels - 1;  --horizontal pixel coordinate
+        o_row       :   out integer range 0 to g_v_pixels - 1   --vertical pixel coordinate
     ); 
 end vga_controller;
 
