@@ -165,6 +165,13 @@ package GOL_pkg is
     pure function str_to_int(i_str : string; i_len : integer) return integer;
     
     --Convert chunk X and Y coordinates, as well as the MSB, into an address to be used for read/write on memory.
+    pure function get_chunk_addr_int(
+        i_chunk_x : integer;
+        i_chunk_y : integer;
+        i_msb : std_logic
+    ) return integer;
+    
+    --Convert chunk X and Y coordinates, as well as the MSB, into an address to be used for read/write on memory.
     pure function get_chunk_addr(
         i_chunk_x : integer;
         i_chunk_y : integer;
@@ -290,6 +297,20 @@ package body GOL_pkg is
         end loop;
         return v_ans;
     end function;
+    
+    pure function get_chunk_addr_int(
+        i_chunk_x : integer;
+        i_chunk_y : integer;
+        i_msb : std_logic
+    ) return integer is
+        variable v_result_int : integer;
+    begin
+        v_result_int := i_chunk_x + c_block_num_chunk_cols*i_chunk_y;
+        if (i_msb = '1') then
+            v_result_int := v_result_int + c_chunks_per_block;
+        end if;
+        return v_result_int;
+    end function;
 
     pure function get_chunk_addr(
         i_chunk_x : integer;
@@ -297,12 +318,9 @@ package body GOL_pkg is
         i_msb : std_logic;
         i_addr_len : integer
     ) return std_logic_vector is 
-        variable v_result_int : integer; 
+        variable v_result_int : integer;
     begin
-        v_result_int := i_chunk_x + c_block_num_chunk_cols*i_chunk_y;
-        if (i_msb = '1') then
-            v_result_int := v_result_int + c_chunks_per_block;
-        end if;
+        v_result_int := get_chunk_addr_int(i_chunk_x, i_chunk_y, i_msb);
         assert v_result_int < 2**(i_addr_len) 
             report "Address length " & integer'image(i_addr_len-1) & " cannot hold chunk address result of " & integer'image(v_result_int) & 
                 " (chunk (" & integer'image(i_chunk_x) & ", " & integer'image(i_chunk_y) & "))"

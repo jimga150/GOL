@@ -27,6 +27,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 use work.GOL_pkg.all;
+use work.bram_dp_custom_pkg.all;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -64,6 +65,29 @@ end GOL_block;
 architecture Structural of GOL_block is
 
     attribute ASYNC_REG : boolean;
+    
+    pure function InitRamFromChunks(i_chunk_arr : in t_block_chunk_arr) return t_custom_ram is
+        variable v_ans : t_custom_ram(c_bram_depth-1 downto 0, c_bram_width-1 downto 0);
+        variable v_addr : integer;
+        variable v_slv : std_logic_vector(v_ans'range(2));
+    begin
+        for r in 0 to c_block_num_chunk_rows-1 loop
+            for c in 0 to c_block_num_chunk_cols-1 loop
+            
+                v_addr := get_chunk_addr_int(c, r, '0');
+                v_slv := chunk_to_vector(i_chunk_arr(r, c));
+                
+                --no partial slices in vivado VHDL.
+                for i in v_ans'range(2) loop
+                    v_ans(v_addr, i) := v_slv(i);
+                end loop;
+            
+            end loop;
+        end loop;
+        return v_ans;
+    end function;
+
+    constant c_ram_init : t_custom_ram := InitRamFromChunks(g_init_cells);
 
     --sync stages for current state MSB 
     --(this means that chunks cannot be accurately read 
@@ -121,7 +145,7 @@ begin
     
     bram_inst: entity work.bram_dp_custom
     generic map(
-        g_init_cells => g_init_cells,
+        g_init_vals => c_ram_init,
         g_read_delay => c_bram_read_delay,
         g_data_width => c_bram_width,
         g_word_depth => c_bram_depth

@@ -23,7 +23,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
-use work.GOL_pkg.all;
+use work.bram_dp_custom_pkg.all;
 
 entity bram_dp_custom_tb is
 end bram_dp_custom_tb;
@@ -31,10 +31,10 @@ end bram_dp_custom_tb;
 architecture Behavioral of bram_dp_custom_tb is
     
     --Generics
-    constant g_init_cells : t_block_chunk_arr := c_empty_block;
     constant g_read_delay : integer := 8+3;
     constant g_data_width : integer := 8;
     constant g_word_depth : integer := 40*1024; --32k
+    constant g_init_vals : t_custom_ram(g_word_depth-1 downto 0, g_data_width-1 downto 0) := (others => (others => '0'));
     
     constant g_addr_width : integer := integer(ceil(log2(real(g_word_depth))));
     
@@ -66,7 +66,7 @@ begin
     
     UUT: entity work.bram_dp_custom
     generic map(
-        g_init_cells => g_init_cells,
+        g_init_vals => g_init_vals,
         g_read_delay => g_read_delay,
         g_data_width => g_data_width,
         g_word_depth => g_word_depth
@@ -132,12 +132,20 @@ begin
             v_writes(i).addr := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).addr'length));
             
             for j in 0 to integer(floor(real(g_data_width)/real(c_rng_max_width))) loop
+            
                 uniform(v_seed1, v_seed2, v_rnd);
+                
                 v_idx_low := j*c_rng_max_width;
-                v_idx_high := int_min((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
+                v_idx_high := (j+1)*c_rng_max_width - 1;
+                if (v_idx_high > v_writes(i).data'high) then
+                    v_idx_high := v_writes(i).data'high;
+                end if;
+                
                 v_data_width := v_idx_high + 1 - v_idx_low;
                 v_max_data_val := 2**v_data_width;
+                
                 v_writes(i).data(v_idx_high downto v_idx_low) := std_logic_vector(to_unsigned(integer(v_rnd*v_max_data_val), v_data_width));
+                
             end loop;
             
             i_addra <= v_writes(i).addr;
@@ -207,12 +215,20 @@ begin
             v_writes(i).addr := std_logic_vector(to_unsigned(v_addr_int, v_writes(i).addr'length));
             
             for j in 0 to integer(floor(real(g_data_width)/real(c_rng_max_width))) loop
+            
                 uniform(v_seed1, v_seed2, v_rnd);
+                
                 v_idx_low := j*c_rng_max_width;
-                v_idx_high := int_min((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
+                v_idx_high := (j+1)*c_rng_max_width - 1;
+                if (v_idx_high > v_writes(i).data'high) then
+                    v_idx_high := v_writes(i).data'high;
+                end if;
+                
                 v_data_width := v_idx_high + 1 - v_idx_low;
                 v_max_data_val := 2**v_data_width;
+                
                 v_writes(i).data(v_idx_high downto v_idx_low) := std_logic_vector(to_unsigned(integer(v_rnd*v_max_data_val), v_data_width));
+                
             end loop;
             
             i_addrb <= v_writes(i).addr;
