@@ -42,7 +42,7 @@ package bram_dp_custom_pkg is
     type t_prim_init_2d_arr is array(natural range<>, natural range<>) of t_bram_primitive;
     
     --use this to initialize bram_dp_custom - row, then col (y, then x)
-    type t_custom_ram is array(natural range<>, natural range<>) of std_logic;
+    type t_custom_ram is array(natural range<>) of std_logic_vector;
 
 end bram_dp_custom_pkg;
 

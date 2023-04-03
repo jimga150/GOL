@@ -34,7 +34,7 @@ architecture Behavioral of bram_dp_custom_tb is
     constant g_read_delay : integer := 8+3;
     constant g_data_width : integer := 8;
     constant g_word_depth : integer := 40*1024; --32k
-    constant g_init_vals : t_custom_ram(g_word_depth-1 downto 0, g_data_width-1 downto 0) := (others => (others => '0'));
+    constant g_init_vals : t_custom_ram(g_word_depth-1 downto 0)(g_data_width-1 downto 0) := (others => (others => '0'));
     
     constant g_addr_width : integer := integer(ceil(log2(real(g_word_depth))));
     

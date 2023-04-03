@@ -67,21 +67,15 @@ architecture Structural of GOL_block is
     attribute ASYNC_REG : boolean;
     
     pure function InitRamFromChunks(i_chunk_arr : in t_block_chunk_arr) return t_custom_ram is
-        variable v_ans : t_custom_ram(c_bram_depth-1 downto 0, c_bram_width-1 downto 0);
+        variable v_ans : t_custom_ram(c_bram_depth-1 downto 0)(c_bram_width-1 downto 0);
         variable v_addr : integer;
-        variable v_slv : std_logic_vector(v_ans'range(2));
+        variable v_slv : std_logic_vector(v_ans(v_ans'low)'range);
     begin
         for r in 0 to c_block_num_chunk_rows-1 loop
             for c in 0 to c_block_num_chunk_cols-1 loop
-            
                 v_addr := get_chunk_addr_int(c, r, '0');
                 v_slv := chunk_to_vector(i_chunk_arr(r, c));
-                
-                --no partial slices in vivado VHDL.
-                for i in v_ans'range(2) loop
-                    v_ans(v_addr, i) := v_slv(i);
-                end loop;
-            
+                v_ans(v_addr) := v_slv;
             end loop;
         end loop;
         return v_ans;

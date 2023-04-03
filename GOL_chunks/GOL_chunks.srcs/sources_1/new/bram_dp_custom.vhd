@@ -39,7 +39,7 @@ entity bram_dp_custom is
         g_read_delay : integer := 6+3;
         g_data_width : integer := 8;
         g_word_depth : integer := 35*1024; --32k
-        g_init_vals : t_custom_ram(g_word_depth-1 downto 0, g_data_width-1 downto 0) := (others => (others => '0'));
+        g_init_vals : t_custom_ram(g_word_depth-1 downto 0)(g_data_width-1 downto 0) := (others => (others => '0'));
         --------------------------------------------------------------------
         --DO NOT OVERRIDE ANYTHING BELOW THIS LINE IN INSTANTIATION
         --------------------------------------------------------------------
@@ -82,21 +82,21 @@ architecture Structural of bram_dp_custom is
         
     begin
     
-        for lv_row in i_init_vals'range(1) loop
+        for lv_row in i_init_vals'range loop
         
             v_prim_row_major := lv_row / c_primitive_word_depth;
             report "v_prim_row_major := " & integer'image(v_prim_row_major);
             v_prim_row_minor := lv_row mod c_primitive_word_depth;
             report "v_prim_row_minor := " & integer'image(v_prim_row_minor);
         
-            for lv_col in i_init_vals'range(2) loop
+            for lv_col in i_init_vals(i_init_vals'low)'range loop
                 
                 v_prim_col_major := lv_col / c_primitive_data_width;
                 report "v_prim_col_major := " & integer'image(v_prim_col_major);
                 v_prim_col_minor := lv_col mod c_primitive_data_width;
                 report "v_prim_col_minor := " & integer'image(v_prim_col_minor);
                 
-                v_ans(v_prim_row_major, v_prim_col_major)(v_prim_row_minor)(v_prim_col_minor) := i_init_vals(lv_row, lv_col);
+                v_ans(v_prim_row_major, v_prim_col_major)(v_prim_row_minor)(v_prim_col_minor) := i_init_vals(lv_row)(lv_col);
                 
             end loop;
             
