@@ -99,7 +99,7 @@ architecture Structural of GOL_chunks_top is
     signal s_vsync_logic : std_logic;
     signal s_do_frame : std_logic;
     
-    signal s_frame_go, s_frame_step : std_logic; --TODO
+    signal s_frame_go, s_frame_step : std_logic;
 
 begin
 
@@ -240,7 +240,7 @@ begin
     field_inst: entity work.GOL_field
     generic map(
         g_init_cells => c_init_vline1680x1050_diamond,
-        g_rules => c_GOL_maze
+        g_rules => c_GOL_ASIM
     )
     port map(
         i_clk_read => s_clk_vga,

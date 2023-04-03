@@ -29,7 +29,7 @@ entity vga_controller is
     generic(
         g_h_pixels  :   integer := 1680;		--horiztonal display width in pixels
         g_h_fp	 	:	integer := 104;		--horiztonal front porch width in pixels
-        g_h_pulse 	:	integer := 184;    	--horiztonal sync pulse width in pixels --TODO: g
+        g_h_pulse 	:	integer := 184;    	--horiztonal sync pulse width in pixels
         g_h_bp	 	:	integer := 288;		--horiztonal back porch width in pixels
         g_h_pol		:	std_logic := '0';		--horizontal sync pulse polarity (1 = positive, 0 = negative)
         g_v_pixels	:	integer := 1050;		--vertical display width in rows
