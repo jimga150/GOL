@@ -54,6 +54,11 @@ package GOL_pkg is
         e_stay => (1 => true, 2 => true, 3 => true, 4 => true, 5 => true, others => false)
     );
     
+    constant c_GOL_ASIM : t_GOL_rules := (
+        e_born => (3 => true, 4 => true, 5 => true, others => false),
+        e_stay => (4 => true, 5 => true, 6 => true, 7 => true, others => false)
+    );
+    
     --cell count will be greater than or equal to the screen size
     constant c_screen_width : integer := 1680;
     constant c_screen_height : integer := 1050;
@@ -131,11 +136,7 @@ package GOL_pkg is
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     type t_field_chunk_arr is array(c_field_num_chunk_rows-1 downto 0, c_field_num_chunk_cols-1 downto 0) of t_chunk_type;
     type t_block_chunk_arr is array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) of t_chunk_type;
-    
-    type t_ram_type is array(natural range<>) of std_logic_vector(c_bram_width-1 downto 0);
-    subtype t_ram_block_arr is t_ram_type(c_bram_depth-1 downto 0);
-    subtype t_bram_36k_arr is t_ram_type(1023 downto 0);
-    
+        
     constant c_empty_chunk : t_chunk_type := (others => (others => '0'));
     constant c_empty_field : t_field_chunk_arr := (others => (others => c_empty_chunk));
     constant c_empty_block : t_block_chunk_arr := (others => (others => c_empty_chunk));
