@@ -140,16 +140,6 @@ package GOL_pkg is
     constant c_empty_field : t_field_chunk_arr := (others => (others => c_empty_chunk));
     constant c_empty_block : t_block_chunk_arr := (others => (others => c_empty_chunk));
     
-    pure function int_max(
-        i_int1 : integer;
-        i_int2 : integer
-    ) return integer;
-    
-    pure function int_min(
-        i_int1 : integer;
-        i_int2 : integer
-    ) return integer;
-    
     pure function barrel_decrement(
         i_int : integer;
         i_min : integer;
@@ -222,30 +212,6 @@ package GOL_pkg is
 end GOL_pkg;
 
 package body GOL_pkg is
-
-    pure function int_max(
-        i_int1 : integer;
-        i_int2 : integer
-    ) return integer is
-    
-    begin
-        if (i_int1 > i_int2) then
-            return i_int1;
-        end if;
-        return i_int2;
-    end function;
-    
-    pure function int_min(
-        i_int1 : integer;
-        i_int2 : integer
-    ) return integer is
-    
-    begin
-        if (i_int1 < i_int2) then
-            return i_int1;
-        end if;
-        return i_int2;
-    end function;
     
     pure function barrel_decrement(
         i_int : integer;
@@ -541,8 +507,8 @@ package body GOL_pkg is
     ) return t_block_chunk_arr is
         constant c_start_x : integer := i_block_x*c_block_num_chunk_cols;
         constant c_start_y : integer := i_block_y*c_block_num_chunk_rows;
-        constant c_last_x : integer := int_min((i_block_x+1)*c_block_num_chunk_cols - 1, i_2d_chunk_arr'high(2));
-        constant c_last_y : integer := int_min((i_block_y+1)*c_block_num_chunk_rows - 1, i_2d_chunk_arr'high(1));
+        constant c_last_x : integer := minimum((i_block_x+1)*c_block_num_chunk_cols - 1, i_2d_chunk_arr'high(2));
+        constant c_last_y : integer := minimum((i_block_y+1)*c_block_num_chunk_rows - 1, i_2d_chunk_arr'high(1));
         variable v_ans : t_block_chunk_arr := c_empty_block;
     begin
         if (c_start_x > c_last_x) then

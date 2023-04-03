@@ -136,10 +136,7 @@ begin
                 uniform(v_seed1, v_seed2, v_rnd);
                 
                 v_idx_low := j*c_rng_max_width;
-                v_idx_high := (j+1)*c_rng_max_width - 1;
-                if (v_idx_high > v_writes(i).data'high) then
-                    v_idx_high := v_writes(i).data'high;
-                end if;
+                v_idx_high := minimum((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
                 
                 v_data_width := v_idx_high + 1 - v_idx_low;
                 v_max_data_val := 2**v_data_width;
@@ -219,10 +216,7 @@ begin
                 uniform(v_seed1, v_seed2, v_rnd);
                 
                 v_idx_low := j*c_rng_max_width;
-                v_idx_high := (j+1)*c_rng_max_width - 1;
-                if (v_idx_high > v_writes(i).data'high) then
-                    v_idx_high := v_writes(i).data'high;
-                end if;
+                v_idx_high := minimum((j+1)*c_rng_max_width - 1, v_writes(i).data'high);
                 
                 v_data_width := v_idx_high + 1 - v_idx_low;
                 v_max_data_val := 2**v_data_width;

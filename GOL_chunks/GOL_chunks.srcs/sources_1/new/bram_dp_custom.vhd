@@ -328,15 +328,8 @@ begin
     
         gen_prim_row: for gv_prim_col_idx in 0 to c_num_prims_wide-1 generate
         
-            pure function int_min(i_a, i_b : in integer) return integer is begin
-                if (i_a < i_b) then
-                    return i_a;
-                end if;
-                return i_b;
-            end function;
-        
             constant c_data_low_idx : integer := gv_prim_col_idx*c_primitive_data_width;
-            constant c_data_high_idx : integer := int_min((gv_prim_col_idx+1)*c_primitive_data_width - 1, g_data_width-1);
+            constant c_data_high_idx : integer := minimum((gv_prim_col_idx+1)*c_primitive_data_width - 1, g_data_width-1);
             constant c_data_used : integer := c_data_high_idx - c_data_low_idx + 1;
             
             --stage 3
