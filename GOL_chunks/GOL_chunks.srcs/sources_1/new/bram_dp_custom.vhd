@@ -152,8 +152,7 @@ architecture Structural of bram_dp_custom is
     signal s_dina_pline, s_dinb_pline : t_data_arr(c_input_delay downto 1);
     
     --major address pipelines
-    type t_int_arr is array(natural range<>) of integer;
-    signal s_major_addra_pline, s_major_addrb_pline : t_int_arr(g_read_delay downto 2);
+    signal s_major_addra_pline, s_major_addrb_pline : integer_vector(g_read_delay downto 2);
     
     --major address: address to select between primitives
     signal s1_major_addra, s1_major_addrb : integer;

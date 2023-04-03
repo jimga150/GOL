@@ -40,8 +40,8 @@ package GOL_pkg is
     constant c_project_path : string := "C:\Users\Jim\Desktop\Code\VHDL\GOL\GOL_chunks";
     
     type t_GOL_rules is record
-        e_born : t_bool_arr(8 downto 0);
-        e_stay : t_bool_arr(8 downto 0);
+        e_born : boolean_vector(8 downto 0);
+        e_stay : boolean_vector(8 downto 0);
     end record t_GOL_rules;
     
     constant c_GOL_default : t_GOL_rules := (
