@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="PS2_mouse_reader_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="PS2_mouse_reader_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000000 ms"></ZoomStartTime>
+      <ZoomEndTime time="68.050000001 ms"></ZoomEndTime>
+      <Cursor1Time time="52.960000000 ms"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="220"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="46" />
+   <wvobject fp_name="/PS2_mouse_reader_tb/i_sys_clk" type="logic">
+      <obj_property name="ElementShortName">i_sys_clk</obj_property>
+      <obj_property name="ObjectShortName">i_sys_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/i_ps2_clk" type="logic">
+      <obj_property name="ElementShortName">i_ps2_clk</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/i_sys_rst" type="logic">
+      <obj_property name="ElementShortName">i_sys_rst</obj_property>
+      <obj_property name="ObjectShortName">i_sys_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/i_ps2_dat" type="logic">
+      <obj_property name="ElementShortName">i_ps2_dat</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_dat</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/o_left_btn" type="logic">
+      <obj_property name="ElementShortName">o_left_btn</obj_property>
+      <obj_property name="ObjectShortName">o_left_btn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/o_right_btn" type="logic">
+      <obj_property name="ElementShortName">o_right_btn</obj_property>
+      <obj_property name="ObjectShortName">o_right_btn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/o_x" type="other">
+      <obj_property name="ElementShortName">o_x</obj_property>
+      <obj_property name="ObjectShortName">o_x</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/o_y" type="other">
+      <obj_property name="ElementShortName">o_y</obj_property>
+      <obj_property name="ObjectShortName">o_y</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/o_mouse_connected" type="logic">
+      <obj_property name="ElementShortName">o_mouse_connected</obj_property>
+      <obj_property name="ObjectShortName">o_mouse_connected</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/s_mouse_ev_arr" type="array">
+      <obj_property name="ElementShortName">s_mouse_ev_arr[19:0]</obj_property>
+      <obj_property name="ObjectShortName">s_mouse_ev_arr[19:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/i_sys_clk_period" type="other">
+      <obj_property name="ElementShortName">i_sys_clk_period</obj_property>
+      <obj_property name="ObjectShortName">i_sys_clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/i_ps2_clk_period" type="other">
+      <obj_property name="ElementShortName">i_ps2_clk_period</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/c_num_mouse_events" type="other">
+      <obj_property name="ElementShortName">c_num_mouse_events</obj_property>
+      <obj_property name="ObjectShortName">c_num_mouse_events</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/c_default_mouse_event" type="array">
+      <obj_property name="ElementShortName">c_default_mouse_event</obj_property>
+      <obj_property name="ObjectShortName">c_default_mouse_event</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/i_ps2_clk" type="logic">
+      <obj_property name="ElementShortName">i_ps2_clk</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/i_ps2_dat" type="logic">
+      <obj_property name="ElementShortName">i_ps2_dat</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_dat</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/i_sys_clk" type="logic">
+      <obj_property name="ElementShortName">i_sys_clk</obj_property>
+      <obj_property name="ObjectShortName">i_sys_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/i_sys_rst" type="logic">
+      <obj_property name="ElementShortName">i_sys_rst</obj_property>
+      <obj_property name="ObjectShortName">i_sys_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/o_left_btn" type="logic">
+      <obj_property name="ElementShortName">o_left_btn</obj_property>
+      <obj_property name="ObjectShortName">o_left_btn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/o_right_btn" type="logic">
+      <obj_property name="ElementShortName">o_right_btn</obj_property>
+      <obj_property name="ObjectShortName">o_right_btn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/o_x" type="other">
+      <obj_property name="ElementShortName">o_x</obj_property>
+      <obj_property name="ObjectShortName">o_x</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/o_y" type="other">
+      <obj_property name="ElementShortName">o_y</obj_property>
+      <obj_property name="ObjectShortName">o_y</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/o_mouse_connected" type="logic">
+      <obj_property name="ElementShortName">o_mouse_connected</obj_property>
+      <obj_property name="ObjectShortName">o_mouse_connected</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/s_ps2_data" type="array">
+      <obj_property name="ElementShortName">s_ps2_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/s_ps2_valid_ready" type="logic">
+      <obj_property name="ElementShortName">s_ps2_valid_ready</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_valid_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/s_ps2_data_error" type="logic">
+      <obj_property name="ElementShortName">s_ps2_data_error</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_data_error</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/s_state" type="other">
+      <obj_property name="ElementShortName">s_state</obj_property>
+      <obj_property name="ObjectShortName">s_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/s_xs" type="logic">
+      <obj_property name="ElementShortName">s_xs</obj_property>
+      <obj_property name="ObjectShortName">s_xs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/s_ys" type="logic">
+      <obj_property name="ElementShortName">s_ys</obj_property>
+      <obj_property name="ObjectShortName">s_ys</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/c_rst_state" type="other">
+      <obj_property name="ElementShortName">c_rst_state</obj_property>
+      <obj_property name="ObjectShortName">c_rst_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/i_ps2_clk" type="logic">
+      <obj_property name="ElementShortName">i_ps2_clk</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/i_ps2_dat" type="logic">
+      <obj_property name="ElementShortName">i_ps2_dat</obj_property>
+      <obj_property name="ObjectShortName">i_ps2_dat</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/i_sys_clk" type="logic">
+      <obj_property name="ElementShortName">i_sys_clk</obj_property>
+      <obj_property name="ObjectShortName">i_sys_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/i_sys_rst" type="logic">
+      <obj_property name="ElementShortName">i_sys_rst</obj_property>
+      <obj_property name="ObjectShortName">i_sys_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/o_data" type="array">
+      <obj_property name="ElementShortName">o_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">o_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/o_data_valid" type="logic">
+      <obj_property name="ElementShortName">o_data_valid</obj_property>
+      <obj_property name="ObjectShortName">o_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/o_data_error" type="logic">
+      <obj_property name="ElementShortName">o_data_error</obj_property>
+      <obj_property name="ObjectShortName">o_data_error</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/i_ready" type="logic">
+      <obj_property name="ElementShortName">i_ready</obj_property>
+      <obj_property name="ObjectShortName">i_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_ps2_word" type="array">
+      <obj_property name="ElementShortName">s_ps2_word[8:0]</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_word[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_ps2_getting_word" type="other">
+      <obj_property name="ElementShortName">s_ps2_getting_word</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_getting_word</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_ps2_bit_count" type="other">
+      <obj_property name="ElementShortName">s_ps2_bit_count</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_bit_count</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_ps2_got_data" type="logic">
+      <obj_property name="ElementShortName">s_ps2_got_data</obj_property>
+      <obj_property name="ObjectShortName">s_ps2_got_data</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_sys_got_data" type="logic">
+      <obj_property name="ElementShortName">s_sys_got_data</obj_property>
+      <obj_property name="ObjectShortName">s_sys_got_data</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_sys_have_data" type="logic">
+      <obj_property name="ElementShortName">s_sys_have_data</obj_property>
+      <obj_property name="ObjectShortName">s_sys_have_data</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_sys_data_valid" type="logic">
+      <obj_property name="ElementShortName">s_sys_data_valid</obj_property>
+      <obj_property name="ObjectShortName">s_sys_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/PS2_mouse_reader_tb/UUT/ps2_rdr_inst/s_sys_word" type="array">
+      <obj_property name="ElementShortName">s_sys_word[8:0]</obj_property>
+      <obj_property name="ObjectShortName">s_sys_word[8:0]</obj_property>
+   </wvobject>
+</wave_config>

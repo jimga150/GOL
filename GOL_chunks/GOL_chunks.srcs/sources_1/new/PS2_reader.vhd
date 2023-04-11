@@ -32,8 +32,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity PS2_reader is
+    generic(
+        g_sys_clk_f : integer := 100_000_000;
+        g_ps2_clk_f : integer := 16891;
+        g_parity_odd : boolean := true
+    );
     port(
         i_ps2_clk, i_ps2_dat : in std_logic;
+        i_ps2_ce : in std_logic := '1';
         i_sys_clk, i_sys_rst : in std_logic;
         o_data : out std_logic_vector(7 downto 0);
         o_data_valid : out std_logic;
@@ -44,13 +50,20 @@ end PS2_reader;
 
 architecture Behavioral of PS2_reader is
 
+    attribute mark_debug : string;
+    
+    constant c_ps2_clk_per_cnt : integer := g_sys_clk_f/g_ps2_clk_f;
+
     --includes parity bit
     signal s_ps2_word : std_logic_vector(8 downto 0);
     
     signal s_ps2_getting_word : boolean;
     signal s_ps2_bit_count : integer range 0 to 9;
     
+    signal s_ps2_wait_stop_bit : std_logic;
+    
     signal s_ps2_got_data : std_logic;
+    attribute mark_debug of s_ps2_got_data : signal is "true";
     
     signal s_sys_got_data : std_logic;
     signal s_sys_have_data : std_logic;
@@ -64,7 +77,7 @@ begin
         if (i_sys_rst = '1') then
             s_ps2_getting_word <= false;
             s_ps2_bit_count <= 0;
-        elsif falling_edge(i_ps2_clk) then
+        elsif (falling_edge(i_ps2_clk) and i_ps2_ce = '1') then
             
             s_ps2_got_data <= '0';
         
@@ -76,8 +89,10 @@ begin
                 if (s_ps2_bit_count = 8) then --about to be 9 after this cycle
                     s_ps2_getting_word <= false;
                     s_ps2_bit_count <= 0;
-                    s_ps2_got_data <= '1';
+                    s_ps2_wait_stop_bit <= '1';
                 end if;
+            elsif (s_ps2_wait_stop_bit and i_ps2_dat) then --its a no-go if we dont get a stop bit
+                s_ps2_got_data <= '1';
             end if;
             
         end if;
@@ -86,7 +101,7 @@ begin
     gotdata_clk_cross: entity work.button_conditioner
     generic map(
         g_metastability_stages => 4,
-        g_stable_cycles => 1 --don't need to debounce
+        g_stable_cycles => c_ps2_clk_per_cnt --wait for 1 PS2 clock period
     )
     port map(
         i_clk => i_sys_clk,
@@ -104,10 +119,17 @@ begin
             end if;
             
             if (s_sys_have_data = '1') then
-                --odd parity: if the parity is even, there is an error
-                o_data_error <= xnor s_sys_word;
+                
+                if (g_parity_odd) then
+                    --odd parity: if the parity is even, there is an error
+                    o_data_error <= xnor s_sys_word;
+                else
+                    o_data_error <= xor s_sys_word;
+                end if;
+                
                 s_sys_data_valid <= '1';
                 o_data <= s_sys_word(7 downto 0); --just the data bits, leave out parity bit (LSB)
+                
             end if;
             
             if (s_sys_data_valid = '1' and i_ready = '1') then
