@@ -35,8 +35,8 @@ entity PS2_mouse_reader_synth_wrapper is
     port(
         io_ps2_clk, io_ps2_dat : inout std_logic;
         i_sys_clk, i_sys_rst : in std_logic;
-        o_left_btn, o_right_btn : out std_logic;
-        o_x, o_y : out std_logic_vector(7 downto 0);
+        o_left_btn, o_right_btn, o_middle_btn : out std_logic;
+        o_x, o_y : out std_logic_vector(8 downto 0);
         o_mouse_connected : out std_logic;
         o_valid : out std_logic;
         i_ready : in std_logic
@@ -74,6 +74,7 @@ begin
         io_ps2_dat => io_ps2_dat,
         o_left_btn => o_left_btn,
         o_right_btn => o_right_btn,
+        o_middle_btn => o_middle_btn,
         o_x => s_x_int,
         o_y => s_y_int,
         o_mouse_connected => o_mouse_connected,
@@ -81,7 +82,7 @@ begin
         i_ready => i_ready
     );
     
-    o_x <= std_logic_vector(to_unsigned(s_x_int, o_x'length));
-    o_y <= std_logic_vector(to_unsigned(s_y_int, o_x'length));
+    o_x <= std_logic_vector(to_signed(s_x_int, o_x'length));
+    o_y <= std_logic_vector(to_signed(s_y_int, o_x'length));
 
 end Behavioral;
