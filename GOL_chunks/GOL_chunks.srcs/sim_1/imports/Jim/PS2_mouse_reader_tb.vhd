@@ -97,7 +97,7 @@ architecture Behavioral of PS2_mouse_reader_tb is
         report "p_send_ps2_data called, sending " & to_hstring(i_data) severity note;
         v_parity := xnor i_data;
         
-        wait for i_ps2_clk_period;
+        wait for i_ps2_clk_period*2;
         wait until rising_edge(s_ps2_clk);
         
         --transmit word
@@ -297,27 +297,45 @@ begin
         
         wait for i_ps2_clk_period;
         
-        --Insert stimuli here
+--        --send self-test pass
+--        v_data_slv := c_resp_self_test_passed;
+--        p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
+        
+--        wait for i_ps2_clk_period;
+        
+--        --send ID
+--        v_data_slv := c_resp_mouse_id;
+--        p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
+        
+--        --get and validate command
+--        p_wait_word(c_cmd_reset, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        
+        --send self-test pass
         v_data_slv := c_resp_self_test_passed;
         p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
-        
-        wait for i_ps2_clk_period;
-        
+                
+        --send ID
         v_data_slv := c_resp_mouse_id;
         p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
         
-        --get and validate command
-        p_wait_word(c_cmd_set_resolution, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+--        --get and validate command
+--        p_wait_word(c_cmd_set_resolution, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
         
-        --get data, no validation
-        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
-        report "Got resolution of " & to_string(v_data_slv);
+--        --get data, no validation
+--        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+--        report "Got resolution of " & to_string(v_data_slv);
         
-        --get command but ask to resend
-        p_wait_word(c_cmd_set_sample_rate, true, true, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+--        --get command but ask to resend
+--        p_wait_word(c_cmd_set_sample_rate, true, true, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
                 
-        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
-        report "Got sample rate of " & to_string(v_data_slv);
+--        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+--        report "Got sample rate of " & to_string(v_data_slv);
+        
+--        --get and validate command
+--        p_wait_word(c_cmd_set_stream_mode, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+
+        --get and validate command
+        p_wait_word(c_cmd_set_defaults, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
         
         p_wait_word(c_cmd_en_data_reporting, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
         
