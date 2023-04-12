@@ -34,7 +34,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 package PS2_mouse_reader_pkg is
 
     constant c_resp_self_test_passed : std_logic_vector(7 downto 0) := X"AA";
-    constant c_resp_mouse_id : std_logic_vector(7 downto 0) := X"00";
+    constant c_resp_mouse_id_norm : std_logic_vector(7 downto 0) := X"00";
+    constant c_resp_mouse_id_wheel : std_logic_vector(7 downto 0) := X"03";
     constant c_resp_ack : std_logic_vector(7 downto 0) := X"FA";
     constant c_resp_resend : std_logic_vector(7 downto 0) := X"FE";
     constant c_resp_error : std_logic_vector(7 downto 0) := X"FC";

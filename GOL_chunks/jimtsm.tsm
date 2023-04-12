@@ -19,7 +19,7 @@
 #
 state wait_for_nth_rising_edge_of_sig:
   # counter check should be n-1
-  if ((ps2mr/s_ps2_rdr_valid_ready == 1'bR) && ($counter0 == 16'h0000)) then
+  if ((ps2mr/s_ps2_rdr_valid_ready == 1'bR) && ($counter0 == 16'h0005)) then
     reset_counter $counter0;
     trigger;
   elseif (ps2mr/s_ps2_rdr_valid_ready == 1'bR) then

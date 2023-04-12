@@ -41,7 +41,7 @@ entity PS2_mouse_reader is
         io_ps2_clk, io_ps2_dat : inout std_logic;
         i_sys_clk, i_sys_rst : in std_logic;
         o_left_btn, o_right_btn : out std_logic;
-        o_x, o_y : out integer;
+        o_x, o_y, o_z : out integer;
         o_mouse_connected : out std_logic;
         o_valid : out std_logic;
         i_ready : in std_logic;
@@ -95,10 +95,11 @@ architecture Behavioral of PS2_mouse_reader is
         SEND_SET_SCALE_1_1,
         WAIT_STATUSBYTE, 
         WAIT_X_BYTE, 
-        WAIT_Y_BYTE, 
+        WAIT_Y_BYTE,
+        WAIT_Z_BYTE,
         GOT_ALL
     );
-    constant c_rst_state : t_state_type := IDLE;
+    constant c_rst_state : t_state_type := SEND_RST;
     signal s_state, s_state_resend, s_state_post_ack, s_state_post_send : t_state_type;
     
     type t_state_seq_type is array(natural range<>) of t_state_type;
@@ -106,12 +107,28 @@ architecture Behavioral of PS2_mouse_reader is
     --before it starts listening for stream packets
     constant c_boot_sequence : t_state_seq_type(0 to 15) := (
 --        0 => SEND_SET_RESOLUTION,
---        1 => SEND_SET_SAMPLE_RATE,
+        0 => SEND_SET_SAMPLE_RATE,
+        1 => SEND_SET_SAMPLE_RATE,
+        2 => SEND_SET_SAMPLE_RATE,
+        3 => SEND_GET_DEV_ID,
+        4 => SEND_SET_RESOLUTION,
+        5 => SEND_SET_SAMPLE_RATE,
 --        2 => SEND_SET_STREAM,
-        0 => SEND_SET_DEFAULTS,
+--        0 => SEND_SET_DEFAULTS,
         others => SEND_EN_DATA_REPORTING --will enter the listening loop upon sending this command
     );
     signal s_boot_seq_idx : integer range c_boot_sequence'range;
+    
+    type t_data_arr_type is array(natural range<>) of std_logic_vector(7 downto 0);
+    -- corresponds to commands in c_boot_sequence that require arguments, like SEND_SET_SAMPLE_RATE
+    constant c_boot_seq_args : t_data_arr_type(c_boot_sequence'range) := (
+        0 => std_logic_vector(to_unsigned(200, s_ps2_data_out'length)),
+        1 => std_logic_vector(to_unsigned(100, s_ps2_data_out'length)),
+        2 => std_logic_vector(to_unsigned(80, s_ps2_data_out'length)),
+        4 => std_logic_vector(to_unsigned(3, s_ps2_data_out'length)),
+        5 => std_logic_vector(to_unsigned(40, s_ps2_data_out'length)),
+        others => (others => '0')
+    );
     
     signal s_xs, s_ys : std_logic;
     
@@ -119,6 +136,9 @@ architecture Behavioral of PS2_mouse_reader is
     signal s_i_ps2_dat, s_o_ps2_dat, s_ps2_dat_oe : std_logic;
     
     signal s_sent_reset : std_logic;
+    
+    signal s_mouse_has_wheel : std_logic;
+    signal s_waiting_inital_id : std_logic;
 
 begin
 
@@ -178,13 +198,23 @@ begin
                         s_state <= WAIT_ID;
                     end if;
                 when WAIT_ID => 
-                    if (s_ps2_rdr_valid_ready = '1' and s_ps2_data_in = c_resp_mouse_id) then
---                        if (s_sent_reset) then
-                            s_state <= c_boot_sequence(s_boot_seq_idx); --presumably the first one
---                        else
---                            s_state <= SEND_RST;
---                        end if;
-                        o_mouse_connected <= '1';
+                    if (s_ps2_rdr_valid_ready = '1') then
+                        if (s_waiting_inital_id = '1' and s_ps2_data_in = c_resp_mouse_id_norm) then
+                            if (s_sent_reset) then
+                                s_state <= c_boot_sequence(s_boot_seq_idx); --presumably the first one
+                                s_waiting_inital_id <= '0';
+                            else
+                                s_state <= SEND_RST;
+                            end if;
+                            o_mouse_connected <= '1';
+                        elsif (s_ps2_data_in = c_resp_mouse_id_norm) then
+                            s_boot_seq_idx <= s_boot_seq_idx + 1;
+                            s_state <= c_boot_sequence(s_boot_seq_idx + 1);
+                        elsif (s_ps2_data_in = c_resp_mouse_id_wheel) then
+                            s_mouse_has_wheel <= '1';
+                            s_boot_seq_idx <= s_boot_seq_idx + 1;
+                            s_state <= c_boot_sequence(s_boot_seq_idx + 1);
+                        end if;
                     end if;
                 when WAIT_ACK =>
                     if (s_ps2_rdr_valid_ready = '1') then
@@ -216,7 +246,7 @@ begin
                         s_state <= WAIT_SEND;
                     end if;
                     
-                when SEND_SET_DEFAULTS => --also sets mouse to stream mode
+                when SEND_SET_DEFAULTS => --also supposedly sets mouse to stream mode, but not on the Nexys A7!!
                     s_ps2_data_out <= c_cmd_set_defaults;
                     s_state_post_send <= WAIT_ACK;
                     s_state_post_ack <= c_boot_sequence(s_boot_seq_idx + 1);
@@ -258,7 +288,7 @@ begin
                         s_state <= WAIT_SEND;
                     end if;
                 when SEND_SAMPLE_RATE =>
-                    s_ps2_data_out <= std_logic_vector(to_unsigned(40, s_ps2_data_out'length));
+                    s_ps2_data_out <= c_boot_seq_args(s_boot_seq_idx);
                     s_state_post_send <= WAIT_ACK;
                     s_state_post_ack <= c_boot_sequence(s_boot_seq_idx + 1);
                     s_state_resend <= s_state;
@@ -375,7 +405,7 @@ begin
                         s_state <= WAIT_SEND;
                     end if;
                 when SEND_RESOLUTION =>
-                    s_ps2_data_out <= X"03";
+                    s_ps2_data_out <= c_boot_seq_args(s_boot_seq_idx);
                     s_state_post_send <= WAIT_ACK;
                     s_state_post_ack <= c_boot_sequence(s_boot_seq_idx + 1);
                     s_state_resend <= s_state;
@@ -426,13 +456,23 @@ begin
                     end if;
                 when WAIT_Y_BYTE => 
                     if (s_ps2_rdr_valid_ready = '1') then
-                        s_state <= GOT_ALL;
-                        o_valid <= '1';
                         if (s_ys = '1') then
                             o_y <= -to_integer(unsigned(s_ps2_data_in));
                         else
                             o_y <= to_integer(unsigned(s_ps2_data_in));
                         end if;
+                        if (s_mouse_has_wheel) then
+                            s_state <= WAIT_Z_BYTE;
+                        else
+                            s_state <= GOT_ALL;
+                            o_valid <= '1';
+                        end if;
+                    end if;
+                when WAIT_Z_BYTE =>
+                    if (s_ps2_rdr_valid_ready = '1') then
+                        s_state <= GOT_ALL;
+                        o_valid <= '1';
+                        o_z <= to_integer(signed(s_ps2_data_in));
                     end if;
                 when GOT_ALL => --wait on data consumer
                     if (i_ready = '1') then
@@ -446,6 +486,8 @@ begin
                 o_mouse_connected <= '0';
                 o_valid <= '0';
                 s_sent_reset <= '0';
+                s_mouse_has_wheel <= '0';
+                s_waiting_inital_id <= '1';
                 s_boot_seq_idx <= c_boot_sequence'low;
             end if;
             

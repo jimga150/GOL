@@ -47,6 +47,7 @@ architecture Behavioral of PS2_mouse_reader_tb is
     signal o_right_btn : std_logic;
     signal o_x : integer;
     signal o_y : integer;
+    signal o_z : integer;
     signal o_mouse_connected : std_logic;
     signal o_valid : std_logic;
     
@@ -68,6 +69,7 @@ architecture Behavioral of PS2_mouse_reader_tb is
         e_yv : std_logic;
         e_x : std_logic_vector(7 downto 0);
         e_y : std_logic_vector(7 downto 0);
+        e_z : std_logic_vector(7 downto 0);
     end record;
     
     constant c_default_mouse_event : r_mouse_event := (
@@ -78,7 +80,8 @@ architecture Behavioral of PS2_mouse_reader_tb is
         e_xv => '0',
         e_yv => '0',
         e_x => (others => '0'),
-        e_y => (others => '0')
+        e_y => (others => '0'),
+        e_z => (others => '0')
     );
     
     type t_mouse_ev_arr is array(natural range<>) of r_mouse_event;
@@ -272,6 +275,7 @@ begin
         o_right_btn => o_right_btn,
         o_x => o_x,
         o_y => o_y,
+        o_z => o_z,
         o_mouse_connected => o_mouse_connected,
         o_valid => o_valid,
         i_ready => i_ready
@@ -291,51 +295,73 @@ begin
         variable v_error : boolean := false;
     begin
         
+        io_ps2_clk <= 'H';
+        io_ps2_dat <= 'H';
+        
         wait for i_ps2_clk_period;
         
         i_sys_rst <= '0';
         
-        wait for i_ps2_clk_period;
-        
+                
 --        --send self-test pass
 --        v_data_slv := c_resp_self_test_passed;
 --        p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
-        
---        wait for i_ps2_clk_period;
-        
+                
 --        --send ID
---        v_data_slv := c_resp_mouse_id;
+--        v_data_slv := c_resp_mouse_id_norm;
 --        p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
         
---        --get and validate command
---        p_wait_word(c_cmd_reset, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        --get and validate command
+        p_wait_word(c_cmd_reset, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
         
         --send self-test pass
         v_data_slv := c_resp_self_test_passed;
         p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
                 
         --send ID
-        v_data_slv := c_resp_mouse_id;
+        v_data_slv := c_resp_mouse_id_norm;
         p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
         
---        --get and validate command
---        p_wait_word(c_cmd_set_resolution, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
-        
---        --get data, no validation
---        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
---        report "Got resolution of " & to_string(v_data_slv);
-        
---        --get command but ask to resend
---        p_wait_word(c_cmd_set_sample_rate, true, true, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        --get command but ask to resend
+        p_wait_word(c_cmd_set_sample_rate, true, true, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
                 
---        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
---        report "Got sample rate of " & to_string(v_data_slv);
+        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        report "Got sample rate of " & to_string(v_data_slv);
         
---        --get and validate command
---        p_wait_word(c_cmd_set_stream_mode, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
-
+        --get command but ask to resend
+        p_wait_word(c_cmd_set_sample_rate, true, true, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+                
+        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        report "Got sample rate of " & to_string(v_data_slv);
+        
         --get and validate command
-        p_wait_word(c_cmd_set_defaults, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        p_wait_word(c_cmd_set_sample_rate, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+                
+        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        report "Got sample rate of " & to_string(v_data_slv);
+        
+        --get and validate command
+        p_wait_word(c_cmd_get_dev_id, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        
+        --send wheel ID
+        v_data_slv := c_resp_mouse_id_wheel;
+        p_send_ps2_data(v_data_slv, io_ps2_dat, s_ps2_clk_drive_en);
+        
+        --get and validate command
+        p_wait_word(c_cmd_set_resolution, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        
+        --get data, no validation
+        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        report "Got resolution of " & to_string(v_data_slv);
+        
+        --get and validate command
+        p_wait_word(c_cmd_set_sample_rate, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+                
+        p_wait_word(X"XX", false, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
+        report "Got sample rate of " & to_string(v_data_slv);
+
+--        --get and validate command
+--        p_wait_word(c_cmd_set_defaults, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
         
         p_wait_word(c_cmd_en_data_reporting, true, false, s_ps2_clk_drive_en, io_ps2_dat, v_data_slv, v_error);
         
@@ -379,14 +405,18 @@ begin
             uniform(v_seed1, v_seed2, v_rnd);
             v_mouse_ev.e_y := std_logic_vector(to_unsigned(integer(v_rnd*(2**v_mouse_ev.e_y'length)), v_mouse_ev.e_y'length));
             
+            uniform(v_seed1, v_seed2, v_rnd);
+            v_mouse_ev.e_z := std_logic_vector(to_unsigned(integer(v_rnd*(2**v_mouse_ev.e_z'length)), v_mouse_ev.e_z'length));
+            
             s_mouse_ev_arr(i) <= v_mouse_ev;
             
-            for j in 0 to 2 loop
+            for j in 0 to 3 loop
             
                 case(j) is
                     when 0 => v_data_slv := v_mouse_ev.e_yv & v_mouse_ev.e_xv & v_mouse_ev.e_ys & v_mouse_ev.e_xs & "10" & v_mouse_ev.e_r & v_mouse_ev.e_l; 
                     when 1 => v_data_slv := v_mouse_ev.e_x;
                     when 2 => v_data_slv := v_mouse_ev.e_y;
+                    when 3 => v_data_slv := v_mouse_ev.e_z;
                     when others => report "check J loop" severity failure;
                 end case;
                 
