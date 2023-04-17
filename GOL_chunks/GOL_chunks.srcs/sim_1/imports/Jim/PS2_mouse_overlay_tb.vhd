@@ -58,6 +58,8 @@ architecture Behavioral of PS2_mouse_overlay_tb is
     signal o_left_btn_click : std_logic;
     signal o_middle_btn_click : std_logic;
     signal o_right_btn_click : std_logic;
+    signal o_mouse_connected : std_logic;
+    signal o_cursor_x, o_cursor_y : unsigned(15 downto 0);
     signal o_pixel_r : std_logic_vector(3 downto 0);
     signal o_pixel_g : std_logic_vector(3 downto 0);
     signal o_pixel_b : std_logic_vector(3 downto 0);
@@ -90,6 +92,9 @@ begin
         o_left_btn_click => o_left_btn_click,
         o_middle_btn_click => o_middle_btn_click,
         o_right_btn_click => o_right_btn_click,
+        o_mouse_connected => o_mouse_connected,
+        o_cursor_x => o_cursor_x,
+        o_cursor_y => o_cursor_y,
         io_ps2_clk => io_ps2_clk,
         io_ps2_dat => io_ps2_dat,
         i_col => i_col,
