@@ -188,6 +188,8 @@ begin
                     i_clk_read => i_clk_read,
                     i_chunk_x => s2_block_chunk_x,
                     i_chunk_y => s2_block_chunk_y,
+                    i_chunk => c_empty_chunk, --TODO
+                    i_chunk_we => '0', --TODO
                     o_chunk => sA_chunks(r, c),
                     i_clk_stepper => i_clk_stepper,
                     i_rst_stepper => i_rst_stepper,

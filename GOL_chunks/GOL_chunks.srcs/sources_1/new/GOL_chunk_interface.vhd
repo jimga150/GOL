@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 08/05/2022 05:15:01 PM
 -- Design Name: 
--- Module Name: GOL_chunk_getter - Behavioral
+-- Module Name: GOL_chunk_interface - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -33,26 +33,32 @@ use work.GOL_pkg.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity GOL_chunk_getter is
+entity GOL_chunk_interface is
     port(
         i_clk : in std_logic;
         i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
         i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
         i_curr_state_msb : in std_logic;
+        i_chunk_we : in std_logic;
+        i_chunk : in t_chunk_type;
         o_chunk : out t_chunk_type;
         
         o_bram_ena : out std_logic := '1';
         o_bram_addr : out std_logic_vector(c_bram_addr_bits-1 downto 0);
-        i_bram_rd_data : in std_logic_vector(c_bram_width-1 downto 0)
+        o_bram_we : out std_logic;
+        i_bram_rd_data : in std_logic_vector(c_bram_width-1 downto 0);
+        o_bram_wr_data : out std_logic_vector(c_bram_width-1 downto 0)
         
     );
-end GOL_chunk_getter;
+end GOL_chunk_interface;
 
-architecture Behavioral of GOL_chunk_getter is
+architecture Behavioral of GOL_chunk_interface is
 
     signal s1_chunk_y_offset : unsigned(o_bram_addr'range);
     signal s1_bram_half_offset : unsigned(o_bram_addr'range);
     signal s1_chunk_x : unsigned(o_bram_addr'range);
+    signal s1_wr_data : std_logic_vector(c_bram_width-1 downto 0);
+    signal s1_chunk_we : std_logic;
 
 begin
 
@@ -69,8 +75,14 @@ begin
             
             s1_chunk_x <= resize(i_chunk_x, s1_chunk_x'length);
             
+            s1_chunk_we <= i_chunk_we;
+            s1_wr_data <= chunk_to_vector(i_chunk);
+            
             o_bram_addr <= std_logic_vector(s1_chunk_y_offset + s1_chunk_x + s1_bram_half_offset);            
 --            o_bram_addr <= get_chunk_addr(to_integer(i_chunk_x), to_integer(i_chunk_y), i_curr_state_msb, o_bram_addr'length);
+
+            o_bram_we <= s1_chunk_we;
+            o_bram_wr_data <= s1_wr_data;
 
             o_chunk <= vector_to_chunk(i_bram_rd_data);
         end if;

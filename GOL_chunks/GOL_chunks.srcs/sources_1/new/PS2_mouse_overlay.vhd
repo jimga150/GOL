@@ -50,6 +50,7 @@ entity PS2_mouse_overlay is
         o_middle_btn_click : out std_logic;
         o_right_btn_click : out std_logic;
         o_mouse_connected : out std_logic;
+        o_cursor_x, o_cursor_y : out unsigned(15 downto 0);
         
         --PS2 interface
         io_ps2_clk, io_ps2_dat : inout std_logic;
@@ -185,6 +186,9 @@ begin
             
         end if;
     end process;
+    
+    o_cursor_x <= unsigned(std_logic_vector(s_cursor_pos_x));
+    o_cursor_y <= unsigned(std_logic_vector(s_cursor_pos_y));
     
     s_cursor_pos_x_slv <= std_logic_vector(s_cursor_pos_x);
     s_cursor_pos_y_slv <= std_logic_vector(s_cursor_pos_y);

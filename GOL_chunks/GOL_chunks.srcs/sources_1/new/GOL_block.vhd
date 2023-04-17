@@ -44,6 +44,8 @@ entity GOL_block is
         
         i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
         i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
+        i_chunk : in t_chunk_type;
+        i_chunk_we : in std_logic;
         o_chunk : out t_chunk_type;
         
         i_clk_stepper : in std_logic;
@@ -159,16 +161,20 @@ begin
         o_doutb => s_bram_rd_datab
     );
     
-    chunk_reader_inst: entity work.GOL_chunk_getter
+    chunk_rw_inst: entity work.GOL_chunk_interface
     port map(
         i_clk => i_clk_read,
         i_chunk_x => i_chunk_x,
         i_chunk_y => i_chunk_y,
+        i_chunk => i_chunk,
+        i_chunk_we => i_chunk_we,
         i_curr_state_msb => s_current_state_msb_pline(s_current_state_msb_pline'high),
         o_chunk => o_chunk,
         o_bram_ena => s_bram_enab,
         o_bram_addr => s_bram_addrb,
-        i_bram_rd_data => s_bram_rd_datab
+        o_bram_we => s_bram_web,
+        i_bram_rd_data => s_bram_rd_datab,
+        o_bram_wr_data => s_bram_wr_datab
     );
     
     process(i_clk_read) is begin
@@ -178,8 +184,5 @@ begin
                 s0_current_state_msb;
         end if;
     end process;
-    
-    s_bram_web <= '0';
-    s_bram_wr_datab <= (others => '0');
 
 end Structural;
