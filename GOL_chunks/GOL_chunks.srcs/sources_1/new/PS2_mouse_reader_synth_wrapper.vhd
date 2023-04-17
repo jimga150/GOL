@@ -54,7 +54,7 @@ architecture Behavioral of PS2_mouse_reader_synth_wrapper is
     
     signal s_sys_clk_slow : std_logic;
 
-    signal s_x_int, s_y_int : integer;
+    signal s_x_signed, s_y_signed : signed(8 downto 0);
 
 begin
 
@@ -75,14 +75,14 @@ begin
         o_left_btn => o_left_btn,
         o_right_btn => o_right_btn,
         o_middle_btn => o_middle_btn,
-        o_x => s_x_int,
-        o_y => s_y_int,
+        o_x => s_x_signed,
+        o_y => s_y_signed,
         o_mouse_connected => o_mouse_connected,
         o_valid => o_valid,
         i_ready => i_ready
     );
     
-    o_x <= std_logic_vector(to_signed(s_x_int, o_x'length));
-    o_y <= std_logic_vector(to_signed(s_y_int, o_x'length));
+    o_x <= std_logic_vector(s_x_signed);
+    o_y <= std_logic_vector(s_y_signed);
 
 end Behavioral;

@@ -7,13 +7,13 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
 
 ## Clock signal
-set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports i_sys_clk]
-#create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports i_sys_clk]
+set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports i_clk_100mhz]
+#create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}];
 
 
 ##Switches
-set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS33} [get_ports i_sys_rst]
-set_property -dict {PACKAGE_PIN L16 IOSTANDARD LVCMOS33} [get_ports i_ready]
+set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS33} [get_ports i_rst]
+#set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { SW[1] }]; #IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]
 #set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { SW[2] }]; #IO_L6N_T0_D08_VREF_14 Sch=sw[2]
 #set_property -dict { PACKAGE_PIN R15   IOSTANDARD LVCMOS33 } [get_ports { SW[3] }]; #IO_L13N_T2_MRCC_14 Sch=sw[3]
 #set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { SW[4] }]; #IO_L12N_T1_MRCC_14 Sch=sw[4]
@@ -30,30 +30,30 @@ set_property -dict {PACKAGE_PIN L16 IOSTANDARD LVCMOS33} [get_ports i_ready]
 #set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { SW[15] }]; #IO_L21P_T3_DQS_14 Sch=sw[15]
 
 ## LEDs
-set_property -dict {PACKAGE_PIN H17 IOSTANDARD LVCMOS33} [get_ports {o_x[1]}]
-set_property -dict {PACKAGE_PIN K15 IOSTANDARD LVCMOS33} [get_ports {o_x[2]}]
-set_property -dict {PACKAGE_PIN J13 IOSTANDARD LVCMOS33} [get_ports {o_x[3]}]
-set_property -dict {PACKAGE_PIN N14 IOSTANDARD LVCMOS33} [get_ports {o_x[4]}]
-set_property -dict {PACKAGE_PIN R18 IOSTANDARD LVCMOS33} [get_ports {o_x[5]}]
-set_property -dict {PACKAGE_PIN V17 IOSTANDARD LVCMOS33} [get_ports {o_x[6]}]
-set_property -dict {PACKAGE_PIN U17 IOSTANDARD LVCMOS33} [get_ports {o_x[7]}]
-set_property -dict {PACKAGE_PIN U16 IOSTANDARD LVCMOS33} [get_ports {o_x[8]}]
-set_property -dict {PACKAGE_PIN V16 IOSTANDARD LVCMOS33} [get_ports {o_y[1]}]
-set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS33} [get_ports {o_y[2]}]
-set_property -dict {PACKAGE_PIN U14 IOSTANDARD LVCMOS33} [get_ports {o_y[3]}]
-set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS33} [get_ports {o_y[4]}]
-set_property -dict {PACKAGE_PIN V15 IOSTANDARD LVCMOS33} [get_ports {o_y[5]}]
-set_property -dict {PACKAGE_PIN V14 IOSTANDARD LVCMOS33} [get_ports {o_y[6]}]
-set_property -dict {PACKAGE_PIN V12 IOSTANDARD LVCMOS33} [get_ports {o_y[7]}]
-set_property -dict {PACKAGE_PIN V11 IOSTANDARD LVCMOS33} [get_ports {o_y[8]}]
+set_property -dict {PACKAGE_PIN H17 IOSTANDARD LVCMOS33} [get_ports o_left_btn_down]
+set_property -dict {PACKAGE_PIN K15 IOSTANDARD LVCMOS33} [get_ports o_middle_btn_down]
+set_property -dict {PACKAGE_PIN J13 IOSTANDARD LVCMOS33} [get_ports o_right_btn_down]
+set_property -dict {PACKAGE_PIN N14 IOSTANDARD LVCMOS33} [get_ports o_left_btn_click]
+set_property -dict {PACKAGE_PIN R18 IOSTANDARD LVCMOS33} [get_ports o_middle_btn_click]
+set_property -dict {PACKAGE_PIN V17 IOSTANDARD LVCMOS33} [get_ports o_right_btn_click]
+#set_property -dict { PACKAGE_PIN U17   IOSTANDARD LVCMOS33 } [get_ports { LED[6] }]; #IO_L17P_T2_A14_D30_14 Sch=led[6]
+#set_property -dict { PACKAGE_PIN U16   IOSTANDARD LVCMOS33 } [get_ports { LED[7] }]; #IO_L18P_T2_A12_D28_14 Sch=led[7]
+#set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { LED[8] }]; #IO_L16N_T2_A15_D31_14 Sch=led[8]
+#set_property -dict { PACKAGE_PIN T15   IOSTANDARD LVCMOS33 } [get_ports { LED[9] }]; #IO_L14N_T2_SRCC_14 Sch=led[9]
+#set_property -dict { PACKAGE_PIN U14   IOSTANDARD LVCMOS33 } [get_ports { LED[10] }]; #IO_L22P_T3_A05_D21_14 Sch=led[10]
+#set_property -dict { PACKAGE_PIN T16   IOSTANDARD LVCMOS33 } [get_ports { LED[11] }]; #IO_L15N_T2_DQS_DOUT_CSO_B_14 Sch=led[11]
+#set_property -dict { PACKAGE_PIN V15   IOSTANDARD LVCMOS33 } [get_ports { LED[12] }]; #IO_L16P_T2_CSI_B_14 Sch=led[12]
+#set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS33 } [get_ports { LED[13] }]; #IO_L22N_T3_A04_D20_14 Sch=led[13]
+#set_property -dict { PACKAGE_PIN V12   IOSTANDARD LVCMOS33 } [get_ports { LED[14] }]; #IO_L20N_T3_A07_D23_14 Sch=led[14]
+#set_property -dict { PACKAGE_PIN V11   IOSTANDARD LVCMOS33 } [get_ports { LED[15] }]; #IO_L21N_T3_DQS_A06_D22_14 Sch=led[15]
 
 ## RGB LEDs
-set_property -dict {PACKAGE_PIN R12 IOSTANDARD LVCMOS33} [get_ports o_left_btn]
-set_property -dict {PACKAGE_PIN M16 IOSTANDARD LVCMOS33} [get_ports o_right_btn]
-set_property -dict {PACKAGE_PIN N15 IOSTANDARD LVCMOS33} [get_ports o_middle_btn]
+#set_property -dict { PACKAGE_PIN R12   IOSTANDARD LVCMOS33 } [get_ports { LED16_B }]; #IO_L5P_T0_D06_14 Sch=led16_b
+#set_property -dict { PACKAGE_PIN M16   IOSTANDARD LVCMOS33 } [get_ports { LED16_G }]; #IO_L10P_T1_D14_14 Sch=led16_g
+#set_property -dict { PACKAGE_PIN N15   IOSTANDARD LVCMOS33 } [get_ports { LED16_R }]; #IO_L11P_T1_SRCC_14 Sch=led16_r
 set_property -dict {PACKAGE_PIN G14 IOSTANDARD LVCMOS33} [get_ports o_mouse_connected]
-set_property -dict {PACKAGE_PIN R11 IOSTANDARD LVCMOS33} [get_ports o_valid]
-#set_property -dict { PACKAGE_PIN N16   IOSTANDARD LVCMOS33 } [get_ports { o_data_error }]; #IO_L11N_T1_SRCC_14 Sch=led17_r
+#set_property -dict { PACKAGE_PIN R11   IOSTANDARD LVCMOS33 } [get_ports { LED17_G }]; #IO_0_14 Sch=led17_g
+#set_property -dict { PACKAGE_PIN N16   IOSTANDARD LVCMOS33 } [get_ports { LED17_R }]; #IO_L11N_T1_SRCC_14 Sch=led17_r
 
 ##7 segment display
 #set_property -dict { PACKAGE_PIN T10   IOSTANDARD LVCMOS33 } [get_ports { CA }]; #IO_L24N_T3_A00_D16_14 Sch=ca
@@ -86,8 +86,8 @@ set_property -dict {PACKAGE_PIN R11 IOSTANDARD LVCMOS33} [get_ports o_valid]
 
 ##Pmod Headers
 ##Pmod Header JA
-set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS33} [get_ports {o_x[0]}]
-set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVCMOS33} [get_ports {o_y[0]}]
+#set_property -dict { PACKAGE_PIN C17   IOSTANDARD LVCMOS33 } [get_ports { JA[1] }]; #IO_L20N_T3_A19_15 Sch=ja[1]
+#set_property -dict { PACKAGE_PIN D18   IOSTANDARD LVCMOS33 } [get_ports { JA[2] }]; #IO_L21N_T3_DQS_A18_15 Sch=ja[2]
 #set_property -dict { PACKAGE_PIN E18   IOSTANDARD LVCMOS33 } [get_ports { JA[3] }]; #IO_L21P_T3_DQS_15 Sch=ja[3]
 #set_property -dict { PACKAGE_PIN G17   IOSTANDARD LVCMOS33 } [get_ports { JA[4] }]; #IO_L18N_T2_A23_15 Sch=ja[4]
 #set_property -dict { PACKAGE_PIN D17   IOSTANDARD LVCMOS33 } [get_ports { JA[7] }]; #IO_L16N_T2_A27_15 Sch=ja[7]
@@ -136,20 +136,20 @@ set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVCMOS33} [get_ports {o_y[0]}]
 #set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { XA_P[4] }]; #IO_L10P_T1_AD11P_15 Sch=xa_p[4]
 
 ##VGA Connector
-#set_property -dict { PACKAGE_PIN A3    IOSTANDARD LVCMOS33 } [get_ports { VGA_R[0] }]; #IO_L8N_T1_AD14N_35 Sch=vga_r[0]
-#set_property -dict { PACKAGE_PIN B4    IOSTANDARD LVCMOS33 } [get_ports { VGA_R[1] }]; #IO_L7N_T1_AD6N_35 Sch=vga_r[1]
-#set_property -dict { PACKAGE_PIN C5    IOSTANDARD LVCMOS33 } [get_ports { VGA_R[2] }]; #IO_L1N_T0_AD4N_35 Sch=vga_r[2]
-#set_property -dict { PACKAGE_PIN A4    IOSTANDARD LVCMOS33 } [get_ports { VGA_R[3] }]; #IO_L8P_T1_AD14P_35 Sch=vga_r[3]
-#set_property -dict { PACKAGE_PIN C6    IOSTANDARD LVCMOS33 } [get_ports { VGA_G[0] }]; #IO_L1P_T0_AD4P_35 Sch=vga_g[0]
-#set_property -dict { PACKAGE_PIN A5    IOSTANDARD LVCMOS33 } [get_ports { VGA_G[1] }]; #IO_L3N_T0_DQS_AD5N_35 Sch=vga_g[1]
-#set_property -dict { PACKAGE_PIN B6    IOSTANDARD LVCMOS33 } [get_ports { VGA_G[2] }]; #IO_L2N_T0_AD12N_35 Sch=vga_g[2]
-#set_property -dict { PACKAGE_PIN A6    IOSTANDARD LVCMOS33 } [get_ports { VGA_G[3] }]; #IO_L3P_T0_DQS_AD5P_35 Sch=vga_g[3]
-#set_property -dict { PACKAGE_PIN B7    IOSTANDARD LVCMOS33 } [get_ports { VGA_B[0] }]; #IO_L2P_T0_AD12P_35 Sch=vga_b[0]
-#set_property -dict { PACKAGE_PIN C7    IOSTANDARD LVCMOS33 } [get_ports { VGA_B[1] }]; #IO_L4N_T0_35 Sch=vga_b[1]
-#set_property -dict { PACKAGE_PIN D7    IOSTANDARD LVCMOS33 } [get_ports { VGA_B[2] }]; #IO_L6N_T0_VREF_35 Sch=vga_b[2]
-#set_property -dict { PACKAGE_PIN D8    IOSTANDARD LVCMOS33 } [get_ports { VGA_B[3] }]; #IO_L4P_T0_35 Sch=vga_b[3]
-#set_property -dict { PACKAGE_PIN B11   IOSTANDARD LVCMOS33 } [get_ports { VGA_HS }]; #IO_L4P_T0_15 Sch=vga_hs
-#set_property -dict { PACKAGE_PIN B12   IOSTANDARD LVCMOS33 } [get_ports { VGA_VS }]; #IO_L3N_T0_DQS_AD1N_15 Sch=vga_vs
+set_property -dict {PACKAGE_PIN A3 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[0]}]
+set_property -dict {PACKAGE_PIN B4 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[1]}]
+set_property -dict {PACKAGE_PIN C5 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[2]}]
+set_property -dict {PACKAGE_PIN A4 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[3]}]
+set_property -dict {PACKAGE_PIN C6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[0]}]
+set_property -dict {PACKAGE_PIN A5 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[1]}]
+set_property -dict {PACKAGE_PIN B6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[2]}]
+set_property -dict {PACKAGE_PIN A6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[3]}]
+set_property -dict {PACKAGE_PIN B7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[0]}]
+set_property -dict {PACKAGE_PIN C7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[1]}]
+set_property -dict {PACKAGE_PIN D7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[2]}]
+set_property -dict {PACKAGE_PIN D8 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[3]}]
+set_property -dict {PACKAGE_PIN B11 IOSTANDARD LVCMOS33} [get_ports o_h_sync]
+set_property -dict {PACKAGE_PIN B12 IOSTANDARD LVCMOS33} [get_ports o_v_sync]
 
 ##Micro SD Connector
 #set_property -dict { PACKAGE_PIN E2    IOSTANDARD LVCMOS33 } [get_ports { SD_RESET }]; #IO_L14P_T2_SRCC_35 Sch=sd_reset
@@ -218,63 +218,69 @@ set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks ps2_
 #set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { QSPI_DQ[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
 #set_property -dict { PACKAGE_PIN L13   IOSTANDARD LVCMOS33 } [get_ports { QSPI_CSN }]; #IO_L6P_T0_FCS_B_14 Sch=qspi_csn
 
+connect_debug_port u_ila_0/clk [get_nets [list clk_mmcm_1_inst/inst/clk_out_logic]]
+
+connect_debug_port u_ila_0/probe4 [get_nets [list io_ps2_clk_IBUF]]
+connect_debug_port u_ila_0/probe5 [get_nets [list io_ps2_dat_IBUF]]
 
 
-connect_debug_port u_ila_0/probe2 [get_nets [list io_ps2_clk_IBUF]]
-connect_debug_port u_ila_0/probe3 [get_nets [list io_ps2_dat_IBUF]]
-connect_debug_port u_ila_0/probe4 [get_nets [list io_ps2_dat_TRI]]
-
-connect_debug_port u_ila_0/probe5 [get_nets [list ps2mr/ps2_writer_inst/io_ps2_clk_IBUF]]
-connect_debug_port u_ila_0/probe6 [get_nets [list ps2mr/ps2_writer_inst/io_ps2_data_IBUF]]
 
 
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_0]
 set_property C_ADV_TRIGGER true [get_debug_cores u_ila_0]
-set_property C_DATA_DEPTH 131072 [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 32768 [get_debug_cores u_ila_0]
 set_property C_EN_STRG_QUAL true [get_debug_cores u_ila_0]
 set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
 set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
 set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
 set_property port_width 1 [get_debug_ports u_ila_0/clk]
-connect_debug_port u_ila_0/clk [get_nets [list clk_div/inst/clk_out1]]
+connect_debug_port u_ila_0/clk [get_nets [list clk_mmcm_inst/inst/clk_out_logic]]
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
 set_property port_width 8 [get_debug_ports u_ila_0/probe0]
-connect_debug_port u_ila_0/probe0 [get_nets [list {ps2mr/s_ps2_data_in[0]} {ps2mr/s_ps2_data_in[1]} {ps2mr/s_ps2_data_in[2]} {ps2mr/s_ps2_data_in[3]} {ps2mr/s_ps2_data_in[4]} {ps2mr/s_ps2_data_in[5]} {ps2mr/s_ps2_data_in[6]} {ps2mr/s_ps2_data_in[7]}]]
+connect_debug_port u_ila_0/probe0 [get_nets [list {UUT/ps2mr/s_ps2_data_in[0]} {UUT/ps2mr/s_ps2_data_in[1]} {UUT/ps2mr/s_ps2_data_in[2]} {UUT/ps2mr/s_ps2_data_in[3]} {UUT/ps2mr/s_ps2_data_in[4]} {UUT/ps2mr/s_ps2_data_in[5]} {UUT/ps2mr/s_ps2_data_in[6]} {UUT/ps2mr/s_ps2_data_in[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
 set_property port_width 8 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list {ps2mr/s_ps2_data_out[0]} {ps2mr/s_ps2_data_out[1]} {ps2mr/s_ps2_data_out[2]} {ps2mr/s_ps2_data_out[3]} {ps2mr/s_ps2_data_out[4]} {ps2mr/s_ps2_data_out[5]} {ps2mr/s_ps2_data_out[6]} {ps2mr/s_ps2_data_out[7]}]]
+connect_debug_port u_ila_0/probe1 [get_nets [list {UUT/ps2mr/s_ps2_data_out[0]} {UUT/ps2mr/s_ps2_data_out[1]} {UUT/ps2mr/s_ps2_data_out[2]} {UUT/ps2mr/s_ps2_data_out[3]} {UUT/ps2mr/s_ps2_data_out[4]} {UUT/ps2mr/s_ps2_data_out[5]} {UUT/ps2mr/s_ps2_data_out[6]} {UUT/ps2mr/s_ps2_data_out[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
-set_property port_width 1 [get_debug_ports u_ila_0/probe2]
-connect_debug_port u_ila_0/probe2 [get_nets [list io_ps2_clk_IBUF]]
+set_property port_width 16 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {UUT/s_cursor_pos_x[0]} {UUT/s_cursor_pos_x[1]} {UUT/s_cursor_pos_x[2]} {UUT/s_cursor_pos_x[3]} {UUT/s_cursor_pos_x[4]} {UUT/s_cursor_pos_x[5]} {UUT/s_cursor_pos_x[6]} {UUT/s_cursor_pos_x[7]} {UUT/s_cursor_pos_x[8]} {UUT/s_cursor_pos_x[9]} {UUT/s_cursor_pos_x[10]} {UUT/s_cursor_pos_x[11]} {UUT/s_cursor_pos_x[12]} {UUT/s_cursor_pos_x[13]} {UUT/s_cursor_pos_x[14]} {UUT/s_cursor_pos_x[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
-set_property port_width 1 [get_debug_ports u_ila_0/probe3]
-connect_debug_port u_ila_0/probe3 [get_nets [list io_ps2_clk_TRI]]
+set_property port_width 16 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {UUT/s_cursor_pos_y[0]} {UUT/s_cursor_pos_y[1]} {UUT/s_cursor_pos_y[2]} {UUT/s_cursor_pos_y[3]} {UUT/s_cursor_pos_y[4]} {UUT/s_cursor_pos_y[5]} {UUT/s_cursor_pos_y[6]} {UUT/s_cursor_pos_y[7]} {UUT/s_cursor_pos_y[8]} {UUT/s_cursor_pos_y[9]} {UUT/s_cursor_pos_y[10]} {UUT/s_cursor_pos_y[11]} {UUT/s_cursor_pos_y[12]} {UUT/s_cursor_pos_y[13]} {UUT/s_cursor_pos_y[14]} {UUT/s_cursor_pos_y[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
-set_property port_width 1 [get_debug_ports u_ila_0/probe4]
-connect_debug_port u_ila_0/probe4 [get_nets [list io_ps2_dat_IBUF]]
+set_property port_width 9 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list {UUT/s_cursor_delta_x[0]} {UUT/s_cursor_delta_x[1]} {UUT/s_cursor_delta_x[2]} {UUT/s_cursor_delta_x[3]} {UUT/s_cursor_delta_x[4]} {UUT/s_cursor_delta_x[5]} {UUT/s_cursor_delta_x[6]} {UUT/s_cursor_delta_x[7]} {UUT/s_cursor_delta_x[8]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
-set_property port_width 1 [get_debug_ports u_ila_0/probe5]
-connect_debug_port u_ila_0/probe5 [get_nets [list io_ps2_dat_TRI]]
+set_property port_width 9 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list {UUT/s_cursor_delta_y[0]} {UUT/s_cursor_delta_y[1]} {UUT/s_cursor_delta_y[2]} {UUT/s_cursor_delta_y[3]} {UUT/s_cursor_delta_y[4]} {UUT/s_cursor_delta_y[5]} {UUT/s_cursor_delta_y[6]} {UUT/s_cursor_delta_y[7]} {UUT/s_cursor_delta_y[8]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
 set_property port_width 1 [get_debug_ports u_ila_0/probe6]
-connect_debug_port u_ila_0/probe6 [get_nets [list ps2mr/ps2_rdr_inst/s_ps2_got_data]]
+connect_debug_port u_ila_0/probe6 [get_nets [list UUT/ps2mr/io_ps2_clk_IBUF]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe7]
 set_property port_width 1 [get_debug_ports u_ila_0/probe7]
-connect_debug_port u_ila_0/probe7 [get_nets [list ps2mr/s_ps2_rdr_valid_ready]]
+connect_debug_port u_ila_0/probe7 [get_nets [list UUT/ps2mr/io_ps2_dat_IBUF]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe8]
 set_property port_width 1 [get_debug_ports u_ila_0/probe8]
-connect_debug_port u_ila_0/probe8 [get_nets [list ps2mr/s_ps2_wtr_valid]]
+connect_debug_port u_ila_0/probe8 [get_nets [list UUT/ps2mr/ps2_rdr_inst/s_ps2_got_data]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe9]
+set_property port_width 1 [get_debug_ports u_ila_0/probe9]
+connect_debug_port u_ila_0/probe9 [get_nets [list UUT/ps2mr/s_ps2_rdr_valid_ready]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe10]
+set_property port_width 1 [get_debug_ports u_ila_0/probe10]
+connect_debug_port u_ila_0/probe10 [get_nets [list UUT/ps2mr/s_ps2_wtr_valid]]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets s_sys_clk_slow]
+connect_debug_port dbg_hub/clk [get_nets s_clk_logic]

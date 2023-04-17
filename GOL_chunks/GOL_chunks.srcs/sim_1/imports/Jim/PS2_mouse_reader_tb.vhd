@@ -46,9 +46,9 @@ architecture Behavioral of PS2_mouse_reader_tb is
     signal o_left_btn : std_logic;
     signal o_right_btn : std_logic;
     signal o_middle_btn : std_logic;
-    signal o_x : integer;
-    signal o_y : integer;
-    signal o_z : integer;
+    signal o_x : signed(8 downto 0);
+    signal o_y : signed(8 downto 0);
+    signal o_z : signed(8 downto 0);
     signal o_mouse_connected : std_logic;
     signal o_valid : std_logic;
     

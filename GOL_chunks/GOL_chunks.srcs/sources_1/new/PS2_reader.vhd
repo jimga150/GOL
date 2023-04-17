@@ -52,6 +52,9 @@ architecture Behavioral of PS2_reader is
 
     attribute mark_debug : string;
     
+    attribute mark_debug of i_ps2_clk : signal is "true";
+    attribute mark_debug of i_ps2_dat : signal is "true";
+    
     constant c_ps2_clk_per_cnt : integer := g_sys_clk_f/g_ps2_clk_f;
 
     --includes parity bit

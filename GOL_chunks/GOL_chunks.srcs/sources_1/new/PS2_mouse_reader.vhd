@@ -41,7 +41,7 @@ entity PS2_mouse_reader is
         io_ps2_clk, io_ps2_dat : inout std_logic;
         i_sys_clk, i_sys_rst : in std_logic;
         o_left_btn, o_right_btn, o_middle_btn : out std_logic;
-        o_x, o_y, o_z : out integer;
+        o_x, o_y, o_z : out signed(8 downto 0);
         o_mouse_connected : out std_logic;
         o_valid : out std_logic;
         i_ready : in std_logic;
@@ -571,22 +571,14 @@ begin
                 when WAIT_X_BYTE => 
                     if (s_ps2_rdr_valid_ready = '1') then
                         s_state <= WAIT_Y_BYTE;
-                        if (s_xs = '1') then
-                            o_x <= -to_integer(unsigned(s_ps2_data_in));
-                        else
-                            o_x <= to_integer(unsigned(s_ps2_data_in));
-                        end if;
+                        o_x <= signed(s_xs & s_ps2_data_in);
                     end if;
                 
                 --wait on the Y byte of the data stream
                 --if we expect one, then wait for a Z byte
                 when WAIT_Y_BYTE => 
                     if (s_ps2_rdr_valid_ready = '1') then
-                        if (s_ys = '1') then
-                            o_y <= -to_integer(unsigned(s_ps2_data_in));
-                        else
-                            o_y <= to_integer(unsigned(s_ps2_data_in));
-                        end if;
+                        o_y <= signed(s_ys & s_ps2_data_in);
                         if (s_mouse_has_wheel) then
                             s_state <= WAIT_Z_BYTE;
                         else
@@ -600,7 +592,7 @@ begin
                     if (s_ps2_rdr_valid_ready = '1') then
                         s_state <= GOT_ALL;
                         o_valid <= '1';
-                        o_z <= to_integer(signed(s_ps2_data_in));
+                        o_z <= signed('0' & s_ps2_data_in);
                     end if;
                     
                 --wait on data consumer
