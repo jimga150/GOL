@@ -91,7 +91,6 @@ package GOL_pkg is
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_block_num_chunk_col_bits : integer := integer(floor(log2(real(c_block_num_chunk_cols))+1.0));
     constant c_block_num_chunk_row_bits : integer := integer(floor(log2(real(c_block_num_chunk_rows))+1.0));
-    constant c_chunks_per_block_bits : integer := integer(floor(log2(real(c_chunks_per_block))+1.0));
     
     --number of bits necessary to represent the chunk row and column as an unsigned type.
     constant c_field_num_block_col_bits : integer := integer(floor(log2(real(c_field_num_block_cols))+1.0));
@@ -129,10 +128,7 @@ package GOL_pkg is
     constant c_pre_chunk_getter_field_delay : integer := 2;
     constant c_post_chunk_getter_field_delay : integer := 2;
     constant c_field_pix_read_delay : integer := c_pre_chunk_getter_field_delay + c_chunk_getter_read_delay + c_post_chunk_getter_field_delay;
-    
-    constant c_block_stepper_cycles_per_chunk : integer := 11 + c_bram_read_delay;
-    constant c_cycles_per_block : integer := c_block_stepper_cycles_per_chunk*c_chunks_per_block;
-    
+        
     type t_chunk_type is array(c_chunk_height-1 downto 0) of std_logic_vector(c_chunk_width-1 downto 0);
     type t_field_chunk_arr is array(c_field_num_chunk_rows-1 downto 0, c_field_num_chunk_cols-1 downto 0) of t_chunk_type;
     type t_block_chunk_arr is array(c_block_num_chunk_rows-1 downto 0, c_block_num_chunk_cols-1 downto 0) of t_chunk_type;
