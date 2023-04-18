@@ -150,8 +150,8 @@ architecture Structural of GOL_field is
 
     constant c_stageA : integer := 2 + c_chunk_getter_read_delay;
     
-    signal sA_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
-    signal sA_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
+    signal sA_field_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
+    signal sA_field_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
     
     constant c_stageB : integer := c_stageA + 1;
     
@@ -235,10 +235,10 @@ begin
             s2_block_chunk_x <= resize(s1_field_chunk_x mod c_block_num_chunk_cols_us, s2_block_chunk_x'length);
             s2_block_chunk_y <= resize(s1_field_chunk_y mod c_block_num_chunk_rows_us, s2_block_chunk_y'length);
             
-            sA_block_row <= to_unsigned(to_integer(s_field_pixel_row_pline(c_stageA-1))/c_block_num_cell_rows, sA_block_row'length);
-            sA_block_col <= to_unsigned(to_integer(s_field_pixel_col_pline(c_stageA-1))/c_block_num_cell_cols, sA_block_col'length);
+            sA_field_block_row <= to_unsigned(to_integer(s_field_pixel_row_pline(c_stageA-1))/c_block_num_cell_rows, sA_field_block_row'length);
+            sA_field_block_col <= to_unsigned(to_integer(s_field_pixel_col_pline(c_stageA-1))/c_block_num_cell_cols, sA_field_block_col'length);
             
-            sB_chunk <= sA_chunks(to_integer(sA_block_row), to_integer(sA_block_col));
+            sB_chunk <= sA_chunks(to_integer(sA_field_block_row), to_integer(sA_field_block_col));
             sB_chunk_cell_x <= resize(s_field_pixel_col_pline(c_stageB-1) mod c_chunk_width_us, sB_chunk_cell_x'length);
             sB_chunk_cell_y <= resize(s_field_pixel_row_pline(c_stageB-1) mod c_chunk_height_us, sB_chunk_cell_y'length);
             
