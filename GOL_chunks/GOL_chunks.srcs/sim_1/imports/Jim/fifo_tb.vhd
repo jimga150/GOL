@@ -143,17 +143,14 @@ begin
         
         while (true) loop
         
-            if (not (o_valid = '1' or s_test_done = '1')) then
-                wait until o_valid = '1' or s_test_done = '1';
-                wait for i_clk_period/2;
-            end if;
+            wait until rising_edge(i_clk);
             
             if (s_test_done = '1') then
                 assert (not v_error) report "Test Failed" severity failure;
                 report "Test Passed" severity failure;
             end if;
             
-            if (i_ready = '1') then
+            if (i_ready = '1' and o_valid = '1') then
             
                 v_data_out_act := to_integer(unsigned(o_data));
                 
@@ -174,8 +171,6 @@ begin
             else
                 i_ready <= '0';
             end if;
-            
-            wait for i_clk_period;
             
         end loop;
         
