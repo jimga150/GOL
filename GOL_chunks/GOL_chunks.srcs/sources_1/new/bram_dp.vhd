@@ -25,10 +25,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
-
-use std.textio.all;
-
-use work.GOL_pkg.all;
+use IEEE.MATH_REAL.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -37,49 +34,39 @@ use work.GOL_pkg.all;
 
 entity bram_dp is
     generic(
-        g_init_cells : t_block_chunk_arr := c_empty_block
+        g_read_delay : integer := 6+3;
+        g_data_width : integer := 8;
+        g_word_depth : integer := 35*1024; --35k
+        --------------------------------------------------------------------
+        --DO NOT OVERRIDE ANYTHING BELOW THIS LINE IN INSTANTIATION
+        --------------------------------------------------------------------
+        g_addr_width : integer := integer(ceil(log2(real(g_word_depth))))
     );
     PORT (
         i_clka : in std_logic;
         i_ena : in std_logic;
         i_wea : in std_logic;
-        i_addra : in std_logic_vector(c_bram_addr_bits-1 downto 0);
-        i_dina : in std_logic_vector(c_bram_width-1 downto 0);
-        o_douta : out std_logic_vector(c_bram_width-1 downto 0);
+        i_addra : in std_logic_vector(g_addr_width-1 downto 0);
+        i_dina : in std_logic_vector(g_data_width-1 downto 0);
+        o_douta : out std_logic_vector(g_data_width-1 downto 0);
         
         i_clkb : in std_logic;
         i_enb : in std_logic;
         i_web : in std_logic;
-        i_addrb : in std_logic_vector(c_bram_addr_bits-1 downto 0);
-        i_dinb : in std_logic_vector(c_bram_width-1 downto 0);
-        o_doutb : out std_logic_vector(c_bram_width-1 downto 0)
+        i_addrb : in std_logic_vector(g_addr_width-1 downto 0);
+        i_dinb : in std_logic_vector(g_data_width-1 downto 0);
+        o_doutb : out std_logic_vector(g_data_width-1 downto 0)
       );
 end bram_dp;
 
 architecture Inferred of bram_dp is
     
-    type t_ram_type is array (c_bram_depth-1 downto 0) of std_logic_vector(o_douta'range);
-    
-    impure function InitRamFromChunks(i_chunk_arr : in t_block_chunk_arr) return t_ram_type is
-        variable v_ram : t_ram_type;
-        variable v_ram_idx : integer := 0;
-        variable v_slv : std_logic_vector(v_ram(v_ram'low)'range);
-    begin
-        for r in 0 to c_block_num_chunk_rows-1 loop
-            for c in 0 to c_block_num_chunk_cols-1 loop
-                v_slv := chunk_to_vector(i_chunk_arr(r, c));
-                v_ram(v_ram_idx) := v_slv;
-                v_ram(v_ram_idx + c_chunks_per_block) := v_slv; --copy to other half of RAM
-                v_ram_idx := v_ram_idx + 1;
-            end loop;
-        end loop;
-        return v_ram;
-    end function;
+    type t_ram_type is array (g_data_width-1 downto 0) of std_logic_vector(o_douta'range);
     
     constant c_input_stages : integer := 1;
-    constant c_output_stages : integer := 3;
+    constant c_output_stages : integer := g_read_delay - c_input_stages;
     
-    shared variable sv_ram : t_ram_type := InitRamFromChunks(g_init_cells);
+    shared variable sv_ram : t_ram_type;
     
     attribute ram_decomp : string;
     attribute ram_decomp of sv_ram : variable is "power"; 

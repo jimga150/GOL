@@ -11,14 +11,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="260.401 ns"></ZoomEndTime>
-      <Cursor1Time time="165.000 ns"></Cursor1Time>
+      <ZoomEndTime time="297.797 ns"></ZoomEndTime>
+      <Cursor1Time time="185.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="273"></NameColumnWidth>
-      <ValueColumnWidth column_width="96"></ValueColumnWidth>
+      <ValueColumnWidth column_width="92"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="36" />
+   <WVObjectSize size="39" />
    <wvobject fp_name="/fifo_tb/i_clk" type="logic">
       <obj_property name="ElementShortName">i_clk</obj_property>
       <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -88,7 +88,6 @@
    <wvobject fp_name="/fifo_tb/UUT/i_data" type="array">
       <obj_property name="ElementShortName">i_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">i_data[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/fifo_tb/UUT/o_valid" type="logic">
       <obj_property name="ElementShortName">o_valid</obj_property>
@@ -101,11 +100,6 @@
    <wvobject fp_name="/fifo_tb/UUT/o_data" type="array">
       <obj_property name="ElementShortName">o_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">o_data[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/fifo_tb/UUT/s_ram" type="array">
-      <obj_property name="ElementShortName">s_ram[255:0][31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_ram[255:0][31:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/fifo_tb/UUT/last_din" type="array">
@@ -162,6 +156,15 @@
       <obj_property name="ElementShortName">s_next_data_valid</obj_property>
       <obj_property name="ObjectShortName">s_next_data_valid</obj_property>
    </wvobject>
+   <wvobject fp_name="/fifo_tb/UUT/s_forward_data" type="logic">
+      <obj_property name="ElementShortName">s_forward_data</obj_property>
+      <obj_property name="ObjectShortName">s_forward_data</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fifo_tb/UUT/s_dout" type="array">
+      <obj_property name="ElementShortName">s_dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dout[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
    <wvobject fp_name="/fifo_tb/UUT/g_data_width" type="other">
       <obj_property name="ElementShortName">g_data_width</obj_property>
       <obj_property name="ObjectShortName">g_data_width</obj_property>
@@ -169,5 +172,13 @@
    <wvobject fp_name="/fifo_tb/UUT/g_data_depth" type="other">
       <obj_property name="ElementShortName">g_data_depth</obj_property>
       <obj_property name="ObjectShortName">g_data_depth</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fifo_tb/UUT/c_high_ptr" type="other">
+      <obj_property name="ElementShortName">c_high_ptr</obj_property>
+      <obj_property name="ObjectShortName">c_high_ptr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fifo_tb/UUT/c_low_ptr" type="other">
+      <obj_property name="ElementShortName">c_low_ptr</obj_property>
+      <obj_property name="ObjectShortName">c_low_ptr</obj_property>
    </wvobject>
 </wave_config>
