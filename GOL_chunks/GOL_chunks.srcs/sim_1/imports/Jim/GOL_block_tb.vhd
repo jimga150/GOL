@@ -41,6 +41,8 @@ architecture Behavioral of GOL_block_tb is
     --General inputs
     signal i_chunk_x : unsigned(c_block_num_chunk_col_bits-1 downto 0) := (others => '0');
     signal i_chunk_y : unsigned(c_block_num_chunk_row_bits-1 downto 0) := (others => '0');
+    signal i_chunk_we : std_logic := '0';
+    signal i_chunk : t_chunk_type := c_empty_chunk;
     signal i_do_frame : std_logic := '0';
     
     --Loopbacks
@@ -66,6 +68,8 @@ architecture Behavioral of GOL_block_tb is
     constant i_clk_read_period : time := 6.796 ns; --VGA timing, 1680x1050 @ 60 Hz
     
     constant c_num_frames : integer := 100;
+    constant c_frame_to_pause : integer := 2;
+    constant c_num_paused_frames : integer := 3;
     
     constant c_field_arr : t_field_chunk_arr := c_init_vlinelrg;
     constant c_block_chunk_arr : t_block_chunk_arr := block_chunk_arr_from_field(c_field_arr, 0, 0);
@@ -80,6 +84,8 @@ begin
         i_clk_read => i_clk_read,
         i_chunk_x => i_chunk_x,
         i_chunk_y => i_chunk_y,
+        i_chunk => i_chunk,
+        i_chunk_we => i_chunk_we,
         o_chunk => o_chunk,
         i_clk_stepper => i_clk_stepper,
         i_rst_stepper => i_rst_stepper,
@@ -123,11 +129,21 @@ begin
         
             for r in 0 to c_block_num_chunk_rows - 1 loop
                 for c in 0 to c_block_num_chunk_cols - 1 loop
+                    
                     s_read_start <= '0';
                     if (r = 0 and c = 0) then s_read_start <= '1'; end if;
+                    
                     i_chunk_x <= to_unsigned(c, i_chunk_x'length);
                     i_chunk_y <= to_unsigned(r, i_chunk_y'length);
+                    
+                    i_chunk_we <= '0';
+                    if (i = c_frame_to_pause and r = c_block_num_chunk_rows/2 and c = c_block_num_chunk_cols/2) then
+                        i_chunk <= (others => (others => '1'));
+                        i_chunk_we <= '1';
+                    end if;
+                    
                     wait for i_clk_read_period;
+                    
                 end loop;
             end loop;
             
@@ -140,7 +156,9 @@ begin
                 wait for i_clk_stepper_period/2;
             end if;
         
-            i_do_frame <= '1';
+            if (i < c_frame_to_pause or i > c_frame_to_pause + c_num_paused_frames) then
+                i_do_frame <= '1';
+            end if;
             
             wait for i_clk_stepper_period;
             
