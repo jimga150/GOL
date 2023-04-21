@@ -36,8 +36,8 @@ use work.GOL_pkg.all;
 entity GOL_chunk_interface is
     port(
         i_clk : in std_logic;
-        i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
-        i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
+        i_chunk_col : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
+        i_chunk_row : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
         i_curr_state_msb : in std_logic;
         i_chunk_we : in std_logic;
         i_chunk : in t_chunk_type;
@@ -54,9 +54,9 @@ end GOL_chunk_interface;
 
 architecture Behavioral of GOL_chunk_interface is
 
-    signal s1_chunk_y_offset : unsigned(o_bram_addr'range);
+    signal s1_chunk_row_offset : unsigned(o_bram_addr'range);
     signal s1_bram_half_offset : unsigned(o_bram_addr'range);
-    signal s1_chunk_x : unsigned(o_bram_addr'range);
+    signal s1_chunk_col : unsigned(o_bram_addr'range);
     signal s1_wr_data : std_logic_vector(c_bram_width-1 downto 0);
     signal s1_chunk_we : std_logic;
 
@@ -65,7 +65,7 @@ begin
     process(i_clk) is begin
         if (rising_edge(i_clk)) then
         
-            s1_chunk_y_offset <= to_unsigned(c_block_num_chunk_cols*to_integer(i_chunk_y), s1_chunk_y_offset'length);
+            s1_chunk_row_offset <= to_unsigned(c_block_num_chunk_cols*to_integer(i_chunk_row), s1_chunk_row_offset'length);
             
             if (i_curr_state_msb = '1') then
                 s1_bram_half_offset <= to_unsigned(c_chunks_per_block, s1_bram_half_offset'length);
@@ -73,13 +73,13 @@ begin
                 s1_bram_half_offset <= (others => '0');
             end if;
             
-            s1_chunk_x <= resize(i_chunk_x, s1_chunk_x'length);
+            s1_chunk_col <= resize(i_chunk_col, s1_chunk_col'length);
             
             s1_chunk_we <= i_chunk_we;
             s1_wr_data <= chunk_to_vector(i_chunk);
             
-            o_bram_addr <= std_logic_vector(s1_chunk_y_offset + s1_chunk_x + s1_bram_half_offset);            
---            o_bram_addr <= get_chunk_addr(to_integer(i_chunk_x), to_integer(i_chunk_y), i_curr_state_msb, o_bram_addr'length);
+            o_bram_addr <= std_logic_vector(s1_chunk_row_offset + s1_chunk_col + s1_bram_half_offset);            
+--            o_bram_addr <= get_chunk_addr(to_integer(i_chunk_col), to_integer(i_chunk_row), i_curr_state_msb, o_bram_addr'length);
 
             o_bram_we <= s1_chunk_we;
             o_bram_wr_data <= s1_wr_data;

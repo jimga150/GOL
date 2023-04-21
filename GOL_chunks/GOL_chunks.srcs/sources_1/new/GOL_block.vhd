@@ -42,8 +42,8 @@ entity GOL_block is
     port(
         i_clk_vga : in std_logic;
         
-        i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
-        i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
+        i_chunk_col : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
+        i_chunk_row : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
         i_chunk : in t_chunk_type;
         i_chunk_we : in std_logic;
         o_chunk : out t_chunk_type;
@@ -164,8 +164,8 @@ begin
     chunk_rw_inst: entity work.GOL_chunk_interface
     port map(
         i_clk => i_clk_vga,
-        i_chunk_x => i_chunk_x,
-        i_chunk_y => i_chunk_y,
+        i_chunk_col => i_chunk_col,
+        i_chunk_row => i_chunk_row,
         i_chunk => i_chunk,
         i_chunk_we => i_chunk_we,
         i_curr_state_msb => s_current_state_msb_pline(s_current_state_msb_pline'high),

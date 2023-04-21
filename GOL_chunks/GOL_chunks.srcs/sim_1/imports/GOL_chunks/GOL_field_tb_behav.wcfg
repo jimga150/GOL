@@ -16,11 +16,11 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000000 ms"></ZoomStartTime>
-      <ZoomEndTime time="137.190670313 ms"></ZoomEndTime>
-      <Cursor1Time time="0.231530000 ms"></Cursor1Time>
+      <ZoomEndTime time="159.289964893 ms"></ZoomEndTime>
+      <Cursor1Time time="0.000000000 ms"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="161"></NameColumnWidth>
+      <NameColumnWidth column_width="157"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="78" />
@@ -212,13 +212,13 @@
       <obj_property name="ElementShortName">s_pixel_in_pline[15:1]</obj_property>
       <obj_property name="ObjectShortName">s_pixel_in_pline[15:1]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_x" type="array">
-      <obj_property name="ElementShortName">s1_field_chunk_x[8:0]</obj_property>
-      <obj_property name="ObjectShortName">s1_field_chunk_x[8:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_col" type="array">
+      <obj_property name="ElementShortName">s1_field_chunk_col[8:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_field_chunk_col[8:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_y" type="array">
-      <obj_property name="ElementShortName">s1_field_chunk_y[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s1_field_chunk_y[7:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_row" type="array">
+      <obj_property name="ElementShortName">s1_field_chunk_row[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_field_chunk_row[7:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_vector_to_write" type="array">
       <obj_property name="ElementShortName">s1_chunk_vector_to_write[35:0]</obj_property>
@@ -252,25 +252,25 @@
       <obj_property name="ElementShortName">s_field_chunk_col_pline[15:2][8:0]</obj_property>
       <obj_property name="ObjectShortName">s_field_chunk_col_pline[15:2][8:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_x" type="array">
-      <obj_property name="ElementShortName">s2_block_chunk_x[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s2_block_chunk_x[7:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_col" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_col[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_col[7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_y" type="array">
-      <obj_property name="ElementShortName">s2_block_chunk_y[6:0]</obj_property>
-      <obj_property name="ObjectShortName">s2_block_chunk_y[6:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_row" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_row[6:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_row[6:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s2_chunk_we" type="logic">
       <obj_property name="ElementShortName">s2_chunk_we</obj_property>
       <obj_property name="ObjectShortName">s2_chunk_we</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_towrite_x" type="array">
-      <obj_property name="ElementShortName">s2_block_chunk_towrite_x[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s2_block_chunk_towrite_x[7:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_towrite_col" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_towrite_col[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_towrite_col[7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_towrite_y" type="array">
-      <obj_property name="ElementShortName">s2_block_chunk_towrite_y[6:0]</obj_property>
-      <obj_property name="ObjectShortName">s2_block_chunk_towrite_y[6:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_towrite_row" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_towrite_row[6:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_towrite_row[6:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s2_field_block_towrite_row" type="array">
       <obj_property name="ElementShortName">s2_field_block_towrite_row[1:0]</obj_property>
@@ -296,13 +296,13 @@
       <obj_property name="ElementShortName">sB_chunk[5:0][5:0]</obj_property>
       <obj_property name="ObjectShortName">sB_chunk[5:0][5:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/sB_chunk_cell_x" type="array">
-      <obj_property name="ElementShortName">sB_chunk_cell_x[2:0]</obj_property>
-      <obj_property name="ObjectShortName">sB_chunk_cell_x[2:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/sB_chunk_cell_col" type="array">
+      <obj_property name="ElementShortName">sB_chunk_cell_col[2:0]</obj_property>
+      <obj_property name="ObjectShortName">sB_chunk_cell_col[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/sB_chunk_cell_y" type="array">
-      <obj_property name="ElementShortName">sB_chunk_cell_y[2:0]</obj_property>
-      <obj_property name="ObjectShortName">sB_chunk_cell_y[2:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/sB_chunk_cell_row" type="array">
+      <obj_property name="ElementShortName">sB_chunk_cell_row[2:0]</obj_property>
+      <obj_property name="ObjectShortName">sB_chunk_cell_row[2:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/sC_pixel" type="logic">
       <obj_property name="ElementShortName">sC_pixel</obj_property>
