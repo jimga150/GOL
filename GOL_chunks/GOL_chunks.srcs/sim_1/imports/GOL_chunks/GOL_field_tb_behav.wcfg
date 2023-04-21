@@ -7,21 +7,23 @@
          <top_modules>
             <top_module name="GOL_field_tb" />
             <top_module name="bmp_pkg" />
+            <top_module name="bram_dp_custom_pkg" />
             <top_module name="gol_field_init" />
             <top_module name="gol_pkg" />
+            <top_module name="type_pkg" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0 ps"></ZoomStartTime>
-      <ZoomEndTime time="15 ps"></ZoomEndTime>
-      <Cursor1Time time="0 ps"></Cursor1Time>
+      <ZoomStartTime time="0.000000000 ms"></ZoomStartTime>
+      <ZoomEndTime time="101.628953877 ms"></ZoomEndTime>
+      <Cursor1Time time="0.000000000 ms"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="177"></NameColumnWidth>
+      <NameColumnWidth column_width="169"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="48" />
+   <WVObjectSize size="78" />
    <wvobject fp_name="/GOL_field_tb/i_clk_stepper" type="logic">
       <obj_property name="ElementShortName">i_clk_stepper</obj_property>
       <obj_property name="ObjectShortName">i_clk_stepper</obj_property>
@@ -33,6 +35,10 @@
    <wvobject fp_name="/GOL_field_tb/i_rst_stepper" type="logic">
       <obj_property name="ElementShortName">i_rst_stepper</obj_property>
       <obj_property name="ObjectShortName">i_rst_stepper</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_rst_read" type="logic">
+      <obj_property name="ElementShortName">i_rst_read</obj_property>
+      <obj_property name="ObjectShortName">i_rst_read</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/i_do_frame" type="logic">
       <obj_property name="ElementShortName">i_do_frame</obj_property>
@@ -54,6 +60,14 @@
       <obj_property name="ElementShortName">i_row[10:0]</obj_property>
       <obj_property name="ObjectShortName">i_row[10:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_pixel_we" type="logic">
+      <obj_property name="ElementShortName">i_pixel_we</obj_property>
+      <obj_property name="ObjectShortName">i_pixel_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/i_pixel" type="logic">
+      <obj_property name="ElementShortName">i_pixel</obj_property>
+      <obj_property name="ObjectShortName">i_pixel</obj_property>
+   </wvobject>
    <wvobject fp_name="/GOL_field_tb/o_pixel" type="logic">
       <obj_property name="ElementShortName">o_pixel</obj_property>
       <obj_property name="ObjectShortName">o_pixel</obj_property>
@@ -63,8 +77,8 @@
       <obj_property name="ObjectShortName">o_stepper_busy</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/s_read_delay_pline" type="array">
-      <obj_property name="ElementShortName">s_read_delay_pline[9:0]</obj_property>
-      <obj_property name="ObjectShortName">s_read_delay_pline[9:0]</obj_property>
+      <obj_property name="ElementShortName">s_read_delay_pline[14:0]</obj_property>
+      <obj_property name="ObjectShortName">s_read_delay_pline[14:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/s_read_start" type="logic">
       <obj_property name="ElementShortName">s_read_start</obj_property>
@@ -82,9 +96,21 @@
       <obj_property name="ElementShortName">c_num_frames</obj_property>
       <obj_property name="ObjectShortName">c_num_frames</obj_property>
    </wvobject>
+   <wvobject fp_name="/GOL_field_tb/c_frame_to_pause" type="other">
+      <obj_property name="ElementShortName">c_frame_to_pause</obj_property>
+      <obj_property name="ObjectShortName">c_frame_to_pause</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/c_num_paused_frames" type="other">
+      <obj_property name="ElementShortName">c_num_paused_frames</obj_property>
+      <obj_property name="ObjectShortName">c_num_paused_frames</obj_property>
+   </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/i_clk_read" type="logic">
       <obj_property name="ElementShortName">i_clk_read</obj_property>
       <obj_property name="ObjectShortName">i_clk_read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/i_rst_read" type="logic">
+      <obj_property name="ElementShortName">i_rst_read</obj_property>
+      <obj_property name="ObjectShortName">i_rst_read</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/i_col" type="other">
       <obj_property name="ElementShortName">i_col</obj_property>
@@ -93,6 +119,14 @@
    <wvobject fp_name="/GOL_field_tb/UUT/i_row" type="other">
       <obj_property name="ElementShortName">i_row</obj_property>
       <obj_property name="ObjectShortName">i_row</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/i_pixel_we" type="logic">
+      <obj_property name="ElementShortName">i_pixel_we</obj_property>
+      <obj_property name="ObjectShortName">i_pixel_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/i_pixel" type="logic">
+      <obj_property name="ElementShortName">i_pixel</obj_property>
+      <obj_property name="ObjectShortName">i_pixel</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/o_pixel" type="logic">
       <obj_property name="ElementShortName">o_pixel</obj_property>
@@ -115,44 +149,44 @@
       <obj_property name="ObjectShortName">o_stepper_busy</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_top_to_bottom_edges" type="array">
-      <obj_property name="ElementShortName">s_top_to_bottom_edges[0:0,0:0][1679:0]</obj_property>
-      <obj_property name="ObjectShortName">s_top_to_bottom_edges[0:0,0:0][1679:0]</obj_property>
+      <obj_property name="ElementShortName">s_top_to_bottom_edges[1:0,1:0][839:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_to_bottom_edges[1:0,1:0][839:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_bottom_to_top_edges" type="array">
-      <obj_property name="ElementShortName">s_bottom_to_top_edges[0:0,0:0][1679:0]</obj_property>
-      <obj_property name="ObjectShortName">s_bottom_to_top_edges[0:0,0:0][1679:0]</obj_property>
+      <obj_property name="ElementShortName">s_bottom_to_top_edges[1:0,1:0][839:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_to_top_edges[1:0,1:0][839:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_left_to_right_edges" type="array">
-      <obj_property name="ElementShortName">s_left_to_right_edges[0:0,0:0][1049:0]</obj_property>
-      <obj_property name="ObjectShortName">s_left_to_right_edges[0:0,0:0][1049:0]</obj_property>
+      <obj_property name="ElementShortName">s_left_to_right_edges[1:0,1:0][527:0]</obj_property>
+      <obj_property name="ObjectShortName">s_left_to_right_edges[1:0,1:0][527:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_right_to_left_edges" type="array">
-      <obj_property name="ElementShortName">s_right_to_left_edges[0:0,0:0][1049:0]</obj_property>
-      <obj_property name="ObjectShortName">s_right_to_left_edges[0:0,0:0][1049:0]</obj_property>
+      <obj_property name="ElementShortName">s_right_to_left_edges[1:0,1:0][527:0]</obj_property>
+      <obj_property name="ObjectShortName">s_right_to_left_edges[1:0,1:0][527:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_top_left_to_bottom_right_corners" type="array">
-      <obj_property name="ElementShortName">s_top_left_to_bottom_right_corners[0:0,0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_top_left_to_bottom_right_corners[0:0,0:0]</obj_property>
+      <obj_property name="ElementShortName">s_top_left_to_bottom_right_corners[1:0,1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_left_to_bottom_right_corners[1:0,1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_top_right_to_bottom_left_corners" type="array">
-      <obj_property name="ElementShortName">s_top_right_to_bottom_left_corners[0:0,0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_top_right_to_bottom_left_corners[0:0,0:0]</obj_property>
+      <obj_property name="ElementShortName">s_top_right_to_bottom_left_corners[1:0,1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_top_right_to_bottom_left_corners[1:0,1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_bottom_left_to_top_right_corners" type="array">
-      <obj_property name="ElementShortName">s_bottom_left_to_top_right_corners[0:0,0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_bottom_left_to_top_right_corners[0:0,0:0]</obj_property>
+      <obj_property name="ElementShortName">s_bottom_left_to_top_right_corners[1:0,1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_left_to_top_right_corners[1:0,1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_bottom_right_to_top_left_corners" type="array">
-      <obj_property name="ElementShortName">s_bottom_right_to_top_left_corners[0:0,0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_bottom_right_to_top_left_corners[0:0,0:0]</obj_property>
+      <obj_property name="ElementShortName">s_bottom_right_to_top_left_corners[1:0,1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_bottom_right_to_top_left_corners[1:0,1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s_chunks" type="array">
-      <obj_property name="ElementShortName">s_chunks[0:0,0:0][5:0,5:0]</obj_property>
-      <obj_property name="ObjectShortName">s_chunks[0:0,0:0][5:0,5:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/sA_chunks" type="array">
+      <obj_property name="ElementShortName">sA_chunks[1:0,1:0][5:0,5:0]</obj_property>
+      <obj_property name="ObjectShortName">sA_chunks[1:0,1:0][5:0,5:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_stepper_busys" type="array">
-      <obj_property name="ElementShortName">s_stepper_busys[0:0,0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_stepper_busys[0:0,0:0]</obj_property>
+      <obj_property name="ElementShortName">s_stepper_busys[1:0,1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_stepper_busys[1:0,1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_col" type="array">
       <obj_property name="ElementShortName">s_col[10:0]</obj_property>
@@ -163,28 +197,100 @@
       <obj_property name="ObjectShortName">s_row[10:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_field_pixel_row_pline" type="array">
-      <obj_property name="ElementShortName">s_field_pixel_row_pline[10:1][10:0]</obj_property>
-      <obj_property name="ObjectShortName">s_field_pixel_row_pline[10:1][10:0]</obj_property>
+      <obj_property name="ElementShortName">s_field_pixel_row_pline[15:1][10:0]</obj_property>
+      <obj_property name="ObjectShortName">s_field_pixel_row_pline[15:1][10:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_field_pixel_col_pline" type="array">
-      <obj_property name="ElementShortName">s_field_pixel_col_pline[10:1][10:0]</obj_property>
-      <obj_property name="ObjectShortName">s_field_pixel_col_pline[10:1][10:0]</obj_property>
+      <obj_property name="ElementShortName">s_field_pixel_col_pline[15:1][10:0]</obj_property>
+      <obj_property name="ObjectShortName">s_field_pixel_col_pline[15:1][10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_x" type="array">
-      <obj_property name="ElementShortName">s1_chunk_x[8:0]</obj_property>
-      <obj_property name="ObjectShortName">s1_chunk_x[8:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_pixel_we_pline" type="array">
+      <obj_property name="ElementShortName">s_pixel_we_pline[15:1]</obj_property>
+      <obj_property name="ObjectShortName">s_pixel_we_pline[15:1]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_y" type="array">
-      <obj_property name="ElementShortName">s1_chunk_y[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s1_chunk_y[7:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_pixel_in_pline" type="array">
+      <obj_property name="ElementShortName">s_pixel_in_pline[15:1]</obj_property>
+      <obj_property name="ObjectShortName">s_pixel_in_pline[15:1]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/sA_block_row" type="array">
-      <obj_property name="ElementShortName">sA_block_row[0:0]</obj_property>
-      <obj_property name="ObjectShortName">sA_block_row[0:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_x" type="array">
+      <obj_property name="ElementShortName">s1_field_chunk_x[8:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_field_chunk_x[8:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/sA_block_col" type="array">
-      <obj_property name="ElementShortName">sA_block_col[0:0]</obj_property>
-      <obj_property name="ObjectShortName">sA_block_col[0:0]</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_y" type="array">
+      <obj_property name="ElementShortName">s1_field_chunk_y[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_field_chunk_y[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_vector_to_write" type="array">
+      <obj_property name="ElementShortName">s1_chunk_vector_to_write[35:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_chunk_vector_to_write[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_towrite_row" type="array">
+      <obj_property name="ElementShortName">s1_field_chunk_towrite_row[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_field_chunk_towrite_row[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_field_chunk_towrite_col" type="array">
+      <obj_property name="ElementShortName">s1_field_chunk_towrite_col[8:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_field_chunk_towrite_col[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_fifo_output" type="array">
+      <obj_property name="ElementShortName">s1_fifo_output[52:0]</obj_property>
+      <obj_property name="ObjectShortName">s1_fifo_output[52:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_towrite_valid" type="logic">
+      <obj_property name="ElementShortName">s1_chunk_towrite_valid</obj_property>
+      <obj_property name="ObjectShortName">s1_chunk_towrite_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s1_chunk_towrite_addr_match" type="logic">
+      <obj_property name="ElementShortName">s1_chunk_towrite_addr_match</obj_property>
+      <obj_property name="ObjectShortName">s1_chunk_towrite_addr_match</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_field_chunk_row_pline" type="array">
+      <obj_property name="ElementShortName">s_field_chunk_row_pline[15:2][8:0]</obj_property>
+      <obj_property name="ObjectShortName">s_field_chunk_row_pline[15:2][8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s_field_chunk_col_pline" type="array">
+      <obj_property name="ElementShortName">s_field_chunk_col_pline[15:2][7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_field_chunk_col_pline[15:2][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_x" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_x[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_x[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_y" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_y[6:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_y[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_chunk_we" type="logic">
+      <obj_property name="ElementShortName">s2_chunk_we</obj_property>
+      <obj_property name="ObjectShortName">s2_chunk_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_towrite_x" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_towrite_x[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_towrite_x[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_towrite_y" type="array">
+      <obj_property name="ElementShortName">s2_block_chunk_towrite_y[6:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_block_chunk_towrite_y[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_field_block_towrite_row" type="array">
+      <obj_property name="ElementShortName">s2_field_block_towrite_row[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_field_block_towrite_row[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_field_block_towrite_col" type="array">
+      <obj_property name="ElementShortName">s2_field_block_towrite_col[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_field_block_towrite_col[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/s2_chunk_towrite" type="array">
+      <obj_property name="ElementShortName">s2_chunk_towrite[5:0][5:0]</obj_property>
+      <obj_property name="ObjectShortName">s2_chunk_towrite[5:0][5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/sA_field_block_row" type="array">
+      <obj_property name="ElementShortName">sA_field_block_row[1:0]</obj_property>
+      <obj_property name="ObjectShortName">sA_field_block_row[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/sA_field_block_col" type="array">
+      <obj_property name="ElementShortName">sA_field_block_col[1:0]</obj_property>
+      <obj_property name="ObjectShortName">sA_field_block_col[1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/sB_chunk" type="array">
       <obj_property name="ElementShortName">sB_chunk[5:0][5:0]</obj_property>
@@ -201,6 +307,22 @@
    <wvobject fp_name="/GOL_field_tb/UUT/sC_pixel" type="logic">
       <obj_property name="ElementShortName">sC_pixel</obj_property>
       <obj_property name="ObjectShortName">sC_pixel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/sC_chunk_to_write" type="array">
+      <obj_property name="ElementShortName">sC_chunk_to_write[5:0][5:0]</obj_property>
+      <obj_property name="ObjectShortName">sC_chunk_to_write[5:0][5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/sC_chunk_vector_to_write" type="array">
+      <obj_property name="ElementShortName">sC_chunk_vector_to_write[35:0]</obj_property>
+      <obj_property name="ObjectShortName">sC_chunk_vector_to_write[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/sC_fifo_input" type="array">
+      <obj_property name="ElementShortName">sC_fifo_input[52:0]</obj_property>
+      <obj_property name="ObjectShortName">sC_fifo_input[52:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/GOL_field_tb/UUT/g_rules" type="array">
+      <obj_property name="ElementShortName">g_rules</obj_property>
+      <obj_property name="ObjectShortName">g_rules</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/c_stageA" type="other">
       <obj_property name="ElementShortName">c_stageA</obj_property>

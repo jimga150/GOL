@@ -37,12 +37,15 @@ architecture Behavioral of GOL_field_tb is
     
     --Resets
     signal i_rst_stepper : std_logic := '1';
+    signal i_rst_read : std_logic := '1';
     
     --General inputs
     signal i_do_frame : std_logic := '0';
     signal i_col_int, i_row_int : integer := 0;
     signal i_col : unsigned(c_field_num_cell_col_bits-1 downto 0);
     signal i_row : unsigned(c_field_num_cell_row_bits-1 downto 0);
+    signal i_pixel_we : std_logic := '0';
+    signal i_pixel : std_logic := '0';
     
     --Outputs
     signal o_pixel : std_logic;
@@ -57,6 +60,8 @@ architecture Behavioral of GOL_field_tb is
     constant i_clk_read_period : time := 6.796 ns; --VGA timing, 1680x1050 @ 60 Hz
     
     constant c_num_frames : integer := 100;
+    constant c_frame_to_pause : integer := 2;
+    constant c_num_paused_frames : integer := 3;
     
 --    constant c_init_filename : string := c_project_path & "\GOL_mem_init_files\hline_plussome.gmif";
     
@@ -85,8 +90,11 @@ begin
         i_do_frame => i_do_frame,
         o_stepper_busy => o_stepper_busy,
         i_clk_read => i_clk_read,
+        i_rst_read => i_rst_read,
         i_col => i_col_int,
         i_row => i_row_int,
+        i_pixel_we => i_pixel_we,
+        i_pixel => i_pixel,
         o_pixel => o_pixel
     );
     
@@ -96,9 +104,10 @@ begin
     
     stim_proc: process is begin
         
-        wait for i_clk_stepper_period;
+        wait for i_clk_stepper_period*10;
         
         i_rst_stepper <= '0';
+        i_rst_read <= '0';
         
         wait for i_clk_stepper_period;
         
@@ -110,11 +119,21 @@ begin
         
             for r in 0 to c_field_num_cell_rows-1 loop
                 for c in 0 to c_field_num_cell_cols-1 loop
+                
                     s_read_start <= '0';
                     if (r = 0 and c = 0) then s_read_start <= '1'; end if;
+                    
                     i_col_int <= c;
                     i_row_int <= r;
+                    
+                    i_pixel_we <= '0';
+                    if (i = c_frame_to_pause and r = c_screen_height/2 and c = c_screen_width/2) then
+                        i_pixel <= '1';
+                        i_pixel_we <= '1';
+                    end if;
+                    
                     wait for i_clk_read_period;
+                    
                 end loop;
             end loop;
             
@@ -127,7 +146,9 @@ begin
                 wait for i_clk_stepper_period/2;
             end if;
         
-            i_do_frame <= '1';
+            if (i < c_frame_to_pause or i > c_frame_to_pause + c_num_paused_frames) then
+                i_do_frame <= '1';
+            end if;
             
             wait for i_clk_stepper_period;
             
