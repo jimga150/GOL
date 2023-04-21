@@ -146,7 +146,7 @@ architecture Structural of GOL_field is
     signal s_pixel_in_pline : std_logic_vector(c_field_pix_read_delay downto 1);
     
     
-    signal s1_field_chunk_col : unsigned(c_field_num_chunk_col_bits-1 downto 0); --TODO: just use row and col for everything, stop mixing in x and y
+    signal s1_field_chunk_col : unsigned(c_field_num_chunk_col_bits-1 downto 0);
     signal s1_field_chunk_row : unsigned(c_field_num_chunk_row_bits-1 downto 0);
     
     signal s1_chunk_vector_to_write : std_logic_vector(c_chunk_width*c_chunk_height - 1 downto 0);
