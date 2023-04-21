@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 04/18/2023 19:29:02
--- Design Name: fifo_tb
--- Module Name: fifo_tb - Behavioral
+-- Create Date: 04/21/2023 12:59:34 PM
+-- Design Name: 
+-- Module Name: axis_fifo_tb - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -14,7 +14,7 @@
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: Created with VHDL Test Bench Template Generator
+-- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
 
@@ -24,10 +24,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use ieee.math_real.all;
 
-entity fifo_tb is
-end fifo_tb;
+entity axis_fifo_tb is
+end axis_fifo_tb;
 
-architecture Behavioral of fifo_tb is
+architecture Behavioral of axis_fifo_tb is
     
     --Generics
     constant g_data_width : integer := 32;
@@ -57,7 +57,7 @@ architecture Behavioral of fifo_tb is
     
 begin
     
-    UUT: entity work.fifo
+    UUT: entity work.axis_fifo
     generic map(
         g_data_width => g_data_width,
         g_data_depth => g_data_depth

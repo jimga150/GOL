@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 04/18/2023 07:07:34 PM
+-- Create Date: 04/21/2023 12:59:12 PM
 -- Design Name: 
--- Module Name: fifo - Behavioral
+-- Module Name: axis_fifo - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -32,7 +32,7 @@ use IEEE.MATH_REAL.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity fifo is
+entity axis_fifo is
     generic(
         g_data_width : integer := 36;
         g_data_depth : integer := 1024
@@ -48,9 +48,9 @@ entity fifo is
         i_ready : in std_logic;
         o_data : out std_logic_vector(g_data_width-1 downto 0)
     );
-end fifo;
+end axis_fifo;
 
-architecture Behavioral of fifo is
+architecture Behavioral of axis_fifo is
     
     constant c_high_ptr : integer := g_data_depth-1;
     constant c_low_ptr : integer := 0;
@@ -79,10 +79,10 @@ begin
     --1 when data is being output this cycle
     s_dout_put <= s_dout_valid and i_ready;
     
-    --1 when on this cycle, the FIFO has one word in it
+    --1 when on this cycle, the axis_fifo has one word in it
     s_one_word_left <= '1' when s_dout_ptr_next = s_din_ptr else '0';
     
-    --1 when on this cycle, the FIFO has no words in it
+    --1 when on this cycle, the axis_fifo has no words in it
     s_fifo_empty <= '1' when s_dout_ptr = s_din_ptr else '0'; 
     
     bram_inst: entity work.bram_simple_dp
@@ -117,14 +117,14 @@ begin
                     s_din_ptr <= c_low_ptr;
                 end if;
                 
-                --if FIFO is inflating (gaining data on a cycle that it does not also lose some)
+                --if axis_fifo is inflating (gaining data on a cycle that it does not also lose some)
                 if (s_dout_put = '0') then
-                    --if din ptr is about to catch up to dout ptr (FIFO is about to be full)
+                    --if din ptr is about to catch up to dout ptr (axis_fifo is about to be full)
                     if (s_din_ptr + 2 = s_dout_ptr or
                         (s_din_ptr = c_high_ptr and s_dout_ptr = c_low_ptr + 1) or 
                         (s_din_ptr = c_high_ptr - 1 and s_dout_ptr = c_low_ptr)) then
                         
-                        --next cycle, we are NOT ready for data. FIFO will be full.
+                        --next cycle, we are NOT ready for data. axis_fifo will be full.
                         s_din_ready <= '0';
                         
                     end if;
@@ -159,11 +159,11 @@ begin
                     s_dout_ptr_next <= c_low_ptr;
                 end if;
                 
-                --if the FIFO is deflating (losing data on a cycle that data is not also gained)
+                --if the axis_fifo is deflating (losing data on a cycle that data is not also gained)
                 if (s_din_get = '0') then 
-                    --if the dout pointer is about to catch up to the din pointer (FIFO is about to be empty)
+                    --if the dout pointer is about to catch up to the din pointer (axis_fifo is about to be empty)
                     if (s_one_word_left = '1') then
-                        --FIFO will be empty next cycle
+                        --axis_fifo will be empty next cycle
                         s_dout_valid <= '0';
                     end if;
                 end if;
