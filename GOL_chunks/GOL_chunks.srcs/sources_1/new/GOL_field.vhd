@@ -39,8 +39,8 @@ entity GOL_field is
         g_rules : t_GOL_rules := c_GOL_default
     );
     port(
-        i_clk_read : in std_logic; --TODO: rename to vga clock
-        i_rst_read : in std_logic; --TODO
+        i_clk_vga : in std_logic;
+        i_rst_vga : in std_logic;
         i_col : in integer;
         i_row : in integer;
         i_pixel_we : in std_logic;
@@ -236,7 +236,7 @@ begin
                     g_rules => g_rules
                 )
                 port map(
-                    i_clk_read => i_clk_read,
+                    i_clk_vga => i_clk_vga,
                     i_chunk_x => s2_block_chunk_x,
                     i_chunk_y => s2_block_chunk_y,
                     i_chunk => s2_chunk_towrite,
@@ -266,7 +266,7 @@ begin
         end generate block_col_gen;
     end generate block_row_gen;
     
-    process(i_clk_read) is
+    process(i_clk_vga) is
     
         constant c_chunk_height_us : unsigned(s_row'range) := to_unsigned(c_chunk_height, s_row'length);
         constant c_block_num_chunk_rows_us : unsigned(s1_field_chunk_y'range) := to_unsigned(c_block_num_chunk_rows, s1_field_chunk_y'length);
@@ -275,7 +275,7 @@ begin
         constant c_block_num_chunk_cols_us : unsigned(s1_field_chunk_x'range) := to_unsigned(c_block_num_chunk_cols, s1_field_chunk_x'length);
     
     begin
-        if rising_edge(i_clk_read) then
+        if rising_edge(i_clk_vga) then
         
             s_field_pixel_row_pline <= s_field_pixel_row_pline(s_field_pixel_row_pline'high - 1 downto s_field_pixel_row_pline'low) & s_row;
             s_field_pixel_col_pline <= s_field_pixel_col_pline(s_field_pixel_col_pline'high - 1 downto s_field_pixel_col_pline'low) & s_col;
@@ -326,8 +326,8 @@ begin
         g_data_depth => 1024 --cause more than this would probably be insane
     )
     port map(
-        i_clk => i_clk_read,
-        i_rst => i_rst_read,
+        i_clk => i_clk_vga,
+        i_rst => i_rst_vga,
         i_valid => s_pixel_we_pline(c_stageC),
         o_ready => open, --drop data. i dont care.
         i_data => sC_fifo_input,

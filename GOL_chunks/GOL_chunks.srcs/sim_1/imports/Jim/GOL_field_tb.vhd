@@ -33,11 +33,11 @@ architecture Behavioral of GOL_field_tb is
     
     --Clocks
     signal i_clk_stepper : std_logic := '0';
-    signal i_clk_read : std_logic := '0';
+    signal i_clk_vga : std_logic := '0';
     
     --Resets
     signal i_rst_stepper : std_logic := '1';
-    signal i_rst_read : std_logic := '1';
+    signal i_rst_vga : std_logic := '1';
     
     --General inputs
     signal i_do_frame : std_logic := '0';
@@ -89,8 +89,8 @@ begin
         i_rst_stepper => i_rst_stepper,
         i_do_frame => i_do_frame,
         o_stepper_busy => o_stepper_busy,
-        i_clk_read => i_clk_read,
-        i_rst_read => i_rst_read,
+        i_clk_vga => i_clk_vga,
+        i_rst_vga => i_rst_vga,
         i_col => i_col_int,
         i_row => i_row_int,
         i_pixel_we => i_pixel_we,
@@ -100,20 +100,20 @@ begin
     
     --Clock Drivers
     i_clk_stepper <= not i_clk_stepper after i_clk_stepper_period/2;
-    i_clk_read <= not i_clk_read after i_clk_read_period/2;
+    i_clk_vga <= not i_clk_vga after i_clk_read_period/2;
     
     stim_proc: process is begin
         
         wait for i_clk_stepper_period*10;
         
         i_rst_stepper <= '0';
-        i_rst_read <= '0';
+        i_rst_vga <= '0';
         
         wait for i_clk_stepper_period;
         
         --re-sync with read clock
-        wait until i_clk_read = '1';
-        wait until i_clk_read = '0';
+        wait until i_clk_vga = '1';
+        wait until i_clk_vga = '0';
         
         for i in 0 to c_num_frames-1 loop
         
@@ -157,8 +157,8 @@ begin
             wait for i_clk_stepper_period;
             
             --re-sync with read clock
-            wait until i_clk_read = '1';
-            wait until i_clk_read = '0';
+            wait until i_clk_vga = '1';
+            wait until i_clk_vga = '0';
             
         end loop;
         
@@ -172,8 +172,8 @@ begin
         
     end process;
     
-    process(i_clk_read) is begin
-        if rising_edge(i_clk_read) then
+    process(i_clk_vga) is begin
+        if rising_edge(i_clk_vga) then
             s_read_delay_pline <= s_read_delay_pline(s_read_delay_pline'high-1 downto 0) & s_read_start;
         end if;
     end process;

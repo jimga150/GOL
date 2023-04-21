@@ -40,7 +40,7 @@ entity GOL_block is
         g_rules : t_GOL_rules := c_GOL_default
     );
     port(
-        i_clk_read : in std_logic;
+        i_clk_vga : in std_logic;
         
         i_chunk_x : in unsigned(c_block_num_chunk_col_bits-1 downto 0);
         i_chunk_y : in unsigned(c_block_num_chunk_row_bits-1 downto 0);
@@ -153,7 +153,7 @@ begin
         i_addra => s_bram_addra,
         i_dina => s_bram_wr_dataa,
         o_douta => s_bram_rd_dataa,
-        i_clkb => i_clk_read,
+        i_clkb => i_clk_vga,
         i_enb => s_bram_enab,
         i_web => s_bram_web,
         i_addrb => s_bram_addrb,
@@ -163,7 +163,7 @@ begin
     
     chunk_rw_inst: entity work.GOL_chunk_interface
     port map(
-        i_clk => i_clk_read,
+        i_clk => i_clk_vga,
         i_chunk_x => i_chunk_x,
         i_chunk_y => i_chunk_y,
         i_chunk => i_chunk,
@@ -177,8 +177,8 @@ begin
         o_bram_wr_data => s_bram_wr_datab
     );
     
-    process(i_clk_read) is begin
-        if rising_edge(i_clk_read) then
+    process(i_clk_vga) is begin
+        if rising_edge(i_clk_vga) then
             s_current_state_msb_pline <= 
                 s_current_state_msb_pline(s_current_state_msb_pline'high - 1 downto s_current_state_msb_pline'low) & 
                 s0_current_state_msb;

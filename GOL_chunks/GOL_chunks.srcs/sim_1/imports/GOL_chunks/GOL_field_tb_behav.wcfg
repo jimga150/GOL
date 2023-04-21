@@ -16,11 +16,11 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000000 ms"></ZoomStartTime>
-      <ZoomEndTime time="101.628953877 ms"></ZoomEndTime>
-      <Cursor1Time time="0.000000000 ms"></Cursor1Time>
+      <ZoomEndTime time="137.190670313 ms"></ZoomEndTime>
+      <Cursor1Time time="0.231530000 ms"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="169"></NameColumnWidth>
+      <NameColumnWidth column_width="161"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="78" />
@@ -28,17 +28,17 @@
       <obj_property name="ElementShortName">i_clk_stepper</obj_property>
       <obj_property name="ObjectShortName">i_clk_stepper</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/i_clk_read" type="logic">
-      <obj_property name="ElementShortName">i_clk_read</obj_property>
-      <obj_property name="ObjectShortName">i_clk_read</obj_property>
+   <wvobject fp_name="/GOL_field_tb/i_clk_vga" type="logic">
+      <obj_property name="ElementShortName">i_clk_vga</obj_property>
+      <obj_property name="ObjectShortName">i_clk_vga</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/i_rst_stepper" type="logic">
       <obj_property name="ElementShortName">i_rst_stepper</obj_property>
       <obj_property name="ObjectShortName">i_rst_stepper</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/i_rst_read" type="logic">
-      <obj_property name="ElementShortName">i_rst_read</obj_property>
-      <obj_property name="ObjectShortName">i_rst_read</obj_property>
+   <wvobject fp_name="/GOL_field_tb/i_rst_vga" type="logic">
+      <obj_property name="ElementShortName">i_rst_vga</obj_property>
+      <obj_property name="ObjectShortName">i_rst_vga</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/i_do_frame" type="logic">
       <obj_property name="ElementShortName">i_do_frame</obj_property>
@@ -104,13 +104,13 @@
       <obj_property name="ElementShortName">c_num_paused_frames</obj_property>
       <obj_property name="ObjectShortName">c_num_paused_frames</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/i_clk_read" type="logic">
-      <obj_property name="ElementShortName">i_clk_read</obj_property>
-      <obj_property name="ObjectShortName">i_clk_read</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/i_clk_vga" type="logic">
+      <obj_property name="ElementShortName">i_clk_vga</obj_property>
+      <obj_property name="ObjectShortName">i_clk_vga</obj_property>
    </wvobject>
-   <wvobject fp_name="/GOL_field_tb/UUT/i_rst_read" type="logic">
-      <obj_property name="ElementShortName">i_rst_read</obj_property>
-      <obj_property name="ObjectShortName">i_rst_read</obj_property>
+   <wvobject fp_name="/GOL_field_tb/UUT/i_rst_vga" type="logic">
+      <obj_property name="ElementShortName">i_rst_vga</obj_property>
+      <obj_property name="ObjectShortName">i_rst_vga</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/i_col" type="other">
       <obj_property name="ElementShortName">i_col</obj_property>
@@ -245,12 +245,12 @@
       <obj_property name="ObjectShortName">s1_chunk_towrite_addr_match</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_field_chunk_row_pline" type="array">
-      <obj_property name="ElementShortName">s_field_chunk_row_pline[15:2][8:0]</obj_property>
-      <obj_property name="ObjectShortName">s_field_chunk_row_pline[15:2][8:0]</obj_property>
+      <obj_property name="ElementShortName">s_field_chunk_row_pline[15:2][7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_field_chunk_row_pline[15:2][7:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s_field_chunk_col_pline" type="array">
-      <obj_property name="ElementShortName">s_field_chunk_col_pline[15:2][7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_field_chunk_col_pline[15:2][7:0]</obj_property>
+      <obj_property name="ElementShortName">s_field_chunk_col_pline[15:2][8:0]</obj_property>
+      <obj_property name="ObjectShortName">s_field_chunk_col_pline[15:2][8:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/GOL_field_tb/UUT/s2_block_chunk_x" type="array">
       <obj_property name="ElementShortName">s2_block_chunk_x[7:0]</obj_property>
