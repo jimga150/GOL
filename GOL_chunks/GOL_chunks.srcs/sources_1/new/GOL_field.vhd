@@ -320,7 +320,7 @@ begin
     sC_chunk_vector_to_write <= chunk_to_vector(sC_chunk_to_write);
     sC_fifo_input <= sC_chunk_vector_to_write & std_logic_vector(s_field_chunk_row_pline(c_stageC)) & std_logic_vector(s_field_chunk_col_pline(c_stageC));
     
-    chunk_wr_fifo_inst: entity work.fifo
+    chunk_wr_fifo_inst: entity work.axis_fifo
     generic map(
         g_data_width => sC_fifo_input'length,
         g_data_depth => 1024 --cause more than this would probably be insane
