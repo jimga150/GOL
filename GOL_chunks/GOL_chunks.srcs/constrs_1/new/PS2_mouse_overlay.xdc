@@ -10,6 +10,7 @@ set_property CFGBVS VCCO [current_design]
 set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports i_clk_100mhz]
 #create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {i_clk_100mhz}];
 
+set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins clk_mmcm_inst/inst/mmcm_adv_inst/CLKOUT0]]
 
 ##Switches
 set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS33} [get_ports i_rst]
@@ -226,40 +227,42 @@ connect_debug_port u_ila_0/probe5 [get_nets [list io_ps2_dat_IBUF]]
 
 
 
+connect_debug_port dbg_hub/clk [get_nets s_clk_logic]
+
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_0]
 set_property C_ADV_TRIGGER true [get_debug_cores u_ila_0]
 set_property C_DATA_DEPTH 32768 [get_debug_cores u_ila_0]
 set_property C_EN_STRG_QUAL true [get_debug_cores u_ila_0]
-set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 4 [get_debug_cores u_ila_0]
 set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
 set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
 set_property port_width 1 [get_debug_ports u_ila_0/clk]
 connect_debug_port u_ila_0/clk [get_nets [list clk_mmcm_inst/inst/clk_out_logic]]
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
-set_property port_width 8 [get_debug_ports u_ila_0/probe0]
-connect_debug_port u_ila_0/probe0 [get_nets [list {UUT/ps2mr/s_ps2_data_in[0]} {UUT/ps2mr/s_ps2_data_in[1]} {UUT/ps2mr/s_ps2_data_in[2]} {UUT/ps2mr/s_ps2_data_in[3]} {UUT/ps2mr/s_ps2_data_in[4]} {UUT/ps2mr/s_ps2_data_in[5]} {UUT/ps2mr/s_ps2_data_in[6]} {UUT/ps2mr/s_ps2_data_in[7]}]]
+set_property port_width 9 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {UUT/s_cursor_delta_y[0]} {UUT/s_cursor_delta_y[1]} {UUT/s_cursor_delta_y[2]} {UUT/s_cursor_delta_y[3]} {UUT/s_cursor_delta_y[4]} {UUT/s_cursor_delta_y[5]} {UUT/s_cursor_delta_y[6]} {UUT/s_cursor_delta_y[7]} {UUT/s_cursor_delta_y[8]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
-set_property port_width 8 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list {UUT/ps2mr/s_ps2_data_out[0]} {UUT/ps2mr/s_ps2_data_out[1]} {UUT/ps2mr/s_ps2_data_out[2]} {UUT/ps2mr/s_ps2_data_out[3]} {UUT/ps2mr/s_ps2_data_out[4]} {UUT/ps2mr/s_ps2_data_out[5]} {UUT/ps2mr/s_ps2_data_out[6]} {UUT/ps2mr/s_ps2_data_out[7]}]]
+set_property port_width 16 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {UUT/s_cursor_pos_y[0]} {UUT/s_cursor_pos_y[1]} {UUT/s_cursor_pos_y[2]} {UUT/s_cursor_pos_y[3]} {UUT/s_cursor_pos_y[4]} {UUT/s_cursor_pos_y[5]} {UUT/s_cursor_pos_y[6]} {UUT/s_cursor_pos_y[7]} {UUT/s_cursor_pos_y[8]} {UUT/s_cursor_pos_y[9]} {UUT/s_cursor_pos_y[10]} {UUT/s_cursor_pos_y[11]} {UUT/s_cursor_pos_y[12]} {UUT/s_cursor_pos_y[13]} {UUT/s_cursor_pos_y[14]} {UUT/s_cursor_pos_y[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
 set_property port_width 16 [get_debug_ports u_ila_0/probe2]
 connect_debug_port u_ila_0/probe2 [get_nets [list {UUT/s_cursor_pos_x[0]} {UUT/s_cursor_pos_x[1]} {UUT/s_cursor_pos_x[2]} {UUT/s_cursor_pos_x[3]} {UUT/s_cursor_pos_x[4]} {UUT/s_cursor_pos_x[5]} {UUT/s_cursor_pos_x[6]} {UUT/s_cursor_pos_x[7]} {UUT/s_cursor_pos_x[8]} {UUT/s_cursor_pos_x[9]} {UUT/s_cursor_pos_x[10]} {UUT/s_cursor_pos_x[11]} {UUT/s_cursor_pos_x[12]} {UUT/s_cursor_pos_x[13]} {UUT/s_cursor_pos_x[14]} {UUT/s_cursor_pos_x[15]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
-set_property port_width 16 [get_debug_ports u_ila_0/probe3]
-connect_debug_port u_ila_0/probe3 [get_nets [list {UUT/s_cursor_pos_y[0]} {UUT/s_cursor_pos_y[1]} {UUT/s_cursor_pos_y[2]} {UUT/s_cursor_pos_y[3]} {UUT/s_cursor_pos_y[4]} {UUT/s_cursor_pos_y[5]} {UUT/s_cursor_pos_y[6]} {UUT/s_cursor_pos_y[7]} {UUT/s_cursor_pos_y[8]} {UUT/s_cursor_pos_y[9]} {UUT/s_cursor_pos_y[10]} {UUT/s_cursor_pos_y[11]} {UUT/s_cursor_pos_y[12]} {UUT/s_cursor_pos_y[13]} {UUT/s_cursor_pos_y[14]} {UUT/s_cursor_pos_y[15]}]]
+set_property port_width 9 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {UUT/s_cursor_delta_x[0]} {UUT/s_cursor_delta_x[1]} {UUT/s_cursor_delta_x[2]} {UUT/s_cursor_delta_x[3]} {UUT/s_cursor_delta_x[4]} {UUT/s_cursor_delta_x[5]} {UUT/s_cursor_delta_x[6]} {UUT/s_cursor_delta_x[7]} {UUT/s_cursor_delta_x[8]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
-set_property port_width 9 [get_debug_ports u_ila_0/probe4]
-connect_debug_port u_ila_0/probe4 [get_nets [list {UUT/s_cursor_delta_x[0]} {UUT/s_cursor_delta_x[1]} {UUT/s_cursor_delta_x[2]} {UUT/s_cursor_delta_x[3]} {UUT/s_cursor_delta_x[4]} {UUT/s_cursor_delta_x[5]} {UUT/s_cursor_delta_x[6]} {UUT/s_cursor_delta_x[7]} {UUT/s_cursor_delta_x[8]}]]
+set_property port_width 8 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list {UUT/ps2mr/s_ps2_data_out[0]} {UUT/ps2mr/s_ps2_data_out[1]} {UUT/ps2mr/s_ps2_data_out[2]} {UUT/ps2mr/s_ps2_data_out[3]} {UUT/ps2mr/s_ps2_data_out[4]} {UUT/ps2mr/s_ps2_data_out[5]} {UUT/ps2mr/s_ps2_data_out[6]} {UUT/ps2mr/s_ps2_data_out[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
-set_property port_width 9 [get_debug_ports u_ila_0/probe5]
-connect_debug_port u_ila_0/probe5 [get_nets [list {UUT/s_cursor_delta_y[0]} {UUT/s_cursor_delta_y[1]} {UUT/s_cursor_delta_y[2]} {UUT/s_cursor_delta_y[3]} {UUT/s_cursor_delta_y[4]} {UUT/s_cursor_delta_y[5]} {UUT/s_cursor_delta_y[6]} {UUT/s_cursor_delta_y[7]} {UUT/s_cursor_delta_y[8]}]]
+set_property port_width 8 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list {UUT/ps2mr/s_ps2_data_in[0]} {UUT/ps2mr/s_ps2_data_in[1]} {UUT/ps2mr/s_ps2_data_in[2]} {UUT/ps2mr/s_ps2_data_in[3]} {UUT/ps2mr/s_ps2_data_in[4]} {UUT/ps2mr/s_ps2_data_in[5]} {UUT/ps2mr/s_ps2_data_in[6]} {UUT/ps2mr/s_ps2_data_in[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
 set_property port_width 1 [get_debug_ports u_ila_0/probe6]
@@ -283,4 +286,4 @@ connect_debug_port u_ila_0/probe10 [get_nets [list UUT/ps2mr/s_ps2_wtr_valid]]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets s_clk_logic]
+connect_debug_port dbg_hub/clk [get_nets u_ila_0_clk_out_logic]

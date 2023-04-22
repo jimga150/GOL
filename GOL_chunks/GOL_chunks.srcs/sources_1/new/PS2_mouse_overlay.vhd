@@ -40,6 +40,9 @@ entity PS2_mouse_overlay is
         g_sys_clk_f : integer := 12_500_000
     );
     port(
+    
+        --PS2 interface
+        io_ps2_clk, io_ps2_dat : inout std_logic;
         
         --system clock domain interface
         i_sys_clk, i_sys_rst : in std_logic;
@@ -52,11 +55,6 @@ entity PS2_mouse_overlay is
         o_mouse_connected : out std_logic;
         o_cursor_x, o_cursor_y : out unsigned(15 downto 0);
         
-        --PS2 interface
-        io_ps2_clk, io_ps2_dat : inout std_logic;
-        
-        --VGA interface
-        i_vga_clk, i_vga_rst : in std_logic;
         i_col, i_row : in integer;
         o_pixel_r, o_pixel_g, o_pixel_b : out std_logic_vector(3 downto 0);
         o_pixel_enable : out std_logic
@@ -64,21 +62,6 @@ entity PS2_mouse_overlay is
 end PS2_mouse_overlay;
 
 architecture Behavioral of PS2_mouse_overlay is
-
-    COMPONENT axis_clock_converter_0
-    PORT (
-        s_axis_aresetn : IN STD_LOGIC;
-        m_axis_aresetn : IN STD_LOGIC;
-        s_axis_aclk : IN STD_LOGIC;
-        s_axis_tvalid : IN STD_LOGIC;
-        s_axis_tready : OUT STD_LOGIC;
-        s_axis_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        m_axis_aclk : IN STD_LOGIC;
-        m_axis_tvalid : OUT STD_LOGIC;
-        m_axis_tready : IN STD_LOGIC;
-        m_axis_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) 
-    );
-    END COMPONENT;
     
     attribute mark_debug : string;
     
@@ -88,8 +71,10 @@ architecture Behavioral of PS2_mouse_overlay is
     attribute mark_debug of s_cursor_pos_x : signal is "true";
     attribute mark_debug of s_cursor_pos_y : signal is "true";
     
-    signal s_cursor_pos_x_slv, s_cursor_pos_y_slv : std_logic_vector(s_cursor_pos_x'range);
-    signal s_sys_cursor_pos_slv : std_logic_vector(s_cursor_pos_x_slv'length + s_cursor_pos_y_slv'length - 1 downto 0);
+    signal s_cursor_x_match : std_logic;
+    signal s_cursor_x_offbyone : std_logic;
+    signal s_cursor_y_match : std_logic;
+    signal s_cursor_y_offbyone : std_logic;
     
     signal s_left_button, s_left_button_saved : std_logic;
     signal s_middle_button, s_middle_button_saved : std_logic;
@@ -101,13 +86,6 @@ architecture Behavioral of PS2_mouse_overlay is
     
     signal s_mouse_packet_valid : std_logic;
     
-    
-    signal s_vga_rstn : std_logic;
-    
-    signal s_vga_cursor_pos_slv : std_logic_vector(s_sys_cursor_pos_slv'range);
-    signal s_vga_cursor_x : integer range 0 to g_screen_width-1;
-    signal s_vga_cursor_y : integer range 0 to g_screen_height-1;
-    
     type t_pix_arr is array(natural range<>) of std_logic_vector(11 downto 0);
     signal s_pixel_pipeline : t_pix_arr(g_pixel_delay downto 1);
     signal s_pix_en_pipeline : std_logic_vector(s_pixel_pipeline'range);
@@ -115,7 +93,6 @@ architecture Behavioral of PS2_mouse_overlay is
 begin
 
     s_sys_rstn <= not i_sys_rst;
-    s_vga_rstn <= not i_vga_rst;
 
     ps2mr: entity work.PS2_mouse_reader
     generic map(
@@ -172,6 +149,42 @@ begin
                 s_cursor_pos_y <= v_cursor_pos_y;
                 
             end if;
+        
+            s_pix_en_pipeline(1) <= '0';
+            s_pixel_pipeline(1) <= (others => '0'); --not strictly necessary but i dont think it adds too much.
+            
+            s_cursor_x_match <= '0';
+            if (i_col = s_cursor_pos_x) then
+                s_cursor_x_match <= '1';
+            end if;
+            
+            s_cursor_x_offbyone <= '0';
+            if (i_col = s_cursor_pos_x + 1 or i_col = s_cursor_pos_x - 1) then
+                s_cursor_x_offbyone <= '1';
+            end if;
+            
+            s_cursor_y_match <= '0';
+            if (i_row = s_cursor_pos_y) then
+                s_cursor_y_match <= '1';
+            end if;
+            
+            s_cursor_y_offbyone <= '0';
+            if (i_row = s_cursor_pos_y + 1 or i_row = s_cursor_pos_y - 1) then
+                s_cursor_y_offbyone <= '1';
+            end if;
+            
+            --make green pixels surround the current cursor position
+            if (s_cursor_x_match and s_cursor_y_offbyone) then
+                s_pixel_pipeline(1) <= "000011110000"; --green
+                s_pix_en_pipeline(1) <= '1';
+            end if;
+            if (s_cursor_y_match and s_cursor_x_offbyone) then
+                s_pixel_pipeline(1) <= "000011110000"; --green
+                s_pix_en_pipeline(1) <= '1';
+            end if;
+            
+            s_pixel_pipeline(s_pixel_pipeline'high downto 2) <= s_pixel_pipeline(s_pixel_pipeline'high-1 downto 1);
+            s_pix_en_pipeline(s_pix_en_pipeline'high downto 2) <= s_pix_en_pipeline(s_pix_en_pipeline'high-1 downto 1);
             
             if (i_sys_rst) then
                 s_cursor_pos_x <= (others => '0');
@@ -183,53 +196,6 @@ begin
                 s_middle_button_saved <= '0';
                 s_right_button_saved <= '0';
             end if;
-            
-        end if;
-    end process;
-    
-    o_cursor_x <= unsigned(std_logic_vector(s_cursor_pos_x));
-    o_cursor_y <= unsigned(std_logic_vector(s_cursor_pos_y));
-    
-    s_cursor_pos_x_slv <= std_logic_vector(s_cursor_pos_x);
-    s_cursor_pos_y_slv <= std_logic_vector(s_cursor_pos_y);
-    s_sys_cursor_pos_slv <= s_cursor_pos_x_slv & s_cursor_pos_y_slv;
-    
-    axis_clk_cross : axis_clock_converter_0
-    PORT MAP (
-        s_axis_aclk => i_sys_clk,
-        s_axis_aresetn => s_sys_rstn,
-        s_axis_tvalid => '1',
-        s_axis_tready => open,
-        s_axis_tdata => s_sys_cursor_pos_slv,
-        
-        m_axis_aclk => i_vga_clk,
-        m_axis_aresetn => s_vga_rstn,
-        m_axis_tvalid => open,
-        m_axis_tready => '1',
-        m_axis_tdata => s_vga_cursor_pos_slv
-    );
-    
-    s_vga_cursor_x <= to_integer(unsigned(s_vga_cursor_pos_slv(s_vga_cursor_pos_slv'high downto s_vga_cursor_pos_slv'high - s_cursor_pos_x'length + 1)));
-    s_vga_cursor_y <= to_integer(unsigned(s_vga_cursor_pos_slv(s_vga_cursor_pos_slv'high - s_cursor_pos_x'length downto s_vga_cursor_pos_slv'low)));
-    
-    process(i_vga_clk) is begin
-        if rising_edge(i_vga_clk) then
-        
-            s_pix_en_pipeline(1) <= '0';
-            s_pixel_pipeline(1) <= (others => '0'); --not strictly necessary but i dont think it adds too much.
-            
-            --make green pixels surround the current cursor position
-            if (i_col = s_vga_cursor_x and (i_row = s_vga_cursor_y + 1 or i_row = s_vga_cursor_y - 1)) then
-                s_pixel_pipeline(1) <= "000011110000"; --green
-                s_pix_en_pipeline(1) <= '1';
-            end if;
-            if (i_row = s_vga_cursor_y and (i_col = s_vga_cursor_x + 1 or i_col = s_vga_cursor_x - 1)) then
-                s_pixel_pipeline(1) <= "000011110000"; --green
-                s_pix_en_pipeline(1) <= '1';
-            end if;
-            
-            s_pixel_pipeline(s_pixel_pipeline'high downto 2) <= s_pixel_pipeline(s_pixel_pipeline'high-1 downto 1);
-            s_pix_en_pipeline(s_pix_en_pipeline'high downto 2) <= s_pix_en_pipeline(s_pix_en_pipeline'high-1 downto 1);
             
         end if;
     end process;

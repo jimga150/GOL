@@ -133,13 +133,12 @@ begin
         g_screen_height => 1050,
         g_pixel_delay => 5,
 --        g_sys_clk_f => 100_000_000 --clk_wiz_1
-        g_sys_clk_f => 12_644_675 --clk_wiz_vga_slow_logic
+--        g_sys_clk_f => 12_644_675 --clk_wiz_vga_slow_logic
+        g_sys_clk_f => 147_136_322 --vga_clk
     )
     port map(
-        i_sys_clk => s_clk_logic,
-        i_vga_clk => s_clk_vga,
+        i_sys_clk => s_clk_vga,
         i_sys_rst => i_rst,
-        i_vga_rst => i_rst,
         o_left_btn_down => o_left_btn_down,
         o_middle_btn_down => o_middle_btn_down,
         o_right_btn_down => o_right_btn_down,
