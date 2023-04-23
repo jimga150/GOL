@@ -126,6 +126,9 @@ begin
             end loop;
         end loop;
         
+        i_m_valid <= '0';
+        wait for i_m_clk_period*20;
+        
         s_test_done <= '1';
 --        assert false report "End Simulation" severity failure;
         

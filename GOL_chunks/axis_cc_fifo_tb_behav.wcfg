@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="67.507 ns"></ZoomStartTime>
-      <ZoomEndTime time="747.508 ns"></ZoomEndTime>
-      <Cursor1Time time="195.507 ns"></Cursor1Time>
+      <ZoomStartTime time="114,812.521 ns"></ZoomStartTime>
+      <ZoomEndTime time="115,048.122 ns"></ZoomEndTime>
+      <Cursor1Time time="114,852.843 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="167"></NameColumnWidth>
-      <ValueColumnWidth column_width="92"></ValueColumnWidth>
+      <ValueColumnWidth column_width="64"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="54" />
+   <WVObjectSize size="50" />
    <wvobject fp_name="/axis_cc_fifo_tb/i_m_clk" type="logic">
       <obj_property name="ElementShortName">i_m_clk</obj_property>
       <obj_property name="ObjectShortName">i_m_clk</obj_property>
@@ -66,26 +66,6 @@
       <obj_property name="ElementShortName">s_test_done</obj_property>
       <obj_property name="ObjectShortName">s_test_done</obj_property>
    </wvobject>
-   <wvobject fp_name="/axis_cc_fifo_tb/g_data_width" type="other">
-      <obj_property name="ElementShortName">g_data_width</obj_property>
-      <obj_property name="ObjectShortName">g_data_width</obj_property>
-   </wvobject>
-   <wvobject fp_name="/axis_cc_fifo_tb/g_data_depth" type="other">
-      <obj_property name="ElementShortName">g_data_depth</obj_property>
-      <obj_property name="ObjectShortName">g_data_depth</obj_property>
-   </wvobject>
-   <wvobject fp_name="/axis_cc_fifo_tb/g_sync_stages" type="other">
-      <obj_property name="ElementShortName">g_sync_stages</obj_property>
-      <obj_property name="ObjectShortName">g_sync_stages</obj_property>
-   </wvobject>
-   <wvobject fp_name="/axis_cc_fifo_tb/i_m_clk_period" type="other">
-      <obj_property name="ElementShortName">i_m_clk_period</obj_property>
-      <obj_property name="ObjectShortName">i_m_clk_period</obj_property>
-   </wvobject>
-   <wvobject fp_name="/axis_cc_fifo_tb/i_s_clk_period" type="other">
-      <obj_property name="ElementShortName">i_s_clk_period</obj_property>
-      <obj_property name="ObjectShortName">i_s_clk_period</obj_property>
-   </wvobject>
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/i_m_clk" type="logic">
       <obj_property name="ElementShortName">i_m_clk</obj_property>
       <obj_property name="ObjectShortName">i_m_clk</obj_property>
@@ -125,6 +105,7 @@
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/o_s_data" type="array">
       <obj_property name="ElementShortName">o_s_data[35:0]</obj_property>
       <obj_property name="ObjectShortName">o_s_data[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_m_ready" type="logic">
       <obj_property name="ElementShortName">s_m_ready</obj_property>
@@ -193,6 +174,12 @@
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_s_next_data" type="array">
       <obj_property name="ElementShortName">s_s_next_data[35:0]</obj_property>
       <obj_property name="ObjectShortName">s_s_next_data[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_s_curr_data" type="array">
+      <obj_property name="ElementShortName">s_s_curr_data[35:0]</obj_property>
+      <obj_property name="ObjectShortName">s_s_curr_data[35:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_s_din_addr_grey_pline" type="array">
       <obj_property name="ElementShortName">s_s_din_addr_grey_pline[3:1][9:0]</obj_property>
@@ -214,13 +201,13 @@
       <obj_property name="ElementShortName">s_s_one_word_left</obj_property>
       <obj_property name="ObjectShortName">s_s_one_word_left</obj_property>
    </wvobject>
+   <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_s_dout_addrs_setup" type="logic">
+      <obj_property name="ElementShortName">s_s_dout_addrs_setup</obj_property>
+      <obj_property name="ObjectShortName">s_s_dout_addrs_setup</obj_property>
+   </wvobject>
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_s_forward_data" type="logic">
       <obj_property name="ElementShortName">s_s_forward_data</obj_property>
       <obj_property name="ObjectShortName">s_s_forward_data</obj_property>
-   </wvobject>
-   <wvobject fp_name="/axis_cc_fifo_tb/UUT/s_s_dout" type="array">
-      <obj_property name="ElementShortName">s_s_dout[35:0]</obj_property>
-      <obj_property name="ObjectShortName">s_s_dout[35:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/axis_cc_fifo_tb/UUT/g_data_width" type="other">
       <obj_property name="ElementShortName">g_data_width</obj_property>
