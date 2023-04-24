@@ -57,7 +57,7 @@ architecture Behavioral of axis_fifo is
         
     signal last_din : std_logic_vector(i_data'range);
     
-    signal s_din_ptr, s_dout_ptr, s_dout_ptr_next : integer range c_high_ptr downto c_low_ptr;
+    signal s_last_din_ptr, s_din_ptr, s_dout_ptr, s_dout_ptr_next : integer range c_high_ptr downto c_low_ptr;
     
     signal s_dout_valid, s_din_ready : std_logic;
     
@@ -77,13 +77,7 @@ begin
     s_din_get <= i_valid and s_din_ready;
     
     --1 when data is being output this cycle
-    s_dout_put <= s_dout_valid and i_ready;
-    
-    --1 when on this cycle, the axis_fifo has one word in it
-    s_one_word_left <= '1' when s_dout_ptr_next = s_din_ptr else '0';
-    
-    --1 when on this cycle, the axis_fifo has no words in it
-    s_fifo_empty <= '1' when s_dout_ptr = s_din_ptr else '0'; 
+    s_dout_put <= s_dout_valid and i_ready; 
     
     bram_inst: entity work.bram_simple_dp
     generic map(
@@ -104,6 +98,25 @@ begin
     process(i_clk) is begin
         if rising_edge(i_clk) then
         
+            --1 when on this cycle, the axis_fifo has one word in it
+            s_one_word_left <= '0';
+            if (
+                (s_dout_ptr_next = s_din_ptr and s_din_get = s_dout_put) or --if the FIFO size is staying the same
+                (s_din_get = '1' and s_dout_put = '0' and s_fifo_empty = '1') or --if the FIFO is inflating
+                (s_din_get = '0' and s_dout_put = '1' and s_dout_ptr_next = s_last_din_ptr) --if the FIFO is deflating
+            ) then
+                s_one_word_left <= '1';
+            end if;
+            
+            --1 when on this cycle, the axis_fifo has no words in it
+            s_fifo_empty <= '0';
+            if (
+                (s_dout_ptr = s_din_ptr and s_din_get = s_dout_put) or --if the FIFO size is staying the same
+                (s_din_get = '0' and s_dout_put = '1' and s_dout_ptr = s_last_din_ptr) --if the FIFO is deflating
+            ) then
+                s_fifo_empty <= '1';
+            end if;
+        
             s1_dout_put <= s_dout_put;
         
             if (s_din_get = '1') then
@@ -116,6 +129,7 @@ begin
                 if (s_din_ptr = c_high_ptr) then
                     s_din_ptr <= c_low_ptr;
                 end if;
+                s_last_din_ptr <= s_din_ptr;
                 
                 --if axis_fifo is inflating (gaining data on a cycle that it does not also lose some)
                 if (s_dout_put = '0') then
