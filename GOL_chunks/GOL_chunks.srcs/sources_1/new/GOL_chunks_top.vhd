@@ -36,11 +36,20 @@ use work.GOL_field_init.all;
 
 entity GOL_chunks_top is
     port(
+        
+        --system clock/reset
         i_clk_100mhz, i_rst_btn : in std_logic;
+        
+        --user buttons
         i_frame_go_btn, i_frame_step_btn : in std_logic;
+        
+        --VGA interface
         o_vga_clk : out std_logic;
         o_h_sync, o_v_sync : out std_logic;
-        o_pixel_slv : out std_logic_vector(11 downto 0)
+        o_pixel_r, o_pixel_g, o_pixel_b : out std_logic_vector(3 downto 0);
+        
+        --PS2 interface
+        io_ps2_clk, io_ps2_dat : inout std_logic
     );
 end GOL_chunks_top;
 
@@ -83,8 +92,17 @@ architecture Structural of GOL_chunks_top is
     
 --    attribute mark_debug of s0_hsync: signal is "true";
 --    attribute mark_debug of s0_vsync: signal is "true";
+    
+    signal s_left_btn, s_right_btn : std_logic;
+    signal s_cursor_x, s_cursor_y : integer;
+    
+    signal s_pixel_we : std_logic;
+    signal s_pixel_in : std_logic;
         
-    signal s_pixel : std_logic;
+    signal s_pixel_out : std_logic;
+    
+    signal s_mouse_overlay_en : std_logic;
+    signal s_mouse_pix_r, s_mouse_pix_g, s_mouse_pix_b : std_logic_vector(3 downto 0);
     
     -----------------------
     --stepper logic stuff below here
@@ -161,6 +179,37 @@ begin
 		o_row => s_row
     );
     
+    mouse_overlay_inst: entity work.PS2_mouse_overlay
+    generic map(
+        g_screen_width => c_screen_width,
+        g_screen_height => c_screen_height,
+        g_pixel_delay => c_field_pix_read_delay,
+--        g_sys_clk_f => 100_000_000 --clk_wiz_1
+--        g_sys_clk_f => 12_644_675 --clk_wiz_vga_slow_logic
+        g_sys_clk_f => 147_136_322 --vga_clk
+    )
+    port map(
+        i_sys_clk => s_clk_vga,
+        i_sys_rst => s_rst_vga,
+        o_left_btn_down => s_left_btn,
+        o_middle_btn_down => open,
+        o_right_btn_down => s_right_btn,
+        o_left_btn_click => open,
+        o_middle_btn_click => open,
+        o_right_btn_click => open,
+        o_mouse_connected => open,
+        o_cursor_x => s_cursor_x,
+        o_cursor_y => s_cursor_y,
+        io_ps2_clk => io_ps2_clk,
+        io_ps2_dat => io_ps2_dat,
+        i_col => s_col,
+        i_row => s_row,
+        o_pixel_r => s_mouse_pix_r,
+        o_pixel_g => s_mouse_pix_g,
+        o_pixel_b => s_mouse_pix_b,
+        o_pixel_enable => s_mouse_overlay_en
+    );
+    
     process(s_clk_vga) is begin
         if rising_edge(s_clk_vga) then
         
@@ -177,13 +226,28 @@ begin
             o_h_sync <= s_hsync_pline(s_hsync_pline'high);
             o_v_sync <= s_vsync_pline(s_vsync_pline'high);
             
-            gen_pixel: for i in o_pixel_slv'range loop
-                o_pixel_slv(i) <= s_pixel and s_disp_en_pline(s_disp_en_pline'high);
-            end loop;
+            if (s_mouse_overlay_en = '1') then
+                o_pixel_r <= s_mouse_pix_r;
+                o_pixel_g <= s_mouse_pix_g;
+                o_pixel_b <= s_mouse_pix_b;
+            else
+                o_pixel_r <= (others => 
+                    s_pixel_out and s_disp_en_pline(s_disp_en_pline'high));
+                o_pixel_g <= (others => 
+                    s_pixel_out and s_disp_en_pline(s_disp_en_pline'high));
+                o_pixel_b <= (others => 
+                    s_pixel_out and s_disp_en_pline(s_disp_en_pline'high));
+            end if;
             
+            s_pixel_we <= '0';
+            if (s_cursor_x = s_col and s_cursor_y = s_row) then
+                s_pixel_we <= s_left_btn or s_right_btn;
+            end if;
+            
+            s_pixel_in <= s_left_btn;
+        
         end if;
     end process;
-    
     
     
     ------------------------------------------------------------------
@@ -243,10 +307,13 @@ begin
         g_rules => c_GOL_ASIM
     )
     port map(
-        i_clk_read => s_clk_vga,
+        i_clk_vga => s_clk_vga,
+        i_rst_vga => s_rst_vga,
         i_col => s_col,
         i_row => s_row,
-        o_pixel => s_pixel,
+        i_pixel_we => s_pixel_we,
+        i_pixel => s_pixel_in,
+        o_pixel => s_pixel_out,
         i_clk_stepper => s_clk_logic,
         i_rst_stepper => s_rst_logic,
         i_do_frame => s_do_frame,

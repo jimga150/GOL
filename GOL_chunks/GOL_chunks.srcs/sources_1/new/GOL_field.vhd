@@ -162,29 +162,42 @@ architecture Structural of GOL_field is
     signal s1_chunk_towrite_valid : std_logic;
     signal s1_chunk_towrite_addr_match : std_logic;
     
+    
+    signal s2_field_chunk_col : unsigned(c_field_num_chunk_col_bits-1 downto 0);
+    signal s2_field_chunk_row : unsigned(c_field_num_chunk_row_bits-1 downto 0);
+    
+    signal s2_chunk_vector_to_write : std_logic_vector(c_chunk_width*c_chunk_height - 1 downto 0);
+    
+    signal s2_field_chunk_towrite_row : unsigned(s1_field_chunk_row'range);
+    signal s2_field_chunk_towrite_col : unsigned(s1_field_chunk_col'range);
+        
+    signal s2_chunk_towrite_valid : std_logic;
+    signal s2_chunk_towrite_addr_match : std_logic;
+    
+    
     type t_field_chunk_row_pipeline is array(natural range<>) of unsigned(s1_field_chunk_row'range);
     type t_field_chunk_col_pipeline is array(natural range<>) of unsigned(s1_field_chunk_col'range);
     
-    signal s_field_chunk_row_pline : t_field_chunk_row_pipeline(c_field_pix_read_delay downto 2);
-    signal s_field_chunk_col_pline : t_field_chunk_col_pipeline(c_field_pix_read_delay downto 2);
+    signal s_field_chunk_row_pline : t_field_chunk_row_pipeline(c_field_pix_read_delay downto 3);
+    signal s_field_chunk_col_pline : t_field_chunk_col_pipeline(c_field_pix_read_delay downto 3);
 
     --read addresses
-    signal s2_block_chunk_col : unsigned(c_block_num_chunk_col_bits-1 downto 0);
-    signal s2_block_chunk_row : unsigned(c_block_num_chunk_row_bits-1 downto 0);
+    signal s3_block_chunk_col : unsigned(c_block_num_chunk_col_bits-1 downto 0);
+    signal s3_block_chunk_row : unsigned(c_block_num_chunk_row_bits-1 downto 0);
 
     --write stuff
-    signal s2_chunk_we : std_logic;
+    signal s3_chunk_we : std_logic;
     
-    signal s2_block_chunk_towrite_col : unsigned(c_block_num_chunk_col_bits-1 downto 0);
-    signal s2_block_chunk_towrite_row : unsigned(c_block_num_chunk_row_bits-1 downto 0);
+    signal s3_block_chunk_towrite_col : unsigned(c_block_num_chunk_col_bits-1 downto 0);
+    signal s3_block_chunk_towrite_row : unsigned(c_block_num_chunk_row_bits-1 downto 0);
     
-    signal s2_field_block_towrite_row : unsigned(c_field_num_block_row_bits-1 downto 0);
-    signal s2_field_block_towrite_col : unsigned(c_field_num_block_col_bits-1 downto 0);
+    signal s3_field_block_towrite_row : unsigned(c_field_num_block_row_bits-1 downto 0);
+    signal s3_field_block_towrite_col : unsigned(c_field_num_block_col_bits-1 downto 0);
     
-    signal s2_chunk_towrite : t_chunk_type;
+    signal s3_chunk_towrite : t_chunk_type;
     
 
-    constant c_stageA : integer := 2 + c_chunk_getter_read_delay;
+    constant c_stageA : integer := c_pre_chunk_getter_field_delay + c_chunk_getter_read_delay;
     
     signal sA_field_block_row : unsigned(c_field_num_block_row_bits-1 downto 0);
     signal sA_field_block_col : unsigned(c_field_num_block_col_bits-1 downto 0);
@@ -218,16 +231,16 @@ begin
             constant c_prev_col : integer := barrel_sub(c, c_field_num_block_cols-1);
             constant c_block_init_cells : t_block_chunk_arr := block_chunk_arr_from_field(g_init_cells, c, r);
             
-            signal s2_block_match : std_logic;
-            signal s2_block_chunk_we : std_logic;
+            signal s3_block_match : std_logic;
+            signal s3_block_chunk_we : std_logic;
             
         begin
         
-            s2_block_match <= '1' 
-                when to_integer(s2_field_block_towrite_row) = r and to_integer(s2_field_block_towrite_col) = c 
+            s3_block_match <= '1' 
+                when to_integer(s3_field_block_towrite_row) = r and to_integer(s3_field_block_towrite_col) = c 
                 else '0';
                 
-            s2_block_chunk_we <= s2_chunk_we and s2_block_match;
+            s3_block_chunk_we <= s3_chunk_we and s3_block_match;
         
             --5 cycles delay between (x, y) update and o_chunk
             block_inst: entity work.GOL_block
@@ -237,10 +250,10 @@ begin
                 )
                 port map(
                     i_clk_vga => i_clk_vga,
-                    i_chunk_col => s2_block_chunk_col,
-                    i_chunk_row => s2_block_chunk_row,
-                    i_chunk => s2_chunk_towrite,
-                    i_chunk_we => s2_block_chunk_we,
+                    i_chunk_col => s3_block_chunk_col,
+                    i_chunk_row => s3_block_chunk_row,
+                    i_chunk => s3_chunk_towrite,
+                    i_chunk_we => s3_block_chunk_we,
                     o_chunk => sA_chunks(r, c),
                     i_clk_stepper => i_clk_stepper,
                     i_rst_stepper => i_rst_stepper,
@@ -286,21 +299,35 @@ begin
             s1_field_chunk_col <= resize(s_col/c_chunk_width_us, s1_field_chunk_col'length);
             s1_field_chunk_row <= resize(s_row/c_chunk_height_us, s1_field_chunk_row'length);
             
+            
             s_field_chunk_row_pline <= s_field_chunk_row_pline(s_field_chunk_row_pline'high - 1 downto s_field_chunk_row_pline'low) & s1_field_chunk_row;
             s_field_chunk_col_pline <= s_field_chunk_col_pline(s_field_chunk_col_pline'high - 1 downto s_field_chunk_col_pline'low) & s1_field_chunk_col;
             
-            s2_block_chunk_col <= resize(s1_field_chunk_col mod c_block_num_chunk_cols_us, s2_block_chunk_col'length);
-            s2_block_chunk_row <= resize(s1_field_chunk_row mod c_block_num_chunk_rows_us, s2_block_chunk_row'length);
+            s2_field_chunk_col <= s1_field_chunk_col;
+            s2_field_chunk_row <= s1_field_chunk_row;
             
-            s2_chunk_towrite <= vector_to_chunk(s1_chunk_vector_to_write);
+            s2_chunk_vector_to_write <= s1_chunk_vector_to_write;
+            
+            s2_chunk_towrite_valid <= s1_chunk_towrite_valid;
+            s2_chunk_towrite_addr_match <= s1_chunk_towrite_addr_match;
+            
+            s2_field_chunk_towrite_row <= s1_field_chunk_towrite_row;
+            s2_field_chunk_towrite_col <= s1_field_chunk_towrite_col;
+            
+            
+            s3_block_chunk_col <= resize(s2_field_chunk_col mod c_block_num_chunk_cols_us, s3_block_chunk_col'length);
+            s3_block_chunk_row <= resize(s2_field_chunk_row mod c_block_num_chunk_rows_us, s3_block_chunk_row'length);
+            
+            s3_chunk_towrite <= vector_to_chunk(s2_chunk_vector_to_write);
     
-            s2_chunk_we <= s1_chunk_towrite_valid and s1_chunk_towrite_addr_match;
+            s3_chunk_we <= s2_chunk_towrite_valid and s2_chunk_towrite_addr_match;
             
-            s2_field_block_towrite_row <= resize(s1_field_chunk_towrite_row/c_block_num_chunk_rows_us, s2_field_block_towrite_row'length);
-            s2_field_block_towrite_col <= resize(s1_field_chunk_towrite_col/c_block_num_chunk_cols_us, s2_field_block_towrite_col'length);
+            s3_field_block_towrite_row <= resize(s2_field_chunk_towrite_row/c_block_num_chunk_rows_us, s3_field_block_towrite_row'length);
+            s3_field_block_towrite_col <= resize(s2_field_chunk_towrite_col/c_block_num_chunk_cols_us, s3_field_block_towrite_col'length);
             
-            s2_block_chunk_towrite_col <= resize(s1_field_chunk_towrite_col mod c_block_num_chunk_cols_us, s2_block_chunk_towrite_col'length);
-            s2_block_chunk_towrite_row <= resize(s1_field_chunk_towrite_row mod c_block_num_chunk_rows_us, s2_block_chunk_towrite_row'length);
+            s3_block_chunk_towrite_col <= resize(s2_field_chunk_towrite_col mod c_block_num_chunk_cols_us, s3_block_chunk_towrite_col'length);
+            s3_block_chunk_towrite_row <= resize(s2_field_chunk_towrite_row mod c_block_num_chunk_rows_us, s3_block_chunk_towrite_row'length);
+            
             
             sA_field_block_row <= to_unsigned(to_integer(s_field_pixel_row_pline(c_stageA-1))/c_block_num_cell_rows, sA_field_block_row'length);
             sA_field_block_col <= to_unsigned(to_integer(s_field_pixel_col_pline(c_stageA-1))/c_block_num_cell_cols, sA_field_block_col'length);

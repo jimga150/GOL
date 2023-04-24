@@ -154,26 +154,26 @@ set_false_path -from [get_ports i_rst_btn]
 #set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { XA_P[4] }]; #IO_L10P_T1_AD11P_15 Sch=xa_p[4]
 
 ##VGA Connector
-set_property -dict {PACKAGE_PIN A3 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[0]}]
-set_property -dict {PACKAGE_PIN B4 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[1]}]
-set_property -dict {PACKAGE_PIN C5 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[2]}]
-set_property -dict {PACKAGE_PIN A4 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[3]}]
-set_property -dict {PACKAGE_PIN C6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[4]}]
-set_property -dict {PACKAGE_PIN A5 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[5]}]
-set_property -dict {PACKAGE_PIN B6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[6]}]
-set_property -dict {PACKAGE_PIN A6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[7]}]
-set_property -dict {PACKAGE_PIN B7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[8]}]
-set_property -dict {PACKAGE_PIN C7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[9]}]
-set_property -dict {PACKAGE_PIN D7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[10]}]
-set_property -dict {PACKAGE_PIN D8 IOSTANDARD LVCMOS33} [get_ports {o_pixel_slv[11]}]
+set_property -dict {PACKAGE_PIN A3 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[0]}]
+set_property -dict {PACKAGE_PIN B4 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[1]}]
+set_property -dict {PACKAGE_PIN C5 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[2]}]
+set_property -dict {PACKAGE_PIN A4 IOSTANDARD LVCMOS33} [get_ports {o_pixel_r[3]}]
+set_property -dict {PACKAGE_PIN C6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[0]}]
+set_property -dict {PACKAGE_PIN A5 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[1]}]
+set_property -dict {PACKAGE_PIN B6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[2]}]
+set_property -dict {PACKAGE_PIN A6 IOSTANDARD LVCMOS33} [get_ports {o_pixel_g[3]}]
+set_property -dict {PACKAGE_PIN B7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[0]}]
+set_property -dict {PACKAGE_PIN C7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[1]}]
+set_property -dict {PACKAGE_PIN D7 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[2]}]
+set_property -dict {PACKAGE_PIN D8 IOSTANDARD LVCMOS33} [get_ports {o_pixel_b[3]}]
 set_property -dict {PACKAGE_PIN B11 IOSTANDARD LVCMOS33} [get_ports o_h_sync]
 set_property -dict {PACKAGE_PIN B12 IOSTANDARD LVCMOS33} [get_ports o_v_sync]
 
-set_property IOB TRUE [get_ports {o_pixel_slv[*]}]
+set_property IOB TRUE [get_ports {o_pixel_?[*]}]
 set_property IOB TRUE [get_ports o_h_sync]
 set_property IOB TRUE [get_ports o_v_sync]
 
-set_false_path -to [get_ports {o_pixel_slv[*]}]
+set_false_path -to [get_ports {o_pixel_?[*]}]
 set_false_path -to [get_ports o_h_sync]
 set_false_path -to [get_ports o_v_sync]
 
@@ -225,9 +225,11 @@ set_false_path -to [get_ports o_v_sync]
 #set_property -dict { PACKAGE_PIN E5    IOSTANDARD LVCMOS33 } [get_ports { UART_RTS }]; #IO_L5N_T0_AD13N_35 Sch=uart_rts
 
 ##USB HID (PS/2)
-#set_property -dict { PACKAGE_PIN F4    IOSTANDARD LVCMOS33 } [get_ports { PS2_CLK }]; #IO_L13P_T2_MRCC_35 Sch=ps2_clk
-#set_property -dict { PACKAGE_PIN B2    IOSTANDARD LVCMOS33 } [get_ports { PS2_DATA }]; #IO_L10N_T1_AD15N_35 Sch=ps2_data
+set_property -dict {PACKAGE_PIN F4 IOSTANDARD LVCMOS33} [get_ports io_ps2_clk]
+create_clock -period 50000.000 -name ps2_clk -add [get_ports io_ps2_clk]
+set_property -dict {PACKAGE_PIN B2 IOSTANDARD LVCMOS33} [get_ports io_ps2_dat]
 
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks ps2_clk]
 ##SMSC Ethernet PHY
 #set_property -dict { PACKAGE_PIN C9    IOSTANDARD LVCMOS33 } [get_ports { ETH_MDC }]; #IO_L11P_T1_SRCC_16 Sch=eth_mdc
 #set_property -dict { PACKAGE_PIN A9    IOSTANDARD LVCMOS33 } [get_ports { ETH_MDIO }]; #IO_L14N_T2_SRCC_16 Sch=eth_mdio

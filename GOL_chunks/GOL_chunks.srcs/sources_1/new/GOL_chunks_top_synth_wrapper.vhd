@@ -37,7 +37,10 @@ entity GOL_chunks_top_synth_wrapper is
         i_frame_go_btn, i_frame_step_btn : in std_logic;
 --        o_vga_clk : out std_logic;
         o_h_sync, o_v_sync : out std_logic;
-        o_pixel_slv : out std_logic_vector(11 downto 0)
+        o_pixel_r, o_pixel_g, o_pixel_b : out std_logic_vector(3 downto 0);
+        
+        --PS2 interface
+        io_ps2_clk, io_ps2_dat : inout std_logic
     );
 end GOL_chunks_top_synth_wrapper;
 
@@ -52,6 +55,10 @@ begin
         i_frame_step_btn => i_frame_step_btn,
         o_h_sync => o_h_sync,
         o_v_sync => o_v_sync,
-        o_pixel_slv => o_pixel_slv
+        o_pixel_r => o_pixel_r,
+        o_pixel_g => o_pixel_g,
+        o_pixel_b => o_pixel_b,
+        io_ps2_clk => io_ps2_clk,
+        io_ps2_dat => io_ps2_dat
     );
 end Structural;

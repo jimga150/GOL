@@ -53,7 +53,8 @@ entity PS2_mouse_overlay is
         o_middle_btn_click : out std_logic;
         o_right_btn_click : out std_logic;
         o_mouse_connected : out std_logic;
-        o_cursor_x, o_cursor_y : out unsigned(15 downto 0);
+        o_cursor_x : out integer range 0 to g_screen_width-1;
+        o_cursor_y : out integer range 0 to g_screen_height-1;
         
         i_col, i_row : in integer;
         o_pixel_r, o_pixel_g, o_pixel_b : out std_logic_vector(3 downto 0);
@@ -116,6 +117,9 @@ begin
     o_left_btn_down <= s_left_button_saved;
     o_middle_btn_down <= s_middle_button_saved;
     o_right_btn_down <= s_right_button_saved;
+    
+    o_cursor_x <= to_integer(s_cursor_pos_x);
+    o_cursor_y <= to_integer(s_cursor_pos_y);
     
     process(i_sys_clk) is
         variable v_cursor_pos_x, v_cursor_pos_y : signed(s_cursor_pos_x'range);

@@ -125,7 +125,7 @@ package GOL_pkg is
     constant c_chunk_getter_data_decode_delay : integer := 1;
     constant c_chunk_getter_read_delay : integer := c_chunk_getter_addr_decode_delay + c_bram_read_delay + c_chunk_getter_data_decode_delay;
     
-    constant c_pre_chunk_getter_field_delay : integer := 2;
+    constant c_pre_chunk_getter_field_delay : integer := 3;
     constant c_post_chunk_getter_field_delay : integer := 2;
     constant c_field_pix_read_delay : integer := c_pre_chunk_getter_field_delay + c_chunk_getter_read_delay + c_post_chunk_getter_field_delay;
         
