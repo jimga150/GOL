@@ -53,7 +53,14 @@ architecture Behavioral of axis_fifo_tb is
     --Clock Periods
     constant i_clk_period : time := 10 ns;
     
+    signal s_input_cnt : integer := 0;
+    signal s_input_done : std_logic := '0';
+    
+    constant c_fifo_latency_to_wait : integer := 100;
+    signal s_test_done_counter : integer := 0;
     signal s_test_done : std_logic := '0';
+    
+    signal s_output_cnt : integer := 0;
     
 begin
     
@@ -105,6 +112,7 @@ begin
                     i_data <= std_logic_vector(to_unsigned(v_data, i_data'length));
                     if (o_ready = '1') then
                         v_data := v_data + 1;
+                        s_input_cnt <= s_input_cnt + 1;
                     end if;
                 else
                     i_valid <= '0';
@@ -117,7 +125,7 @@ begin
         end loop;
         
         
-        s_test_done <= '1';
+        s_input_done <= '1';
         
 --        assert false report "End Simulation" severity failure;
         
@@ -145,12 +153,27 @@ begin
         
             wait until rising_edge(i_clk);
             
+            if (s_input_done = '1') then
+                s_test_done_counter <= s_test_done_counter + 1;
+                if (s_test_done_counter >= c_fifo_latency_to_wait) then
+                    s_test_done <= '1';
+                end if;
+            end if;
+            
             if (s_test_done = '1') then
-                assert (not v_error) report "Test Failed" severity failure;
+                if (v_error) then
+                    report "Test Failed: Error detected" severity failure;
+                end if;
+                if (s_output_cnt /= s_input_cnt) then
+                    report "Test Failed: Input count was " & integer'image(s_input_cnt) & 
+                        ", but output count was " & integer'image(s_output_cnt) severity failure;
+                end if;
                 report "Test Passed" severity failure;
             end if;
             
             if (i_ready = '1' and o_valid = '1') then
+            
+                s_output_cnt <= s_output_cnt + 1;
             
                 v_data_out_act := to_integer(unsigned(o_data));
                 
