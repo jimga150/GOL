@@ -32,6 +32,13 @@ use IEEE.MATH_REAL.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+--this FIFO has a two cycle latency between an assertion of i_request_data and the corresponding data being available on the line.
+--i_request_data may be asserted again while output data is pending, so sequential reads are supported.
+--if i_request_data is asserted while o_fifo_empty is 1, nothing happens.
+--if i_valid is asserted while o_fifo_full is 1, no data is taken and the FIFO is not affected.
+
+--this FIFO also has a capacity of g_data_depth - 1.
+
 entity fifo is
     generic(
         g_data_width : integer := 36;
