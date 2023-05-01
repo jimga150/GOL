@@ -48,9 +48,11 @@ entity fifo is
         i_clk, i_rst : in std_logic;
         
         i_valid : in std_logic;
+        o_fifo_almost_full : out std_logic;
         o_fifo_full : out std_logic;
         i_data : in std_logic_vector(g_data_width-1 downto 0);
         
+        o_fifo_almost_empty : out std_logic;
         o_fifo_empty : out std_logic;
         i_request_data : in std_logic;
         o_data : out std_logic_vector(g_data_width-1 downto 0)
@@ -112,6 +114,10 @@ begin
     s_fifo_deflating <= s_dout_req and (not s_din_get);
     
     fifo_cnt_staying_same <= '1' when s_din_get = s_dout_req else '0';
+    
+    o_fifo_almost_full <= s_fifo_almost_full;
+    
+    o_fifo_almost_empty <= s_fifo_almost_empty;
     
     bram_inst: entity work.bram_simple_dp
     generic map(

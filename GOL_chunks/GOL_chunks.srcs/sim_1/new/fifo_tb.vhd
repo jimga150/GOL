@@ -57,7 +57,9 @@ architecture Behavioral of fifo_tb is
     
     --Outputs
     signal o_fifo_full : std_logic;
+    signal o_fifo_almost_full : std_logic;
     signal o_fifo_empty : std_logic;
+    signal o_fifo_almost_empty : std_logic;
     signal o_data : std_logic_vector(g_data_width-1 downto 0);
     
     --Clock Periods
@@ -85,8 +87,10 @@ begin
         i_clk => i_clk,
         i_rst => i_rst,
         i_valid => i_valid,
+        o_fifo_almost_full => o_fifo_almost_full,
         o_fifo_full => o_fifo_full,
         i_data => i_data,
+        o_fifo_almost_empty => o_fifo_almost_empty,
         o_fifo_empty => o_fifo_empty,
         i_request_data => i_request_data,
         o_data => o_data
