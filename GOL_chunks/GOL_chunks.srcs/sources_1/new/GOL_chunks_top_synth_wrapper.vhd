@@ -40,7 +40,10 @@ entity GOL_chunks_top_synth_wrapper is
         o_pixel_r, o_pixel_g, o_pixel_b : out std_logic_vector(3 downto 0);
         
         --PS2 interface
-        io_ps2_clk, io_ps2_dat : inout std_logic
+        io_ps2_clk, io_ps2_dat : inout std_logic;
+        
+        --LEDS
+        led1, led2 : out std_logic
     );
 end GOL_chunks_top_synth_wrapper;
 
@@ -59,6 +62,8 @@ begin
         o_pixel_g => o_pixel_g,
         o_pixel_b => o_pixel_b,
         io_ps2_clk => io_ps2_clk,
-        io_ps2_dat => io_ps2_dat
+        io_ps2_dat => io_ps2_dat,
+        led1 => led1,
+        led2 => led2
     );
 end Structural;

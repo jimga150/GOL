@@ -50,6 +50,7 @@ entity GOL_field is
         i_clk_stepper : in std_logic;
         i_rst_stepper : in std_logic;
         i_do_frame : in std_logic;
+        i_recalc_frame : in std_logic;
         o_stepper_busy : out std_logic
     );
 end GOL_field;
@@ -258,6 +259,7 @@ begin
                     i_clk_stepper => i_clk_stepper,
                     i_rst_stepper => i_rst_stepper,
                     i_do_frame => i_do_frame,
+                    i_recalc_frame => i_recalc_frame,
                     o_stepper_busy => s_stepper_busys(r, c),
                     i_top_edge => s_bottom_to_top_edges(c_prev_row, c),
                     i_bottom_edge => s_top_to_bottom_edges(c_next_row, c),

@@ -39,7 +39,9 @@ entity GOL_block_stepper is
         g_rules : t_GOL_rules := c_GOL_default
     );
     Port (
-        i_clk, i_rst, i_do_frame : in std_logic;
+        i_clk, i_rst : in std_logic;
+        
+        i_do_frame, i_recalc_frame : in std_logic;
         
         o_stepper_busy : out std_logic;
         
@@ -212,6 +214,11 @@ begin
                 o_top_right_bit <= s_block_top_right_bit;
                 o_bottom_left_bit <= s_block_bottom_left_bit;
                 o_bottom_right_bit <= s_block_bottom_right_bit;
+                
+                if (i_recalc_frame = '1') then
+                    s_readout_state <= READ_TOP_LEFT;
+                    --DONT flip current state MSB
+                end if;
             
                 if (i_do_frame = '1') then
                     s_readout_state <= READ_TOP_LEFT;

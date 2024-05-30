@@ -49,7 +49,10 @@ entity GOL_chunks_top is
         o_pixel_r, o_pixel_g, o_pixel_b : out std_logic_vector(3 downto 0);
         
         --PS2 interface
-        io_ps2_clk, io_ps2_dat : inout std_logic
+        io_ps2_clk, io_ps2_dat : inout std_logic;
+        
+        --LEDS
+        led1, led2 : out std_logic
     );
 end GOL_chunks_top;
 
@@ -81,6 +84,8 @@ architecture Structural of GOL_chunks_top is
 --    signal s_rst_vga_nolock : std_logic;
     signal s_rst_vga, s_rst_vga_n : std_logic;
     
+    signal s_frame_go_vga : std_logic;
+    
     signal s_col, s_row : integer;
 --    attribute mark_debug of s_col: signal is "true";
 --    attribute mark_debug of s_row: signal is "true";
@@ -96,7 +101,7 @@ architecture Structural of GOL_chunks_top is
     signal s_left_btn, s_right_btn : std_logic;
     signal s_cursor_x, s_cursor_y : integer;
     
-    signal s_pixel_we : std_logic;
+    signal s_pixel_we, s_pixel_write_happened_vga : std_logic;
     signal s_pixel_in : std_logic;
         
     signal s_pixel_out : std_logic;
@@ -115,9 +120,11 @@ architecture Structural of GOL_chunks_top is
     signal s_rst_logic, s_rst_logic_n : std_logic;
     
     signal s_vsync_logic : std_logic;
-    signal s_do_frame : std_logic;
+    signal s_do_frame, s_recalc_frame : std_logic;
     
-    signal s_frame_go, s_frame_step : std_logic;
+    signal s_frame_go_logic, s_frame_step : std_logic;
+    
+    signal s_pixel_write_happened_logic : std_logic;
 
 begin
 
@@ -168,6 +175,14 @@ begin
 --    s_rst_vga <= s_rst_vga_nolock or (not s_clk_vga_locked);
     s_rst_vga_n <= not s_rst_vga;
     
+    frame_hold_btn_vga_cond: entity work.button_conditioner
+    port map(
+        i_clk => s_clk_vga,
+        i_rst => s_rst_vga,
+        i_btn => i_frame_go_btn,
+        o_debounced => s_frame_go_vga
+    );
+    
     vga_cont_int: entity work.vga_controller
     port map(
         i_clk => s_clk_vga,
@@ -217,12 +232,6 @@ begin
             s_vsync_pline <= s_vsync_pline(s_vsync_pline'high-1 downto s_vsync_pline'low) & s0_vsync;
             s_disp_en_pline <= s_disp_en_pline(s_disp_en_pline'high-1 downto s_disp_en_pline'low) & s0_disp_en;
             
-            if (s_rst_vga = '1') then
-                s_hsync_pline <= (others => '0');
-                s_vsync_pline <= (others => '0');
-                s_disp_en_pline <= (others => '0');
-            end if;
-            
             o_h_sync <= s_hsync_pline(s_hsync_pline'high);
             o_v_sync <= s_vsync_pline(s_vsync_pline'high);
             
@@ -241,13 +250,31 @@ begin
             
             s_pixel_we <= '0';
             if (s_cursor_x = s_col and s_cursor_y = s_row) then
-                s_pixel_we <= s_left_btn or s_right_btn;
+                -- only allow pixel writes from the mouse if the stepper is paused.
+                -- each mouse click will queue another fram generation based on what was just written.
+                s_pixel_we <= (s_left_btn or s_right_btn) and (not s_frame_go_vga);
+            end if;
+            
+            -- 1 when frame write is queued from a mouse click
+            s_pixel_write_happened_vga <= s_pixel_write_happened_vga or s_pixel_we;
+            if (s0_vsync = '1') then
+                s_pixel_write_happened_vga <= '0';
             end if;
             
             s_pixel_in <= s_left_btn;
+            
+            if (s_rst_vga = '1') then
+                s_hsync_pline <= (others => '0');
+                s_vsync_pline <= (others => '0');
+                s_disp_en_pline <= (others => '0');
+                s_pixel_we <= '0';
+                s_pixel_write_happened_vga <= '0';
+            end if;
         
         end if;
     end process;
+    
+    led1 <= s_pixel_write_happened_vga;
     
     
     ------------------------------------------------------------------
@@ -271,12 +298,12 @@ begin
 --    s_rst_logic <= s_rst_logic_nolock or (not s_clk_logic_locked);
     s_rst_logic_n <= not s_rst_logic;
     
-    frame_hold_btn_cond: entity work.button_conditioner
+    frame_hold_btn_logic_cond: entity work.button_conditioner
     port map(
         i_clk => s_clk_logic,
         i_rst => s_rst_logic,
         i_btn => i_frame_go_btn,
-        o_debounced => s_frame_go
+        o_debounced => s_frame_go_logic
     );
     
     frame_step_btn_cond: entity work.button_conditioner
@@ -287,7 +314,7 @@ begin
         o_pos_pulse => s_frame_step
     );
     
-    do_frame_logic_sync_inst: entity work.button_conditioner
+    vsync_sync_inst: entity work.button_conditioner
     generic map(
         g_metastability_stages => 3,
         g_stable_cycles => 1
@@ -298,13 +325,30 @@ begin
         i_btn => s0_vsync,
         o_pos_pulse => s_vsync_logic
     );
+    
+    pwh_logic_cond: entity work.button_conditioner
+    generic map(
+        g_metastability_stages => 3,
+        g_stable_cycles => 10 -- delay by much more than VGA sync
+        --this is because this signal is set to go low as soon as the VGA signal goes high
+        --and we want to have them both high for a couple cycles to assert s_do_frame
+    )
+    port map(
+        i_clk => s_clk_logic,
+        i_rst => s_rst_logic,
+        i_btn => s_pixel_write_happened_vga,
+        o_debounced => s_pixel_write_happened_logic
+    );
+    
+    led2 <= s_pixel_write_happened_logic;
         
-    s_do_frame <= (s_vsync_logic and s_frame_go) or s_frame_step;
+    s_do_frame <= (s_vsync_logic and s_frame_go_logic) or s_frame_step;
+    s_recalc_frame <= s_vsync_logic and s_pixel_write_happened_logic;
     
     field_inst: entity work.GOL_field
     generic map(
-        g_init_cells => c_init_vline1680x1050_diamond,
-        g_rules => c_GOL_ASIM
+        g_init_cells => c_init_puffertrain,
+        g_rules => c_GOL_default
     )
     port map(
         i_clk_vga => s_clk_vga,
@@ -317,6 +361,7 @@ begin
         i_clk_stepper => s_clk_logic,
         i_rst_stepper => s_rst_logic,
         i_do_frame => s_do_frame,
+        i_recalc_frame => s_recalc_frame,
         o_stepper_busy => open
     );
 

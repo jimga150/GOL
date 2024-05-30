@@ -51,7 +51,7 @@ entity GOL_block is
         i_clk_stepper : in std_logic;
         i_rst_stepper : in std_logic;
         
-        i_do_frame: in std_logic;
+        i_do_frame, i_recalc_frame : in std_logic;
         o_stepper_busy : out std_logic;
         
         i_top_edge, i_bottom_edge : in std_logic_vector(c_block_num_cell_cols-1 downto 0) := (others => '0');
@@ -114,6 +114,7 @@ begin
         i_clk => i_clk_stepper,
         i_rst => i_rst_stepper,
         i_do_frame => i_do_frame,
+        i_recalc_frame => i_recalc_frame,
         o_stepper_busy => o_stepper_busy,
         i_top_edge => i_top_edge,
         i_bottom_edge => i_bottom_edge,
