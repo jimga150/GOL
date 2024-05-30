@@ -59,7 +59,7 @@ architecture Behavioral of GOL_field_tb is
     constant i_clk_stepper_period : time := 10 ns;
     constant i_clk_read_period : time := 6.796 ns; --VGA timing, 1680x1050 @ 60 Hz
     
-    constant c_num_frames : integer := 100;
+    constant c_num_frames : integer := 7;
     constant c_frame_to_pause : integer := 2;
     constant c_num_paused_frames : integer := 3;
     
@@ -88,6 +88,7 @@ begin
         i_clk_stepper => i_clk_stepper,
         i_rst_stepper => i_rst_stepper,
         i_do_frame => i_do_frame,
+        i_recalc_frame => '0',
         o_stepper_busy => o_stepper_busy,
         i_clk_vga => i_clk_vga,
         i_rst_vga => i_rst_vga,
@@ -127,7 +128,8 @@ begin
                     i_row_int <= r;
                     
                     i_pixel_we <= '0';
-                    if (i = c_frame_to_pause and r = c_screen_height/2 and c = c_screen_width/2) then
+                    if (i = (c_frame_to_pause + 1) and r >= (c_screen_height/4 - 3) and r <= (c_screen_height/4 + 3) 
+                            and c >= (c_screen_width/4 - 3) and c <= (c_screen_width/4 + 3)) then
                         i_pixel <= '1';
                         i_pixel_we <= '1';
                     end if;
